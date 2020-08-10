@@ -25,8 +25,8 @@ testnet-config =
     api:
         provider: \velas2
         web3Provider : \https://tn.yopta.net/rpc
-        url : \https://tn.yopta.net
-        apiUrl : \https://xtn.yopta.net/api
+        url : \https://xtn.yopta.net
+        apiUrl : \https://tn.yopta.net/api
 testnet2-config =
     disabled: yes
     decimals: 18
