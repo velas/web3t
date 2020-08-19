@@ -40,7 +40,7 @@ to-eth-address = (velas-address, cb)->
     return cb null, res
     # return cb null, vlxToEth(velas-address)
     # bs58str = velas-address.substr(1, velas-address.length)
-    # try 
+    # try
     #     bytes = decode bs58str
     #     hex = bytes.toString('hex')
     #     eth-address = \0x + hex
@@ -97,7 +97,7 @@ export get-transaction-info = (config, cb)->
     query = [tx]
     err, tx <- make-query network, \eth_getTransactionReceipt , query
     return cb err if err?
-    status = 
+    status =
         | typeof! tx isnt \Object => \pending
         | tx.status is \0x1 => \confirmed
         | _ => \pending
@@ -117,7 +117,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
-    data-parsed = 
+    data-parsed =
         | data? => data
         | _ => '0x'
     err, from <- to-eth-address account.address
@@ -149,7 +149,7 @@ transform-tx = (network, description, t)-->
     { url } = network.api
     dec = get-dec network
     network = \eth
-    tx = 
+    tx =
         | t.hash? => t.hash
         | t.transactionHash? => t.transactionHash
         | _ => "unknown"
@@ -177,7 +177,7 @@ get-internal-transactions = ({ network, address }, cb)->
     err, result <- json-parse resp.text
     return cb "cannot parse json: #{err.message ? err}" if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
-    txs = 
+    txs =
         result.result |> map transform-tx network, 'internal'
     cb null, txs
 get-external-transactions = ({ network, address }, cb)->
@@ -196,7 +196,7 @@ get-external-transactions = ({ network, address }, cb)->
     err, result <- json-parse resp.text
     return cb "cannot parse json: #{err.message ? err}" if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
-    txs = 
+    txs =
         result.result |> map transform-tx network, 'external'
     #console.log api-url, result.result, txs
     cb null, txs
@@ -235,7 +235,7 @@ try-get-lateest = ({ network, account }, cb)->
     next = +from-hex(nonce)
     cb null, next
 get-nonce = ({ network, account }, cb)->
-    #err, nonce <- web3.eth.get-transaction-count 
+    #err, nonce <- web3.eth.get-transaction-count
     err, address <- to-eth-address account.address
     return cb err if err?
     err, nonce <- make-query network, \eth_getTransactionCount , [ address, \pending ]
@@ -273,7 +273,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     #     |  gas? => gas
     #     |  +gas-price is 0 => 21000
     #     | _ => round(to-wei(amount-fee) `div` gas-price)
-    data-parsed = 
+    data-parsed =
         | data? => data
         | _ => '0x'
     query = { from: address, to: recipient, data: data-parsed }
@@ -282,7 +282,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
-    if fee-type is \custom
+    if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
     tx-obj = {
         nonce: to-hex nonce
