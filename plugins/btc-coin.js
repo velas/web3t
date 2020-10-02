@@ -12,8 +12,8 @@
     },
     mask: '1000000000000000000000000000000000',
     api: {
-      provider: 'insight',
-      url: 'https://insight.bitpay.com',
+      provider: 'bitcore',
+      url: 'https://api.bitcore.io',
       decimal: 8,
       alternative: {
         balance: 'https://blockchain.info/q/addressbalance/:address'
@@ -31,6 +31,7 @@
   };
   out$.testnet = testnet = {
     txFee: 0.0001,
+    txFeeAutoMode: 'per-byte',
     decimals: 8,
     mask: '1000000000000000000000000000000000',
     api: {

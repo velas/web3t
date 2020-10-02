@@ -82,6 +82,7 @@
     var output, outputs, outputAmount, ref$, nextAmount, youHaveNext;
     output = arg$[0], outputs = slice$.call(arg$, 1);
     if (output == null) {
+      debugger
       return cb("Not Enough Funds (Unspent Outputs). You have " + youHave);
     }
     if (output.amount == null) {

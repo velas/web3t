@@ -18,10 +18,10 @@ testnet-config =
     #because it unavailable frequently
     # disabled: yes
     decimals: 18
-    tx-fee: \0.0014
+    tx-fee: \0.0020
     tx-fee-options:
         auto: \0.0020
-        cheap: \0.00014
+        cheap: \0.0020
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     api:
