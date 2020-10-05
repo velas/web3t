@@ -266,7 +266,7 @@
     var network, address, url;
     network = arg$.network, address = arg$.address;
     url = network.api.url;
-    return get(getApiUrl(network) + "/addr/" + address + "/utxo").timeout({
+    return get(getApiUrl(network) + "/address/" + address).timeout({
       deadline: deadline
     }).end(function(err, data){
       var ref$;
@@ -552,13 +552,15 @@
     return get(getApiUrl(network) + "/address/" + address + "/unconfirmedBalance").timeout({
       deadline: deadline
     }).end(function(err, data){
-      var json, e, dec, num;
+      var json, dec, num, e;
       if (err != null || data.text.length === 0) {
         return cb(err);
       }
       try {
         json = JSON.parse(data.text);
-        return cb(null, json.unconfirmed);
+        dec = getDec(network);
+        num = div(json.unconfirmed, dec);
+        return cb(null, num);
       } catch (e$) {
         e = e$;
         return cb(e.message);
@@ -577,14 +579,15 @@
     return get(getApiUrl(network) + "/address/" + address + "/balance").timeout({
       deadline: deadline
     }).end(function(err, data){
-      debugger;
-      var json, e, dec, num;
+      var json, dec, num, e;
       if (err != null || data.text.length === 0) {
         return cb(err);
       }
       try {
         json = JSON.parse(data.text);
-        return cb(null, json.balance);
+        dec = getDec(network);
+        num = div(json.balance, dec);
+        return cb(null, num);
       } catch (e$) {
         e = e$;
         return cb(e.message);
@@ -617,38 +620,18 @@
     return null;
   });
   transformIn = function(arg$, t){
-    var net, address, network, tx, time, fee, ref$, vout, pending, unspend, amount, to, from, url;
+    var net, address, tx, pending, dec, amount, to, from, url;
     net = arg$.net, address = arg$.address;
-    network = net.token;
-    tx = t.txid;
-    time = t.time;
-    fee = (ref$ = t.fees) != null ? ref$ : 0;
-    vout = (ref$ = t.vout) != null
-      ? ref$
-      : [];
+    tx = t.mintTxid;
     pending = t.confirmations === 0;
-    unspend = head(
-    filter(incomingVout(address))(
-    vout));
-    amount = unspend != null ? unspend.value : void 8;
+    dec = getDec(net);
+    amount = div(t.value, dec);
     to = address;
-    from = (function(){
-      switch (false) {
-      case toString$.call(t.vin).slice(8, -1) !== 'Array':
-        return t.vin.map(function(it){
-          return it.addr;
-        })[0];
-      default:
-        return t.vin.addr;
-      }
-    }());
+    from = t.address;
     url = net.api.url + "/tx/" + tx;
     return {
-      network: network,
       tx: tx,
       amount: amount,
-      fee: fee,
-      time: time,
       url: url,
       to: to,
       from: from,
@@ -656,37 +639,19 @@
     };
   };
   transformOut = function(arg$, t){
-    var net, address, network, tx, time, fee, ref$, vout, pending, outcoming, amount, to, from, url;
+    var net, address, tx, time, pending, dec, amount, to, from, url;
     net = arg$.net, address = arg$.address;
-    network = net.token;
-    tx = t.txid;
+    tx = t.mintTxid;
     time = t.time;
-    fee = (ref$ = t.fees) != null ? ref$ : 0;
-    vout = (ref$ = t.vout) != null
-      ? ref$
-      : [];
     pending = t.confirmations === 0;
-    outcoming = filter(function(it){
-      return it != null;
-    })(
-    map(outcomingVouts(address))(
-    vout));
-    amount = foldl(plus, 0)(
-    map(function(it){
-      return it.value;
-    })(
-    outcoming));
-    to = outcoming.map(function(it){
-      return it.address;
-    }).join(",");
+    dec = getDec(net);
+    amount = div(t.value, dec);
+    to = t.address;
     from = address;
     url = net.api.url + "/tx/" + tx;
     return {
-      network: network,
       tx: tx,
       amount: amount,
-      fee: fee,
-      time: time,
       url: url,
       to: to,
       pending: pending,
@@ -694,13 +659,10 @@
     };
   };
   transformTx = curry$(function(config, t){
-    var selfSender, ref$;
+    var selfSender;
     selfSender = find(function(it){
-      return it.addr === config.address;
-    })(
-    (ref$ = t.vin) != null
-      ? ref$
-      : []);
+      return it.address === config.address;
+    });
     if (selfSender == null) {
       return transformIn(config, t);
     }
@@ -733,7 +695,7 @@
         if (err != null) {
           return cb(err);
         }
-        if (toString$.call(result != null ? result.txs : void 8).slice(8, -1) !== 'Array') {
+        if (toString$.call(result).slice(8, -1) !== 'Array') {
           return cb("Unexpected result");
         }
         txs = filter(function(it){
@@ -743,7 +705,7 @@
           net: network,
           address: address
         }))(
-        result.txs));
+        result));
         return cb(null, txs);
       });
     });
