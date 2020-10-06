@@ -35,10 +35,14 @@
     decimals: 8,
     mask: '1000000000000000000000000000000000',
     api: {
-      apiName: 'testnet/api',
-      provider: 'blockstream',
-      url: 'https://blockstream.info',
+      provider: 'bitcore',
+      url: 'https://api.bitcore.io',
       decimal: 8
+    },
+    txFeeOptions: {
+      auto: '0.000001',
+      cheap: '0.0000004',
+      feePerByte: '0.0000005'
     },
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     topup: 'https://testnet.manu.backend.hamburg/faucet',
