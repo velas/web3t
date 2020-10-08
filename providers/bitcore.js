@@ -597,7 +597,6 @@
     });
   };
   transformIn = function(arg$, t){
-    debugger;
     var net, address, tr, tx, pending, dec, amount, to, from, url;
     net = arg$.net, address = arg$.address;
     tr = BitcoinLib.Transaction.fromHex(t.script);
@@ -607,7 +606,14 @@
     amount = div(t.value, dec);
     to = address;
     from = t.address;
-    url = net.api.url + "/tx/" + tx;
+    url = (function(){
+      switch (false) {
+      case !net.api.linktx:
+        return net.api.linktx.replace(':hash', tx);
+      case !net.api.url:
+        return net.api.url + "/tx/" + data;
+      }
+    }());
     return {
       tx: tx,
       amount: amount,
@@ -627,7 +633,14 @@
     amount = div(t.value, dec);
     to = t.address;
     from = address;
-    url = net.api.url + "/tx/" + tx;
+    url = (function(){
+      switch (false) {
+      case !net.api.linktx:
+        return net.api.linktx.replace(':hash', tx);
+      case !net.api.url:
+        return net.api.url + "/tx/" + data;
+      }
+    }());
     return {
       tx: tx,
       amount: amount,

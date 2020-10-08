@@ -285,7 +285,6 @@ export get-balance = ({ address, network } , cb)->
     #return cb null, "2.00001"
     cb null, num
 transform-in = ({ net, address }, t)->
-    debugger
     tr = BitcoinLib.Transaction.fromHex(t.script)
     tx = t.mintTxid
     pending = t.confirmations is 0
@@ -293,7 +292,8 @@ transform-in = ({ net, address }, t)->
     amount = t.value `div` dec
     to = address
     from = t.address
-    url = "#{net.api.url}/tx/#{tx}"
+    url = | net.api.linktx => net.api.linktx.replace \:hash, tx
+        | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-in, t)
     { tx, amount, url, to, from, pending }
 transform-out = ({ net, address }, t)->
@@ -304,7 +304,8 @@ transform-out = ({ net, address }, t)->
     amount = t.value `div` dec
     to = t.address
     from = address
-    url = "#{net.api.url}/tx/#{tx}"
+    url = | net.api.linktx => net.api.linktx.replace \:hash, tx
+        | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-out, t)
     { tx, amount, url, to, pending, from }
 transform-tx = (config, t)-->
