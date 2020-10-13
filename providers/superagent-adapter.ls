@@ -105,11 +105,7 @@ make-tor-api = (method)-> (url, data)->
         cb null, { body, text }
         $
     $
-<<<<<<< Updated upstream
 module.exports =
-=======
-module.exports =
->>>>>>> testnet
     all:
         post : make-cross-api \POST
         get  : make-cross-api \GET
@@ -118,8 +114,4 @@ module.exports =
         post : make-tor-api \POST
         get  : make-tor-api \GET
         put  : make-tor-api \PUT
-<<<<<<< Updated upstream
     type: \all
-=======
-    type: \all
->>>>>>> testnet
