@@ -10,7 +10,7 @@
         return '..';
       }
       try {
-        return new bignumber(x)[$](y).toFixed();
+        return new bignumber(x + '')[$](y + '').toFixed();
       } catch (e$) {
         err = e$;
         throw x + " " + $ + " " + y + " = " + err;
@@ -23,6 +23,6 @@
   })(
   ['plus', 'minus', 'times', 'div']));
   module.exports.fromHex = function(hex){
-    return new bignumber(hex, 16).toFixed();
+    return new bignumber(hex + '', 16).toFixed();
   };
 }).call(this);

@@ -51,6 +51,7 @@ lsc -c providers/eos.ls
 lsc -c providers/erc20.ls
 lsc -c providers/eth.ls
 lsc -c providers/insight.ls
+lsc -c providers/bitcore.ls
 lsc -c providers/insightzec.ls
 lsc -c providers/liqpay.ls
 lsc -c providers/omni.ls
@@ -59,6 +60,7 @@ lsc -c providers/ripple.ls
 lsc -c providers/rst.ls
 lsc -c providers/stellar.ls
 lsc -c providers/superagent.ls
+lsc -c providers/superagent-adapter.ls
 lsc -c providers/tron.ls
 lsc -c providers/waves.ls
 lsc -c providers/xem.ls

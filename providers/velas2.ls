@@ -32,7 +32,6 @@ to-eth-address = (velas-address, cb)->
     return cb null, velas-address if isAddress velas-address
     return cb "velas address can be started with V" if velas-address.0 isnt \V
     #NEW_ADDRESS
-<<<<<<< Updated upstream
     res = null
     try
         res = vlxToEth(velas-address)
@@ -55,30 +54,13 @@ export isValidAddress =  ({ address }, cb)->
     err <- to-eth-address address
     return cb "Given address is not valid Velas address" if err?
     cb null, yes
-=======
-    return cb null, vlxToEth(velas-address)
-    bs58str = velas-address.substr(1, velas-address.length)
-    try
-        bytes = decode bs58str
-        hex = bytes.toString('hex')
-        eth-address = \0x + hex
-        #return cb "incorrect velas address" if not isAddress eth-address
-        cb null, eth-address
-    catch err
-        cb err
-window?to-eth-address = vlxToEth if window?
-window?to-velas-address = ethToVlx if window?
->>>>>>> Stashed changes
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
     w = wallet.derive-path("m0").derive-child(index).get-wallet!
     #NEW_ADDRESS
     address = ethToVlx w.get-address!.to-string(\hex)
-<<<<<<< Updated upstream
     address2 = \0x + w.get-address!.to-string(\hex)
-=======
->>>>>>> Stashed changes
     #address = to-velas-address w.get-address! #.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
@@ -130,11 +112,6 @@ get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, 1000000 if +estimate-normal < 1000000
     cb null, estimate-normal
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
-<<<<<<< Updated upstream
-=======
-    console.log \calc-fee, 1
-    #console.log \calc-fee, { network, fee-type, account, amount, to, data }
->>>>>>> Stashed changes
     return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
     dec = get-dec network
@@ -285,8 +262,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei = -> it `times` dec
     to-eth = -> it `div` dec
     value = to-wei amount
+    buffer = {}
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
+    buffer.gas-price = gas-price
     err, address <- to-eth-address account.address
     return cb err if err?
     err, balance <- make-query network, \eth_getBalance , [ address, \latest ]
@@ -294,7 +273,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-<<<<<<< Updated upstream
     # gas-estimate =
     #     |  gas? => gas
     #     |  +gas-price is 0 => 21000
@@ -308,17 +286,9 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
-    if fee-type is \custom
+    gas-price = buffer.gas-price
+    if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
-=======
-    gas-estimate =
-        |  gas? => gas
-        |  +gas-price is 0 => 21000
-        | _ => round(to-wei(amount-fee) `div` gas-price)
-    err, networkId <- make-query network, \net_version , []
-    return cb err if err?
-    common = Common.forCustomChain 'mainnet', { networkId }
->>>>>>> Stashed changes
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price

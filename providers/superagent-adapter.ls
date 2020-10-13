@@ -76,7 +76,7 @@ make-cross-api = (method)-> (url, data)->
         err, text <- as-callback data.text!
         return cb err if err?
         err, body <- json-parse text
-        #return cb err if err?
+        return cb err, { text } if err?
         cb null, { body, text }
         $
     $
@@ -100,16 +100,16 @@ make-tor-api = (method)-> (url, data)->
         tor.setTorAddress("localhost", "9050")
         err, res, text <- tor.request url, body
         err, body <- json-parse text
-        #return cb err if err?
+        return cb err, { text } if err?
         console.log \make-tor-request, method, url, err, body
         cb null, { body, text }
         $
     $
 <<<<<<< Updated upstream
-module.exports = 
+module.exports =
 =======
 module.exports =
->>>>>>> Stashed changes
+>>>>>>> testnet
     all:
         post : make-cross-api \POST
         get  : make-cross-api \GET
@@ -122,4 +122,4 @@ module.exports =
     type: \all
 =======
     type: \all
->>>>>>> Stashed changes
+>>>>>>> testnet
