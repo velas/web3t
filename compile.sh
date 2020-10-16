@@ -20,6 +20,7 @@ lsc -c plugins/dash-coin.ls
 lsc -c plugins/doge-coin.ls
 lsc -c plugins/eos-coin.ls
 lsc -c plugins/etc-coin.ls
+lsc -c plugins/symblox.ls
 lsc -c plugins/eth-coin.ls
 lsc -c plugins/eth-rs.ls
 lsc -c plugins/gobyte-coin.ls
@@ -49,6 +50,7 @@ lsc -c providers/coinpay.ls
 lsc -c providers/cryptonote.ls
 lsc -c providers/eos.ls
 lsc -c providers/erc20.ls
+lsc -c providers/vlxerc20.ls
 lsc -c providers/eth.ls
 lsc -c providers/insight.ls
 lsc -c providers/bitcore.ls

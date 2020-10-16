@@ -8,12 +8,9 @@ mainnet-config =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \velas2
-        #web3Provider : \https://mainnet.yopta.net/rpc
         web3Provider : \https://explorer.velas.com/rpc
-        #web3Provider: \https://mainnet.infura.io/v3/6a6c66740e9e4cea9cc8425869e9d106
         url : \https://explorer.velas.com
         apiUrl : \https://explorer.velas.com/api
-        #apiUrl : \https://mainnet.yopta.net/api
 testnet-config =
     #because it unavailable frequently
     # disabled: yes
