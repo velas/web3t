@@ -63,7 +63,6 @@ transform-tx = (network, t)-->
 up = (s)->
     (s ? "").to-upper-case!
 export get-transactions = ({ network, address }, cb)->
-    debugger
     { api-url } = network.api
     if address.starts-with \V
         address = vlxToEth address

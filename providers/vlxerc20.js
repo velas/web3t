@@ -301,7 +301,6 @@
     return (s != null ? s : "").toUpperCase();
   };
   out$.getTransactions = getTransactions = function(arg$, cb){
-    debugger;
     var network, address, apiUrl, module, action, startblock, endblock, sort, query;
     network = arg$.network, address = arg$.address;
     apiUrl = network.api.apiUrl;
