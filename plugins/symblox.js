@@ -14,7 +14,7 @@
     "mainnet": {
       "decimals": 18,
       "txFee": "0.000020",
-      "txFeeIn": "vlx",
+      "txFeeIn": "vlx2",
       txFeeOptions: {
         auto: '0.0020',
         cheap: '0.00014'
