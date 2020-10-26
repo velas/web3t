@@ -28,9 +28,9 @@
     mask: '0x0000000000000000000000000000000000000000',
     api: {
       provider: 'velas2',
-      web3Provider: 'https://tn.yopta.net/rpc',
-      url: 'https://xtn.yopta.net',
-      apiUrl: 'https://tn.yopta.net/api'
+      web3Provider: 'https://explorer.testnet.veladev.net/rpc',
+      url: 'https://explorer.testnet.veladev.net',
+      apiUrl: 'https://explorer.testnet.veladev.net/api'
     }
   };
   testnet2Config = {
