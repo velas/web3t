@@ -74,7 +74,8 @@ calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     o = network?tx-fee-options
     tx-fee = o?[fee-type] ? network.tx-fee ? 0
     return cb null, tx-fee if fee-type isnt \auto
-    err, data <- get "#{get-api-url network}/BTC/#{global.store.current.network}/fee/6" .timeout { deadline } .end
+    network = global.store?.current?.network || \mainnet
+    err, data <- get "#{get-api-url network}/BTC/#{network}/fee/6" .timeout { deadline } .end
     return cb err if err?
     vals = values data.body
     exists = vals.0 ? -1
@@ -314,7 +315,8 @@ transform-tx = (config, t)-->
     transform-out config, t
 get-api-url = (network)->
     api-name = network.api.api-name ? \api
-    "#{network.api.url}/#{api-name}/BTC/#{global.store.current.network}"
+    network-name = global.store?.current?.network || \mainnet
+    "#{network.api.url}/#{api-name}/BTC/#{network-name}"
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->

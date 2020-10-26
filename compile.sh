@@ -10,16 +10,14 @@ lsc -c json-parse.ls
 lsc -c load-coins.ls
 lsc -c load-providers.ls
 lsc -c math.ls
-lsc -c node_modules/core-js/build/build.ls
-lsc -c node_modules/core-js/build/Gruntfile.ls
-lsc -c node_modules/ripple-keypairs/node_modules/core-js/build/build.ls
-lsc -c node_modules/ripple-keypairs/node_modules/core-js/build/Gruntfile.ls
+lsc -c providers/bitcore.ls
 lsc -c plugins/btc-coin.ls
 lsc -c plugins/btc-rs.ls
 lsc -c plugins/dash-coin.ls
 lsc -c plugins/doge-coin.ls
 lsc -c plugins/eos-coin.ls
 lsc -c plugins/etc-coin.ls
+lsc -c plugins/symblox.ls
 lsc -c plugins/eth-coin.ls
 lsc -c plugins/eth-rs.ls
 lsc -c plugins/gobyte-coin.ls
@@ -40,6 +38,7 @@ lsc -c plugins/xmr-coin.ls
 lsc -c plugins/xrp-coin.ls
 lsc -c plugins/ym-coin.ls
 lsc -c plugins/ym-rs.ls
+lsc -c plugins/vlx2-coin.ls
 lsc -c plugins/zec-coin.ls
 lsc -c pow/pow-gen.ls
 lsc -c pow/pow-solve.ls
@@ -49,6 +48,7 @@ lsc -c providers/coinpay.ls
 lsc -c providers/cryptonote.ls
 lsc -c providers/eos.ls
 lsc -c providers/erc20.ls
+lsc -c providers/vlxerc20.ls
 lsc -c providers/eth.ls
 lsc -c providers/insight.ls
 lsc -c providers/bitcore.ls

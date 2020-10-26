@@ -1,6 +1,5 @@
 require! {
     \cross-fetch : fetch
-    \tor-request : tor
     \qs : { stringify }
 }
 json-parse = (text, cb)->

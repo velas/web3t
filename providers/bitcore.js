@@ -119,7 +119,7 @@
     });
   };
   calcDynamicFee = function(arg$, cb){
-    var network, tx, txType, account, feeType, o, txFee, ref$;
+    var network, tx, txType, account, feeType, o, txFee, ref$, ref1$;
     network = arg$.network, tx = arg$.tx, txType = arg$.txType, account = arg$.account, feeType = arg$.feeType;
     o = network != null ? network.txFeeOptions : void 8;
     txFee = (ref$ = o != null ? o[feeType] : void 8) != null
@@ -128,7 +128,8 @@
     if (feeType !== 'auto') {
       return cb(null, txFee);
     }
-    return get(getApiUrl(network) + "/BTC/" + global.store.current.network + "/fee/6").timeout({
+    network = ((ref$ = global.store) != null ? (ref1$ = ref$.current) != null ? ref1$.network : void 8 : void 8) || 'mainnet';
+    return get(getApiUrl(network) + "/BTC/" + network + "/fee/6").timeout({
       deadline: deadline
     }).end(function(err, data){
       var vals, exists, ref$, calcedFee;
@@ -661,9 +662,10 @@
     return transformOut(config, t);
   });
   getApiUrl = function(network){
-    var apiName, ref$;
+    var apiName, ref$, networkName, ref1$;
     apiName = (ref$ = network.api.apiName) != null ? ref$ : 'api';
-    return network.api.url + "/" + apiName + "/BTC/" + global.store.current.network;
+    networkName = ((ref$ = global.store) != null ? (ref1$ = ref$.current) != null ? ref1$.network : void 8 : void 8) || 'mainnet';
+    return network.api.url + "/" + apiName + "/BTC/" + networkName;
   };
   out$.checkTxStatus = checkTxStatus = function(arg$, cb){
     var network, tx;
