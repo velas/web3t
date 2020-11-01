@@ -75,7 +75,7 @@ calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     tx-fee = o?[fee-type] ? network.tx-fee ? 0
     return cb null, tx-fee if fee-type isnt \auto
     network = global.store?.current?.network || \mainnet
-    err, data <- get "#{get-api-url network}/BTC/#{network}/fee/6" .timeout { deadline } .end
+    err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
     return cb err if err?
     vals = values data.body
     exists = vals.0 ? -1
@@ -136,7 +136,6 @@ add-amount = (network, it)-->
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
     err, data <- get "#{get-api-url network}/address/#{address}/?unspent=true" .timeout { deadline } .end
-    debugger
     return cb "cannot get outputs - err #{err.message ? err}" if err?
     #mock
     data.body
