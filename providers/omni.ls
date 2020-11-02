@@ -28,10 +28,10 @@ calc-fee-per-byte = (config, cb)->
     return cb null, o.cheap if "#{err}".index-of("Not Enough Funds (Unspent Outputs)") > -1
     #console.log { err }
     return cb err, o.cheap if err?
-    return cb "raw-tx is expected" if typeof! data.raw-tx isnt \String
-    #console.log data.raw-tx
+    return cb "rawtx is expected" if typeof! data.rawtx isnt \String
+    #console.log data.rawtx
     #bytes = decode(data.raw-tx).to-string(\hex).length / 2
-    bytes = data.raw-tx.length / 2
+    bytes = data.rawtx.length / 2
     infelicity = 1
     calc-fee = (bytes + infelicity) `times` o.fee-per-byte
     final-price =

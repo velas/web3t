@@ -1,6 +1,7 @@
 export mainnet =
     decimals: 8
     tx-fee: \0.0000004
+    tx-fee-auto-mode: \per-byte
     tx-fee-options:
         cheap: \0.0000004
         auto: \0.000001

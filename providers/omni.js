@@ -46,10 +46,10 @@
       if (err != null) {
         return cb(err, o.cheap);
       }
-      if (toString$.call(data.rawTx).slice(8, -1) !== 'String') {
-        return cb("raw-tx is expected");
+      if (toString$.call(data.rawtx).slice(8, -1) !== 'String') {
+        return cb("rawtx is expected");
       }
-      bytes = data.rawTx.length / 2;
+      bytes = data.rawtx.length / 2;
       infelicity = 1;
       calcFee = times(bytes + infelicity, o.feePerByte);
       finalPrice = (function(){

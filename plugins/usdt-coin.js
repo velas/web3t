@@ -4,6 +4,7 @@
   out$.mainnet = mainnet = {
     decimals: 8,
     txFee: '0.0000004',
+    txFeeAutoMode: 'per-byte',
     txFeeOptions: {
       cheap: '0.0000004',
       auto: '0.000001',
