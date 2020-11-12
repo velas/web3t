@@ -11,6 +11,7 @@ lsc -c load-coins.ls
 lsc -c load-providers.ls
 lsc -c math.ls
 lsc -c providers/bitcore.ls
+lsc -c providers/velas2.ls
 lsc -c plugins/btc-coin.ls
 lsc -c plugins/btc-rs.ls
 lsc -c plugins/dash-coin.ls
