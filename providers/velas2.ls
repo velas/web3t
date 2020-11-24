@@ -99,6 +99,7 @@ export get-transaction-info = (config, cb)->
     return cb err if err?
     status =
         | typeof! tx isnt \Object => \pending
+        | tx.status is \0x0 => \reverted
         | tx.status is \0x1 => \confirmed
         | _ => \pending
     result = { tx?from, tx?to, status, info: tx }
@@ -169,7 +170,7 @@ get-internal-transactions = ({ network, address }, cb)->
     action = \txlistinternal
     startblock = 0
     endblock = 99999999
-    sort = \asc
+    sort = \desc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     page = 1
     offset = 20
@@ -192,7 +193,7 @@ get-external-transactions = ({ network, address }, cb)->
     endblock = 99999999
     page = 1
     offset = 20
-    sort = \asc
+    sort = \desc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end

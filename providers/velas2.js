@@ -160,6 +160,8 @@
         switch (false) {
         case toString$.call(tx).slice(8, -1) === 'Object':
           return 'pending';
+        case tx.status !== '0x0':
+          return 'reverted';
         case tx.status !== '0x1':
           return 'confirmed';
         default:
@@ -317,7 +319,7 @@
       action = 'txlistinternal';
       startblock = 0;
       endblock = 99999999;
-      sort = 'asc';
+      sort = 'desc';
       apikey = '4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG';
       page = 1;
       offset = 20;
@@ -369,7 +371,7 @@
       endblock = 99999999;
       page = 1;
       offset = 20;
-      sort = 'asc';
+      sort = 'desc';
       apikey = '4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG';
       query = stringify({
         module: module,
