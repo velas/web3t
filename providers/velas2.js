@@ -160,6 +160,8 @@
         switch (false) {
         case toString$.call(tx).slice(8, -1) === 'Object':
           return 'pending';
+        case tx.status !== '0x0':
+          return 'reverted';
         case tx.status !== '0x1':
           return 'confirmed';
         default:
@@ -308,7 +310,7 @@
     var network, address;
     network = arg$.network, address = arg$.address;
     return toEthAddress(address, function(err, address){
-      var apiUrl, module, action, startblock, endblock, sort, apikey, query;
+      var apiUrl, module, action, startblock, endblock, sort, apikey, page, offset, query;
       if (err != null) {
         return cb(err);
       }
@@ -317,8 +319,10 @@
       action = 'txlistinternal';
       startblock = 0;
       endblock = 99999999;
-      sort = 'asc';
+      sort = 'desc';
       apikey = '4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG';
+      page = 1;
+      offset = 20;
       query = stringify({
         module: module,
         action: action,
@@ -326,7 +330,9 @@
         address: address,
         sort: sort,
         startblock: startblock,
-        endblock: endblock
+        endblock: endblock,
+        page: page,
+        offset: offset
       });
       return get(apiUrl + "?" + query).timeout({
         deadline: deadline
@@ -354,7 +360,7 @@
     var network, address;
     network = arg$.network, address = arg$.address;
     return toEthAddress(address, function(err, address){
-      var apiUrl, module, action, startblock, endblock, sort, apikey, query;
+      var apiUrl, module, action, startblock, endblock, page, offset, sort, apikey, query;
       if (err != null) {
         return cb(err);
       }
@@ -363,7 +369,9 @@
       action = 'txlist';
       startblock = 0;
       endblock = 99999999;
-      sort = 'asc';
+      page = 1;
+      offset = 20;
+      sort = 'desc';
       apikey = '4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG';
       query = stringify({
         module: module,
@@ -372,7 +380,9 @@
         address: address,
         sort: sort,
         startblock: startblock,
-        endblock: endblock
+        endblock: endblock,
+        page: page,
+        offset: offset
       });
       return get(apiUrl + "?" + query).timeout({
         deadline: deadline
@@ -397,18 +407,24 @@
     });
   };
   out$.getTransactions = getTransactions = function(arg$, cb){
-    var network, address;
+    var network, address, page, offset;
     network = arg$.network, address = arg$.address;
+    page = 1;
+    offset = 20;
     return getExternalTransactions({
       network: network,
-      address: address
+      address: address,
+      page: page,
+      offset: offset
     }, function(err, external){
       if (err != null) {
         return cb(err);
       }
       return getInternalTransactions({
         network: network,
-        address: address
+        address: address,
+        page: page,
+        offset: offset
       }, function(err, internal){
         var all, ordered;
         if (err != null) {
@@ -578,7 +594,7 @@
                     networkId: networkId
                   });
                   gasPrice = buffer.gasPrice;
-                  if (feeType === 'custom') {
+                  if (feeType === 'custom' || !gasPrice) {
                     gasPrice = div(times(amountFee, dec), gasEstimate);
                   }
                   txObj = {
@@ -588,7 +604,7 @@
                     gas: toHex(gasEstimate),
                     to: recipient,
                     from: address,
-                    data: data != null ? data : "0x"
+                    data: data || "0x"
                   };
                   tx = new Tx(txObj, {
                     common: common
