@@ -10,7 +10,7 @@ export mainnet =
     mask: '1000000000000000000000000000000000'
     api:
         api-url: \https://api.omniwallet.org
-        api-url-btc: \https://api.bitcore.io
+        api-url-btc: \https://bitcore.velas.com
         provider: \omni
         url: \https://omniexplorer.info
         decimal: 8

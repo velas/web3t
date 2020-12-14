@@ -236,7 +236,7 @@ calc-gas-price = ({ fee-type, network, gas-price }, cb)->
     #console.log \price, price
     return cb null, 22000 if +price < 22000
     cb null, price
-try-get-lateest = ({ network, account }, cb)->
+try-get-latest = ({ network, account }, cb)->
     err, address <- to-eth-address account.address
     return cb err if err?
     err, nonce <- make-query network, \eth_getTransactionCount , [ address, "latest" ]
@@ -248,7 +248,7 @@ get-nonce = ({ network, account }, cb)->
     err, address <- to-eth-address account.address
     return cb err if err?
     err, nonce <- make-query network, \eth_getTransactionCount , [ address, \pending ]
-    return try-get-lateest { network, account }, cb if err? and "#{err.message ? err}".index-of('not implemented') > -1
+    return try-get-latest { network, account }, cb if err? and "#{err.message ? err}".index-of('not implemented') > -1
     return cb "cannot get nonce (pending) - err: #{err.message ? err}" if err?
     cb null, from-hex(nonce)
 is-address = (address) ->
