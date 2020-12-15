@@ -9,7 +9,7 @@ export mainnet =
     mask: '1000000000000000000000000000000000'
     api:
         provider: \bitcore
-        url: \https://bitcore.velas.com
+        url: \https://api.bitcore.io
         linktx: \https://bitpay.com/insight/#/BTC/mainnet/tx/:hash
         decimal: 8
         alternative:

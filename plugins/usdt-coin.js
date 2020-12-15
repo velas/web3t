@@ -14,7 +14,7 @@
     mask: '1000000000000000000000000000000000',
     api: {
       apiUrl: 'https://api.omniwallet.org',
-      apiUrlBtc: 'https://bitcore.velas.com',
+      apiUrlBtc: 'https://api.bitcore.io',
       provider: 'omni',
       url: 'https://omniexplorer.info',
       decimal: 8
