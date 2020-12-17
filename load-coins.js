@@ -6,6 +6,7 @@
   eth = require('./plugins/eth-coin.js');
   etc = require('./plugins/etc-coin.js');
   symblox = require('./plugins/symblox.js');
+  symblox = require('./plugins/symblox-v2.js');
   ltc = require('./plugins/ltc-coin.js');
   usdt = require('./plugins/usdt-coin.js');
   ref$ = require('prelude-ls'), objToPairs = ref$.objToPairs, pairsToObj = ref$.pairsToObj, filter = ref$.filter;
@@ -34,7 +35,8 @@
       usdt: usdt,
       etc: etc,
       'void': void 8,
-      symblox: symblox
+      symblox: symblox,
+      symbloxV2: symbloxV2
     };
     extendCoins(def, config);
     return cb(null, def);
