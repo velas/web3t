@@ -1,6 +1,6 @@
 require! {
     \moment
-    \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join }
+    \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join, reverse }
     \./superagent.js : { get, post }
     \../math.js : { plus, minus, div, times }
     \./deps.js : { BitcoinLib, bip39 }
@@ -324,9 +324,30 @@ export get-transactions = ({ network, address}, cb)->
     return cb err if err?
     err, result <- json-parse data.text
     return cb err if err?
-    return cb "Unexpected result" if typeof! result isnt \Array
+    err, all-txs <- prepare-raw-txs {txs: result, network} 
+    return cb err if err?   
+    return cb "Unexpected result" if typeof! all-txs isnt \Array
     txs =
-        result
+        all-txs
             |> map transform-tx { net: network, address }
             |> filter (?)
+            |> reverse    
     cb null, txs
+prepare-raw-txs = ({ txs, network }, cb)-> 
+    err, result <- prepare-txs [], network, txs
+    return cb err if err? 
+    cb null, result
+prepare-txs = (result, network, [tx, ...rest], cb)->
+    return cb null, [] if not tx?    
+    hash = tx.mintTxid
+    err, data <- get "#{get-api-url network}/tx/#{hash}/coins" .timeout { deadline: 15000 } .end
+    return cb err if err?
+    err, raw-data <- json-parse data.text
+    return cb err if err?
+    { inputs, outputs } = raw-data
+    _tx = outputs[0]
+    t = if _tx? then [_tx] else []    
+    err, other <- prepare-txs t, network, rest
+    return cb err if err?
+    all =  t ++ other    
+    cb null, all    
