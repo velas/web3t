@@ -285,7 +285,6 @@ export get-balance = ({ address, network } , cb)->
     #return cb null, "2.00001"
     cb null, num
 transform-in = ({ net, address }, t)->
-    tr = BitcoinLib.Transaction.fromHex(t.script)
     tx = t.mintTxid
     pending = t.confirmations is 0
     dec = get-dec net
@@ -309,8 +308,8 @@ transform-out = ({ net, address }, t)->
     #console.log(\insight-out, t)
     { tx, amount, url, to, pending, from }
 transform-tx = (config, t)-->
-    self-sender = find -> it.address is config.address
-    return transform-in config, t if not self-sender?
+    self-sender = t.address is config.address
+    return transform-in config, t if not self-sender    
     transform-out config, t
 get-api-url = (network)->
     api-name = network.api.api-name ? \api
