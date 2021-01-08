@@ -324,7 +324,7 @@ export check-tx-status = ({ network, tx }, cb)->
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
     #err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
-    err, data <- get "https://explorer.api.bitcoin.com/btc/v1/txs/?address=#{address}&pageNum=0" .timeout { deadline: 15000 } .end    
+    err, data <- get "https://explorer.api.bitcoin.com/btc/v2/txsSummaries?address=#{address}&pageNum=0" .timeout { deadline: 15000 } .end    
     return cb err if err?
     err, result <- json-parse data.text
     return cb err if err?
