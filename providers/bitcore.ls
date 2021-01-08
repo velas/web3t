@@ -294,7 +294,7 @@ transform-in = ({ net, address }, t)->
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-in, t)
-    { tx, amount, url, to, from, pending }
+    { tx, amount, url, to, from, pending, time: t.time, fee: t.fee, type: t.type  }
 transform-out = ({ net, address }, t)->
     tx = t.mintTxid
     time = t.time
@@ -306,9 +306,13 @@ transform-out = ({ net, address }, t)->
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-out, t)
-    { tx, amount, url, to, pending, from }
+    { tx, amount, url, to, pending, from, time: t.time, fee: t.fee, type: t.type }
 transform-tx = (config, t)-->
     self-sender = t.address is config.address
+    type = 
+        |  t.address isnt config.address => "OUT"
+        |  _ => "IN" 
+    t.type = type   
     return transform-in config, t if not self-sender    
     transform-out config, t
 get-api-url = (network)->
@@ -319,11 +323,12 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
+    #err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
+    err, data <- get "https://explorer.api.bitcoin.com/btc/v1/txs/?address=#{address}&pageNum=0" .timeout { deadline: 15000 } .end    
     return cb err if err?
     err, result <- json-parse data.text
     return cb err if err?
-    err, all-txs <- prepare-raw-txs {txs: result, network} 
+    err, all-txs <- prepare-raw-txs {txs: result.txs, network} 
     return cb err if err?   
     return cb "Unexpected result" if typeof! all-txs isnt \Array
     txs =
@@ -333,20 +338,31 @@ export get-transactions = ({ network, address}, cb)->
             |> reverse    
     cb null, txs
 prepare-raw-txs = ({ txs, network }, cb)-> 
-    err, result <- prepare-txs [], network, txs
+    err, result <- prepare-txs network, txs
     return cb err if err? 
     cb null, result
-prepare-txs = (result, network, [tx, ...rest], cb)->
+prepare-txs = (network, [tx, ...rest], cb)->
     return cb null, [] if not tx?    
-    hash = tx.mintTxid
-    err, data <- get "#{get-api-url network}/tx/#{hash}/coins" .timeout { deadline: 15000 } .end
-    return cb err if err?
-    err, raw-data <- json-parse data.text
-    return cb err if err?
-    { inputs, outputs } = raw-data
-    _tx = outputs[0]
+    { fees, txid, time, confirmations, vout } = tx   
+    address = vout.0.scriptPubKey.addresses.0
+    value = +vout.0.value * 10^8  
+    chain = "BTC"
+    network = network 
+    _id = txid    
+    _tx = {
+        address   
+        value
+        fee: fees
+        chain
+        network: "mainnet" 
+        time: time + ""    
+        confirmations
+        _id 
+        coinbase: no
+        mintTxid: txid,    
+    }
     t = if _tx? then [_tx] else []    
-    err, other <- prepare-txs t, network, rest
+    err, other <- prepare-txs network, rest
     return cb err if err?
     all =  t ++ other    
     cb null, all    
