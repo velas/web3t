@@ -324,7 +324,7 @@ export check-tx-status = ({ network, tx }, cb)->
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
     #err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
-    err, data <- get "https://explorer.api.bitcoin.com/btc/v2/txsSummaries?address=#{address}&pageNum=0" .timeout { deadline: 15000 } .end    
+    err, data <- get "https://api.blockcypher.com/v1/btc/main/addrs/#{address}/full" .timeout { deadline: 15000 } .end    
     return cb err if err?
     err, result <- json-parse data.text
     return cb err if err?
@@ -343,23 +343,24 @@ prepare-raw-txs = ({ txs, network }, cb)->
     cb null, result
 prepare-txs = (network, [tx, ...rest], cb)->
     return cb null, [] if not tx?    
-    { fees, txid, time, confirmations, vout } = tx   
-    address = vout.0.scriptPubKey.addresses.0
-    value = +vout.0.value * 10^8  
+    { fees, hash, received, confirmations, outputs, addresses } = tx
+    time = moment(received).format("X") 
+    address = outputs.0.addresses.0 
+    value = outputs.0.value  
     chain = "BTC"
     network = network 
-    _id = txid    
+    _id = hash    
     _tx = {
         address   
         value
         fee: fees
         chain
         network: "mainnet" 
-        time: time + ""    
+        time: time    
         confirmations
         _id 
         coinbase: no
-        mintTxid: txid,    
+        mintTxid: hash,    
     }
     t = if _tx? then [_tx] else []    
     err, other <- prepare-txs network, rest
