@@ -1,6 +1,6 @@
 require! {
     \moment
-    \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join, reverse }
+    \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join, reverse, uniqueBy }
     \./superagent.js : { get, post }
     \../math.js : { plus, minus, div, times }
     \./deps.js : { BitcoinLib, bip39 }
@@ -285,12 +285,13 @@ export get-balance = ({ address, network } , cb)->
     #return cb null, "2.00001"
     cb null, num
 transform-in = ({ net, address }, t)->
+    #tr = BitcoinLib.Transaction.fromHex(t.script)  
     tx = t.mintTxid
     pending = t.confirmations is 0
     dec = get-dec net
     amount = t.value `div` dec
-    to = address
-    from = t.address
+    from = address
+    to = t.address
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-in, t)
@@ -323,45 +324,50 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "https://api.bitcore.io/api/BTC/mainnet/address/#{address}/txs" .timeout { deadline: 15000 } .end
-    console.log "data", data    
-    err, data <- get "https://api.blockcypher.com/v1/btc/main/addrs/#{address}/full" .timeout { deadline: 15000 } .end    
+    err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
+    #err, data <- get "https://api.blockcypher.com/v1/btc/main/addrs/#{address}/full" .timeout { deadline: 15000 } .end    
     return cb err if err?
-    err, result <- json-parse data.text
+    err, result <- json-parse data.text 
     return cb err if err?
-    err, all-txs <- prepare-raw-txs {txs: result.txs, network} 
+    _result = result |> uniqueBy (-> it.mintTxid) |> reverse     
+    err, all-txs <- prepare-raw-txs {txs: _result, network} 
     return cb err if err?   
     return cb "Unexpected result" if typeof! all-txs isnt \Array
     txs =
         all-txs
             |> map transform-tx { net: network, address }
-            |> filter (?)
-            |> reverse    
+            |> filter (?)                
     cb null, txs
-prepare-raw-txs = ({ txs, network }, cb)-> 
+prepare-raw-txs = ({ txs, network }, cb)->    
     err, result <- prepare-txs network, txs
     return cb err if err? 
     cb null, result
 prepare-txs = (network, [tx, ...rest], cb)->
     return cb null, [] if not tx?    
-    { fees, hash, received, confirmations, outputs, addresses } = tx
-    time = moment(received).format("X") 
-    address = outputs.0.addresses.0 
-    value = outputs.0.value  
-    chain = "BTC"
-    network = network 
-    _id = hash    
+    { mintTxid } = tx
+    err, _coins <- get "#{get-api-url network}/tx/#{mintTxid}/coins" .timeout { deadline: 15000 } .end
+    return cb err if err?
+    err, result <- json-parse _coins.text
+    return cb err if err?
+    address = result.outputs.0.address
+    value = result.outputs.0.value    
+    err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 15000 } .end
+    return cb err if err?
+    err, result <- json-parse data.text
+    return cb err if err? 
+    { blockTime, txid, fee, confirmations, chain,  _id } = result 
+    time = moment(blockTime).format("X") 
     _tx = {
         address   
         value
-        fee: fees
+        fee
         chain
-        network: "mainnet" 
-        time: time    
+        network: result.network     
+        time   
         confirmations
         _id 
         coinbase: no
-        mintTxid: hash,    
+        mintTxid: txid,    
     }
     t = if _tx? then [_tx] else []    
     err, other <- prepare-txs network, rest
