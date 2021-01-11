@@ -323,7 +323,8 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    #err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
+    err, data <- get "https://api.bitcore.io/api/BTC/mainnet/address/#{address}/txs" .timeout { deadline: 15000 } .end
+    console.log "data", data    
     err, data <- get "https://api.blockcypher.com/v1/btc/main/addrs/#{address}/full" .timeout { deadline: 15000 } .end    
     return cb err if err?
     err, result <- json-parse data.text
