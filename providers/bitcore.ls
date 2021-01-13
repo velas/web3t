@@ -7,6 +7,7 @@ require! {
     \../json-parse.js
     \../deadline.js
     \bs58 : { decode }
+    \bitcoin-address-validation : \validate     
 }
 segwit-address = (public-key)->
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(public-key))
@@ -373,4 +374,8 @@ prepare-txs = (network, [tx, ...rest], cb)->
     err, other <- prepare-txs network, rest
     return cb err if err?
     all =  t ++ other    
-    cb null, all    
+    cb null, all   
+export isValidAddress = ({ address, network }, cb)-> 
+    addressIsValid = validate(address)    
+    return cb "Address is not valid" if not addressIsValid   
+    return cb null, address
