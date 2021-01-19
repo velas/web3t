@@ -59,10 +59,8 @@ calc-fee-per-byte = (config, cb)->
     #console.log { config.amount, amount-fee }
     err, data <- create-transaction { fee-type, amount-fee , recipient, ...config }
     return cb null, o.cheap if "#{err}".index-of("Not Enough Funds (Unspent Outputs)") > -1
-    #console.log { err }
     return cb err, o.cheap if err?
     return cb "raw-tx is expected" if typeof! data.raw-tx isnt \String
-    #console.log data.raw-tx
     #bytes = decode(data.raw-tx).to-string(\hex).length / 2
     bytes = data.raw-tx.length / 2
     infelicity = 1
@@ -357,11 +355,12 @@ prepare-txs = (network, [tx, ...rest], cb)->
     err, result <- json-parse data.text
     return cb err if err? 
     { blockTime, txid, fee, confirmations, chain,  _id } = result 
-    time = moment(blockTime).format("X") 
+    time = moment(blockTime).format("X")
+    dec = get-dec network 
     _tx = {
         address   
         value
-        fee
+        fee: fee `div` dec 
         chain
         network: result.network     
         time   
