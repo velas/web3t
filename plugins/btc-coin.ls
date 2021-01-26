@@ -30,8 +30,8 @@ export testnet =
     api:
         #api-name: \testnet/api
         provider: \bitcore
-        url: \https://bitcore.velas.com
-        linktx: \https://bitcore.velas.com/#/BTC/testnet/tx/:hash
+        url: \https://api.bitcore.io
+        linktx: \https://bitpay.com/insight/#/BTC/testnet/tx/:hash
         decimal: 8
     tx-fee-options:
         auto: \0.000001
