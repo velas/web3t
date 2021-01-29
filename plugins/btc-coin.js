@@ -13,8 +13,8 @@
     mask: '1000000000000000000000000000000000',
     api: {
       provider: 'bitcore',
-      url: 'https://api.bitcore.io',
-      linktx: 'https://bitpay.com/insight/#/BTC/mainnet/tx/:hash',
+      url: 'https://bitcore.velas.com',
+      linktx: 'https://bitcore.velas.com/#/BTC/mainnet/tx/:hash',
       decimal: 8,
       alternative: {
         balance: 'https://blockchain.info/q/addressbalance/:address'
