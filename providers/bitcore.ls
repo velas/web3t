@@ -7,7 +7,7 @@ require! {
     \../json-parse.js
     \../deadline.js
     \bs58 : { decode }
-    \bitcoin-address-validation : \validate     
+    \multicoin-address-validator : \WAValidator      
 }
 segwit-address = (public-key)->
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(public-key))
@@ -323,8 +323,7 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/address/#{address}/txs" .timeout { deadline: 15000 } .end
-    #err, data <- get "https://api.blockcypher.com/v1/btc/main/addrs/#{address}/full" .timeout { deadline: 15000 } .end    
+    err, data <- get "#{get-api-url network}/address/#{address}/txs?limit=100" .timeout { deadline: 15000 } .end
     return cb err if err?
     err, result <- json-parse data.text 
     return cb err if err?
@@ -375,6 +374,20 @@ prepare-txs = (network, [tx, ...rest], cb)->
     all =  t ++ other    
     cb null, all   
 export isValidAddress = ({ address, network }, cb)-> 
-    addressIsValid = validate(address)    
+    addressIsValid = WAValidator.validate(address, 'BTC')   
     return cb "Address is not valid" if not addressIsValid   
     return cb null, address
+export get-transaction-info = (config, cb)->
+    { network, tx } = config
+    url = "#{get-api-url network}/tx/:hash".replace \:hash, tx
+    err, data <- get url .timeout { deadline: 15000 } .end  
+    return cb err if err?
+    err, result <- json-parse data.text
+    return cb err if err? 
+    { blockTime, txid, fee, confirmations, chain,  _id } = result
+    status =
+        | +confirmations > 0 => \confirmed
+        | tx.status is \0x1 => \reverted
+        | _ => \pending
+    result = { status, info: tx }
+    cb null, result
