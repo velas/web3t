@@ -374,7 +374,7 @@ prepare-txs = (network, [tx, ...rest], cb)->
     all =  t ++ other    
     cb null, all   
 export isValidAddress = ({ address, network }, cb)-> 
-    addressIsValid = WAValidator.validate(address, 'BTC')   
+    addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
     return cb "Address is not valid" if not addressIsValid   
     return cb null, address
 export get-transaction-info = (config, cb)->

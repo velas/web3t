@@ -259,6 +259,6 @@ export get-balance = ({ network, address} , cb)->
     value = balance.value `div` dec
     cb null, value
 export isValidAddress = ({ address, network }, cb)-> 
-    addressIsValid = WAValidator.validate(address, 'BTC')    
+    addressIsValid = WAValidator.validate(address, 'BTC', 'both')    
     return cb "Address is not valid" if not addressIsValid   
     return cb null, address

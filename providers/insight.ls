@@ -356,6 +356,6 @@ export get-transactions = ({ network, address}, cb)->
     cb null, txs
 export isValidAddress = ({ address, network, token }, cb)-> 
     token = token.to-upper-case! if token?    
-    addressIsValid = WAValidator.validate(address, token)    
+    addressIsValid = WAValidator.validate(address, token, 'both')    
     return cb "Address is not valid" if not addressIsValid   
     return cb null, address
