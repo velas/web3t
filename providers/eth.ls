@@ -7,6 +7,7 @@ require! {
     #\web3 : \Web3
     \../json-parse.js
     \../deadline.js
+    \multicoin-address-validator : \WAValidator
 }
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
@@ -183,3 +184,8 @@ export get-balance = ({ network, address} , cb)->
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
+export isValidAddress = ({ address, network }, cb)-> 
+    console.log "eth validation"   address   
+    addressIsValid = WAValidator.validate(address, 'ETH')    
+    return cb "Address is not valid" if not addressIsValid   
+    return cb null, address
