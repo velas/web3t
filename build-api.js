@@ -158,8 +158,8 @@
     };
   };
   buildIsValidAddress = function(arg$){
-    var network, provider;
-    network = arg$.network, provider = arg$.provider;
+    var network, provider, token;
+    network = arg$.network, provider = arg$.provider, token = arg$.token;
     return function(address, cb){
       if (toString$.call(address).slice(8, -1) !== 'String') {
         return cb("address should be string");
@@ -169,7 +169,8 @@
       }
       return provider.isValidAddress({
         address: address,
-        network: network
+        network: network,
+        token: token
       }, function(err, valid){
         if (err != null) {
           return cb(err);
