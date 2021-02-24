@@ -34,9 +34,7 @@
       ltc: ltc,
       usdt: usdt,
       etc: etc,
-      'void': void 8,
-      symblox: symblox,
-      symbloxV2: symbloxV2
+      symblox: symblox
     };
     extendCoins(def, config);
     return cb(null, def);

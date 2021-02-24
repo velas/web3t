@@ -1,5 +1,5 @@
 require! {
-    \prelude-ls : { obj-to-pairs, pairs-to-obj }
+    \prelude-ls : { obj-to-pairs, pairs-to-obj, filter }
     \./math.js : { minus, div, times }
     \./config-parser.js
 }
@@ -100,7 +100,8 @@ build-pair = ([name, api], providers, config, cb)->
     mode = get-mode-for name
     #console.log mode if name is \eth
     network = api[mode]
-    return cb "Network #{mode} not found for #{mode}" if not network?
+    return cb "Network #{mode} not found for #{name}/#{mode}" if not network?
+    return cb "API config not found for #{name}/#{mode}" if not network.api?
     provider = providers[network.api.provider]
     return cb "Provider not found for #{name}" if not provider?
     humanize-amount = build-humanize-amount { network, provider }
@@ -127,9 +128,15 @@ build-pairs = ([pair, ...rest], providers, config, cb)->
     return cb err if err?
     cb null, ([[pair.0, item]] ++ rest)
     
+only-enabled = (config)-> (item)->
+    { get-mode-for } = config-parser config
+    mode = get-mode-for item.0
+    item.1[mode].disabled isnt yes
 build-api = (coins, providers, config, cb)->
     pairs = 
-        coins |> obj-to-pairs
+        coins 
+            |> obj-to-pairs
+            |> filter only-enabled config
     err, items <- build-pairs pairs, providers, config
     return cb err if err?
     result = pairs-to-obj items
