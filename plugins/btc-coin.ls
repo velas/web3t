@@ -10,6 +10,7 @@ export mainnet =
     api:
         provider: \bitcore
         url: \https://bitcore.velas.com
+        network-name: 'mainnet'
         linktx: \https://bitcore.velas.com/#/BTC/mainnet/tx/:hash
         decimal: 8
         alternative:
@@ -30,7 +31,8 @@ export testnet =
     api:
         #api-name: \testnet/api
         provider: \bitcore
-        url: \https://api.bitcore.io
+        url: \https://bitcore.testnet.veladev.net
+        network-name: 'testnet'
         linktx: \https://bitpay.com/insight/#/BTC/testnet/tx/:hash
         decimal: 8
     tx-fee-options:

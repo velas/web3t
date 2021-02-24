@@ -580,6 +580,7 @@
       deadline: deadline
     }).end(function(err, data){
       var json, dec, num, e;
+      console.log(getApiUrl(network) + "/address/" + address + "/balance");
       if (err != null || data.text.length === 0) {
         return cb(err);
       }
@@ -674,9 +675,9 @@
     return transformOut(config, t);
   });
   getApiUrl = function(network){
-    var apiName, ref$, networkName, ref1$;
+    var apiName, ref$, networkName;
     apiName = (ref$ = network.api.apiName) != null ? ref$ : 'api';
-    networkName = ((ref$ = global.store) != null ? (ref1$ = ref$.current) != null ? ref1$.network : void 8 : void 8) || 'mainnet';
+    networkName = (ref$ = network.api.networkName) != null ? ref$ : 'mainnet';
     return network.api.url + "/" + apiName + "/BTC/" + networkName;
   };
   out$.checkTxStatus = checkTxStatus = function(arg$, cb){

@@ -14,6 +14,7 @@
     api: {
       provider: 'bitcore',
       url: 'https://bitcore.velas.com',
+      networkName: 'mainnet',
       linktx: 'https://bitcore.velas.com/#/BTC/mainnet/tx/:hash',
       decimal: 8,
       alternative: {
@@ -37,7 +38,8 @@
     mask: '1000000000000000000000000000000000',
     api: {
       provider: 'bitcore',
-      url: 'https://api.bitcore.io',
+      url: 'https://bitcore.testnet.veladev.net',
+      networkName: 'testnet',
       linktx: 'https://bitpay.com/insight/#/BTC/testnet/tx/:hash',
       decimal: 8
     },

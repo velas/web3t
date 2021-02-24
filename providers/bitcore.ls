@@ -270,6 +270,7 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
 export get-balance = ({ address, network } , cb)->
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/address/#{address}/balance" .timeout { deadline } .end
+    console.log "#{get-api-url network}/address/#{address}/balance"
     return cb err if err? or data.text.length is 0
     #check that data.text has number
     try
@@ -317,7 +318,7 @@ transform-tx = (config, t)-->
     transform-out config, t
 get-api-url = (network)->
     api-name = network.api.api-name ? \api
-    network-name = global.store?.current?.network || \mainnet
+    network-name = network.api.network-name ? \mainnet
     "#{network.api.url}/#{api-name}/BTC/#{network-name}"
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
