@@ -188,12 +188,15 @@ add-outputs = (config, cb)->
     { tx-type, total, value, fee, tx, recipient, account } = config
     return cb "fee, value, total are required" if not fee? or not value? or not total?
     return add-outputs-private config, cb if tx-type is \private
-    rest = total `minus` value `minus` fee
-    tx.add-output recipient, +value
-    #console.log { rest }
-    if +rest isnt 0
-        tx.add-output account.address, +rest
-    cb null
+    try  
+        rest = total `minus` value `minus` fee
+        tx.add-output recipient, +value
+        if +rest isnt 0
+            tx.add-output account.address, +rest
+        cb null
+    catch err
+        console.error err    
+        return cb err    
 #recipient
 get-error = (config, fields)->
     result =
