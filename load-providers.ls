@@ -6,6 +6,7 @@ require! {
     \./providers/erc20.js
     \./providers/omni.js
     \./providers/velas2.js
+    #\./providers/vlx_solana.js
     #\./providers/eos.js
     #\./providers/stellar.js
     #\./providers/tron.js
