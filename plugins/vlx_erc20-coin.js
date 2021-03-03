@@ -28,9 +28,9 @@ testnetConfig = {
     txFeeIn: "eth",
     api: {
         provider: 'velas_erc20',
-        web3Provider: 'https://kovan.poa.network',
-        url: 'https://kovan.etherscan.io',
-        apiUrl: 'https://kovan.etherscan.io/api'
+        web3Provider: 'https://ropsten.infura.io/v3/843d2e25655c47c7851744f65ce95837',
+        url: 'https://ropsten.etherscan.io',
+        apiUrl: 'https://api-ropsten.etherscan.io/api'
     }
 };
 
