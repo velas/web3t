@@ -17,13 +17,14 @@ testnet-config =
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options:
-        auto: \0.0020
+        auto: \0.0020  
         cheap: \0.0020
     message-prefix: 'Ethereum'
     mask: \V0000000000000
     api:
         provider: \velas2
         web3Provider : \https://explorer.testnet.veladev.net/rpc
+        foreignProvider: \https://kovan.poa.network    
         url : \https://explorer.testnet.veladev.net
         apiUrl : \https://explorer.testnet.veladev.net/api
 testnet2-config =
