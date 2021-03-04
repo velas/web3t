@@ -12,7 +12,7 @@
     mask: '0x0000000000000000000000000000000000000000',
     api: {
       provider: 'eth',
-      web3Provider: 'https://mainnet.infura.io/v3/843d2e25655c47c7851744f65ce95837',
+      web3Provider: 'https://mainnet.infura.io/v3/622100399ace495d92c1339f6be12b2b',
       url: 'https://etherscan.io',
       apiUrl: 'https://api.etherscan.io/api'
     }
@@ -44,7 +44,7 @@
     mask: '0x0000000000000000000000000000000000000000',
     api: {
       provider: 'eth',
-      web3Provider: 'https://ropsten.infura.io/v3/843d2e25655c47c7851744f65ce95837',
+      web3Provider: 'https://mainnet.infura.io/v3/622100399ace495d92c1339f6be12b2b',
       url: 'https://ropsten.etherscan.io',
       apiUrl: 'https://api-ropsten.etherscan.io/api'
     }
@@ -66,7 +66,7 @@
     }
   }
   out$.color = color = '#5838B8';
-  out$.testnet = testnet = kovan;
+  out$.testnet = testnet = ropsten;
   out$.type = type = 'coin';
   out$.enabled = enabled = true;
   out$.name = name = 'Ethereum';

@@ -1,4 +1,4 @@
-var mainnetConfig, testnetConfig, testnet2Config, mainnet, testnet, ref$, ref1$, color, type, enabled, name, token, nickname, image, usdInfo, out$ = typeof exports != 'undefined' && exports || this;
+var mainnetConfig, testnetConfig, kovan, ropsten, testnet2Config, mainnet, testnet, ref$, ref1$, color, type, enabled, name, token, nickname, image, usdInfo, out$ = typeof exports != 'undefined' && exports || this;
 mainnetConfig = {
     decimals: 18,
     txFee: '0.0014',
@@ -10,12 +10,12 @@ mainnetConfig = {
     mask: '0x0000000000000000000000000000000000000000',
     api: {
         provider: 'velas_erc20',
-        web3Provider: 'https://explorer.velas.com/rpc',
-        url: 'https://explorer.velas.com',
-        apiUrl: 'https://explorer.velas.com/api'
+        web3Provider: 'https://mainnet.infura.io/v3/622100399ace495d92c1339f6be12b2b',
+        url: 'https://etherscan.io',
+        apiUrl: 'https://api.etherscan.io/api'
     }
 };
-testnetConfig = {
+ropsten = {
     decimals: 18,
     txFee: '0.0014',
     address: '0xD6933C1aE9E20A536D793E25Ea1C3ba38ce02c2D',
@@ -28,14 +28,33 @@ testnetConfig = {
     txFeeIn: "eth",
     api: {
         provider: 'velas_erc20',
-        web3Provider: 'https://ropsten.infura.io/v3/843d2e25655c47c7851744f65ce95837',
+        web3Provider: 'https://ropsten.infura.io/v3/622100399ace495d92c1339f6be12b2b',
         url: 'https://ropsten.etherscan.io',
         apiUrl: 'https://api-ropsten.etherscan.io/api'
     }
 };
 
+kovan = {
+    decimals: 18,
+    txFee: '0.0014',
+    address: '0x3e0aa75a75adafcf3cb800c812b66b4aafe03b52',
+    txFeeOptions: {
+        auto: '0.0020',
+        cheap: '0.0020'
+    },
+    messagePrefix: 'Ethereum',
+    mask: '0x0000000000000000000000000000000000000000',
+    txFeeIn: "eth",
+    api: {
+        provider: 'velas_erc20',
+        web3Provider: 'https://kovan.poa.network',
+        url: 'https://kovan.etherscan.io',
+        apiUrl: 'https://api-kovan.etherscan.io/api'
+    }
+}
+
 out$.mainnet = mainnet = mainnetConfig;
-out$.testnet = testnet = testnetConfig;
+out$.testnet = testnet = kovan;
 out$.color = color = '#9E4FEB';
 out$.type = type = 'coin';
 out$.enabled = enabled = true;
