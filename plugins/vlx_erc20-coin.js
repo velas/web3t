@@ -54,7 +54,7 @@ kovan = {
 }
 
 out$.mainnet = mainnet = mainnetConfig;
-out$.testnet = testnet = kovan;
+out$.testnet = testnet = ropsten;
 out$.color = color = '#9E4FEB';
 out$.type = type = 'coin';
 out$.enabled = enabled = true;
