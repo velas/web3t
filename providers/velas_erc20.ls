@@ -83,6 +83,7 @@ make-query = (network, method, params, cb)->
         id : 1
         method
         params
+        secret: \494f6287e5974752bbc4281598c3993f    
     }
     err, data <- post web3-provider, query .end
     return cb "query err: #{err.message ? err}" if err?
@@ -150,6 +151,10 @@ transform-tx = (network, description, t)-->
         | t.hash? => t.hash
         | t.transactionHash? => t.transactionHash
         | _ => "unknown"
+    status =
+        | +t.confirmations > 0 => \confirmed       
+        | t.status is \0x0 => \reverted
+        | _ => \pending
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
@@ -157,7 +162,7 @@ transform-tx = (network, description, t)-->
     gas-price = t.gas-price ? 0
     fee = gas-used `times` gas-price `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    { network, tx, status, amount, fee, time, url, t.from, t.to, recipient-type, description }
 get-internal-transactions = ({ network, address }, cb)->
     err, address <- to-eth-address address
     return cb err if err?
@@ -204,6 +209,7 @@ get-external-transactions = ({ network, address }, cb)->
     #console.log api-url, result.result, txs
     cb null, txs
 export get-transactions = ({ network, address }, cb)->
+    console.log "get-transactions erc20 vlx"    
     { api-url } = network.api
     module = \account
     action = \tokentx
@@ -212,6 +218,7 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
+    console.log "get-url " "#{api-url}?#{query}"   
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse resp.text
@@ -219,8 +226,8 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
-            |> filter -> up(it.contract-address) is up(network.address)
-            |> map transform-tx network
+            #|> filter -> it.contract-address is network.address
+            |> map transform-tx network, 'external' 
     cb null, txs
 export get-contract-transactions = ({ network, address }, cb)->
     console.log "[get-contract-transactions]"    
