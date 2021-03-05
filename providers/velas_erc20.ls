@@ -369,7 +369,7 @@ export get-balance = ({ network, address} , cb)->
     console.log "get-balance" address  
     abi = ERC20BridgeToken.abi
     web3 = get-web3 network
-    ERC20BridgeToken_ = web3.eth.contract(abi).at("0x3e0Aa75a75AdAfcf3cb800C812b66B4aaFe03B52")    
+    ERC20BridgeToken_ = web3.eth.contract(abi).at("0x82237607a996A545Bf1e0b447050aa73855300b0")    
     number = ERC20BridgeToken_.balance-of(address)
     dec = get-dec network
     balance = number `div` dec
