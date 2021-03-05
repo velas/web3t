@@ -1,6 +1,6 @@
 var mainnetConfig, testnetConfig, kovan, ropsten, testnet2Config, mainnet, testnet, ref$, ref1$, color, type, enabled, name, token, nickname, image, usdInfo, out$ = typeof exports != 'undefined' && exports || this;
 mainnetConfig = {
-    name: "Mainnet",
+    name: "mainnet",
     decimals: 18,
     txFee: '0.0014',
     txFeeOptions: {
@@ -17,7 +17,7 @@ mainnetConfig = {
     }
 };
 ropsten = {
-    name: "Ropsten",
+    name: "ropsten",
     decimals: 18,
     txFee: '0.0014',
     txFeeOptions: {
@@ -36,7 +36,7 @@ ropsten = {
 };
 
 kovan = {
-    name: "Kovan",
+    name: "kovan",
     decimals: 18,
     txFee: '0.0014',
     txFeeOptions: {
@@ -57,7 +57,7 @@ kovan = {
 out$.mainnet = mainnet = mainnetConfig;
 out$.testnet = testnet = ropsten;
 out$.testnets = { kovan: kovan, ropsten: ropsten };
-out$.mainnets = { eth: mainnetConfig };
+out$.mainnets = { mainnet: mainnetConfig };
 out$.color = color = '#9E4FEB';
 out$.type = type = 'coin';
 out$.enabled = enabled = true;
