@@ -35,7 +35,7 @@ export ropsten =
     tx-fee-in: \eth   
     api:
         provider: \eth
-        web3Provider : \https://ropsten.infura.io/v3/622100399ace495d92c1339f6be12b2b
+        web3Provider : \https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648
         url : \https://ropsten.etherscan.io
         apiUrl : \https://api-ropsten.etherscan.io/api
 kovan =

@@ -11,7 +11,7 @@ mainnetConfig = {
     mask: '0x0000000000000000000000000000000000000000',
     api: {
         provider: 'velas_erc20',
-        web3Provider: 'https://mainnet.infura.io/v3/622100399ace495d92c1339f6be12b2b',
+        web3Provider: 'https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648',
         url: 'https://etherscan.io',
         apiUrl: 'https://api.etherscan.io/api'
     }
@@ -29,7 +29,7 @@ ropsten = {
     txFeeIn: "eth",
     api: {
         provider: 'velas_erc20',
-        web3Provider: 'https://ropsten.infura.io/v3/622100399ace495d92c1339f6be12b2b',
+        web3Provider: 'https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648',
         url: 'https://ropsten.etherscan.io',
         apiUrl: 'https://api-ropsten.etherscan.io/api'
     }
