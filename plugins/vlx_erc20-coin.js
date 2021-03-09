@@ -56,8 +56,8 @@ kovan = {
 
 out$.mainnet = mainnet = mainnetConfig;
 out$.testnet = testnet = ropsten;
-out$.testnets = { kovan: kovan, ropsten: ropsten };
-out$.mainnets = { mainnet: mainnetConfig };
+out$.testnets = { vlx_erc20: ropsten };
+out$.mainnets = { vlx_erc20: mainnetConfig };
 out$.color = color = '#9E4FEB';
 out$.type = type = 'coin';
 out$.enabled = enabled = true;
