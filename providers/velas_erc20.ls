@@ -10,7 +10,7 @@ require! {
     \ethereumjs-common : { default: Common }
     \../addresses.js : { vlxToEth, ethToVlx }
     \crypto-js/sha3 : \sha3   
-    \./contracts/ERC20BridgeToken.json    
+    \../contracts/ERC20BridgeToken.json    
 }
 isChecksumAddress = (address) ->
     address = address.replace '0x', ''
@@ -288,9 +288,8 @@ get-contract-instance = (web3, addr)->
     tokenAddress = \0x3e0Aa75a75AdAfcf3cb800C812b66B4aaFe03B52    
     web3.eth.contract(abi).at(tokenAddress)
 export create-transaction = (config, cb)-->
-    { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } = config 
+    { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap, chainId } = config 
     return cb "address in not correct ethereum address" if not is-address recipient
-    console.log "velas_erc20 [create-transaction]" data   
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -325,10 +324,9 @@ export create-transaction = (config, cb)-->
         to: recipient
         from: account.address
         data: config.data || \0x
-    console.log "[create-transaction] tx" tx  
+        chainId: chainId 
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
-    console.log "[create-transaction] rawtx" rawtx
     cb null, { rawtx }
 export check-decoded-data = (decoded-data, data)->
     return no if not (decoded-data ? "").length is 0

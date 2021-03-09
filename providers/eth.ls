@@ -116,7 +116,7 @@ is-address = (address) ->
         false
     else
         true
-export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, chainId} , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
     return cb "address in not correct ethereum address" if not is-address recipient
@@ -147,7 +147,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         to: recipient
         from: account.address
         data: data || \0x
-        #chainId: 1
+        chainId: chainId   
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
