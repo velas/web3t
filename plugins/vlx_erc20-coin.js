@@ -9,6 +9,7 @@ mainnetConfig = {
     },
     messagePrefix: 'Ethereum',
     mask: '0x0000000000000000000000000000000000000000',
+    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
     api: {
         provider: 'velas_erc20',
         web3Provider: 'https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648',
@@ -27,9 +28,10 @@ ropsten = {
     messagePrefix: 'Ethereum',
     mask: '0x0000000000000000000000000000000000000000',
     txFeeIn: "eth",
+    address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
     api: {
         provider: 'velas_erc20',
-        web3Provider: 'https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648',
+        web3Provider: 'https://ropsten-rpc.devnet.veladev.net',
         url: 'https://ropsten.etherscan.io',
         apiUrl: 'https://api-ropsten.etherscan.io/api'
     }
