@@ -10,6 +10,7 @@ mainnetConfig = {
     messagePrefix: 'Ethereum',
     mask: '0x0000000000000000000000000000000000000000',
     address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
+    ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
     api: {
         provider: 'velas_erc20',
         web3Provider: 'https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648',
@@ -29,6 +30,7 @@ ropsten = {
     mask: '0x0000000000000000000000000000000000000000',
     txFeeIn: "eth",
     address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
+    ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C",
     api: {
         provider: 'velas_erc20',
         web3Provider: 'https://ropsten-rpc.devnet.veladev.net',
