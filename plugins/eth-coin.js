@@ -17,22 +17,6 @@
       apiUrl: 'https://api.etherscan.io/api'
     }
   };
-  out$.ethnamed = ethnamed = {
-    decimals: 18,
-    txFee: '0.0014',
-    txFeeOptions: {
-      auto: '0.0014',
-      cheap: '0.00014'
-    },
-    messagePrefix: 'Ethereum',
-    mask: '0x0000000000000000000000000000000000000000',
-    api: {
-      provider: 'eth',
-      web3Provider: 'http://web3.space:9000',
-      url: 'http://web3.space:8000',
-      apiUrl: 'http://web3.space:8000/api'
-    }
-  };
   out$.ropsten = ropsten = {
     decimals: 18,
     txFee: '0.0014',
