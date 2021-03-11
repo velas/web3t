@@ -284,9 +284,8 @@ is-address = (address) ->
     else
         true
 get-contract-instance = (web3, addr)->
-    abi = ERC20BridgeToken.abi
-    tokenAddress = \0x3e0Aa75a75AdAfcf3cb800C812b66B4aaFe03B52    
-    web3.eth.contract(abi).at(tokenAddress)
+    abi = ERC20BridgeToken.abi   
+    web3.eth.contract(abi).at(addr)
 export create-transaction = (config, cb)-->
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap, chainId } = config 
     return cb "address in not correct ethereum address" if not is-address recipient
@@ -364,14 +363,12 @@ get-web3 = (network)->
 export get-balance = ({ network, address} , cb)->
     err, address <- to-eth-address address
     return cb err if err?
-    console.log "get-balance" address  
     abi = ERC20BridgeToken.abi
-    web3 = get-web3 network
-    ERC20BridgeToken_ = web3.eth.contract(abi).at("0x82237607a996A545Bf1e0b447050aa73855300b0")    
+    web3 = get-web3 network   
+    ERC20BridgeToken_ = web3.eth.contract(abi).at(network.ERC20BridgeToken)    
     number = ERC20BridgeToken_.balance-of(address)
     dec = get-dec network
     balance = number `div` dec
-    console.log "token balance" balance    
     cb null, balance
 #console.log \test
 #to-eth-address "VADyNxJR9PjWrQzJVmoaKxqaS8Mk", console.log
