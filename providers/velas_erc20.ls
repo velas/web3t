@@ -1,6 +1,6 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each, sort-by, reverse }
+    \prelude-ls : { filter, map, foldl, each, sort-by, reverse, uniqueBy }
     \../math.js : { plus, minus, times, div, from-hex }
     \./superagent.js : { get, post }
     \./deps.js : { Web3, Tx, BN, hdkey, bip39, ERC20BridgeToken }
@@ -97,14 +97,14 @@ make-query = (network, method, params, cb)->
 export get-transaction-info = (config, cb)->
     { network, tx } = config
     query = [tx]
-    err, tx <- make-query network, \eth_getTransactionReceipt , query
+    err, tx-data <- make-query network, \eth_getTransactionReceipt , query
     return cb err if err?
     status =
-        | typeof! tx isnt \Object => \pending
-        | tx.status is \0x0 => \reverted
-        | tx.status is \0x1 => \confirmed
+        | typeof! tx-data isnt \Object => \pending
+        | tx-data.status is \0x0 => \reverted
+        | tx-data.status is \0x1 => \confirmed
         | _ => \pending
-    result = { tx?from, tx?to, status, info: tx }
+    result = { tx-data?from, tx-data?to, status, info: tx }
     cb null, result
 get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, gas if gas?
@@ -154,6 +154,8 @@ transform-tx = (network, description, t)-->
     status =
         | +t.confirmations > 0 => \confirmed       
         | t.status is \0x0 => \reverted
+#        | +t.isError is 0 and t.confirmations > 0 => \confirmed       
+#        | t.isError is 1 => \reverted
         | _ => \pending
     amount = t.value `div` dec
     time = t.time-stamp
@@ -227,6 +229,7 @@ export get-transactions = ({ network, address }, cb)->
     txs =
         result.result
             #|> filter -> it.contract-address is network.address
+            |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs
 export get-contract-transactions = ({ network, address }, cb)->
