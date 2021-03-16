@@ -3,7 +3,7 @@ mainnetConfig = {
     name: "mainnet",
     decimals: 18,
     txFee: '0.0014',
-    txFeeIn: "vlx",
+    txFeeIn: "eth",
     txBridgeFeeIn: 'eth',
     txFeeOptions: {
         auto: '0.0020',
