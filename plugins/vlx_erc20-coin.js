@@ -30,7 +30,7 @@ ropsten = {
     },
     messagePrefix: 'Ethereum',
     mask: '0x0000000000000000000000000000000000000000',
-    txFeeIn: "vlx",
+    txFeeIn: "eth",
     txBridgeFeeIn: "eth",
     address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
     ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C",
