@@ -3,7 +3,8 @@ mainnetConfig = {
     name: "mainnet",
     decimals: 18,
     txFee: '0.0014',
-    txFeeIn: 'eth',
+    txFeeIn: "vlx",
+    txBridgeFeeIn: 'eth',
     txFeeOptions: {
         auto: '0.0020',
         cheap: '0.00014'
@@ -29,7 +30,8 @@ ropsten = {
     },
     messagePrefix: 'Ethereum',
     mask: '0x0000000000000000000000000000000000000000',
-    txFeeIn: "eth",
+    txFeeIn: "vlx",
+    txBridgeFeeIn: "eth",
     address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
     ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C",
     api: {
