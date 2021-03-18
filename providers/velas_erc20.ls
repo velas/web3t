@@ -174,7 +174,6 @@ get-internal-transactions = ({ network, address }, cb)->
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     page = 1
     offset = 20
-    console.log("api-url", api-url, action)
     query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
@@ -197,7 +196,6 @@ get-external-transactions = ({ network, address }, cb)->
     sort = \desc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
-    console.log("api-url", api-url, action)
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
@@ -205,10 +203,8 @@ get-external-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result |> map transform-tx network, 'external'
-    #console.log api-url, result.result, txs
     cb null, txs
 export get-transactions = ({ network, address }, cb)->
-    console.log "get-transactions erc20 vlx"    
     { api-url } = network.api
     module = \account
     action = \tokentx
@@ -217,7 +213,6 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
-    console.log "get-url " "#{api-url}?#{query}"   
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse resp.text
@@ -230,7 +225,6 @@ export get-transactions = ({ network, address }, cb)->
             |> map transform-tx network, 'external' 
     cb null, txs
 export get-contract-transactions = ({ network, address }, cb)->
-    console.log "[get-contract-transactions]"    
     err, address <- to-eth-address address
     return cb err if err?
     { api-url } = network.api
@@ -243,7 +237,6 @@ export get-contract-transactions = ({ network, address }, cb)->
     sort = \desc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
-    console.log "#{api-url}?#{query}"
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
