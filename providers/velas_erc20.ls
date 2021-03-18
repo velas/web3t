@@ -74,7 +74,6 @@ try-parse = (data, cb)->
         data.body = JSON.parse data.text
         cb null, data
     catch err
-        #console.log \parse-err, err, data.text
         cb err
 make-query = (network, method, params, cb)->  
     { web3-provider } = network.api
@@ -91,8 +90,6 @@ make-query = (network, method, params, cb)->
     return cb err if err?
     return cb "expected object" if typeof! data.body isnt \Object
     return cb data.body.error if data.body?error?
-    console.log "[make-query] " network.api.web3-provider, method, params 
-    console.log "[make-query] result:" data.body.result
     cb null, data.body.result
 export get-transaction-info = (config, cb)->
     { network, tx } = config
@@ -286,8 +283,11 @@ is-address = (address) ->
         false
     else
         true
-get-contract-instance = (web3, addr)->
-    abi = ERC20BridgeToken.abi   
+get-contract-instance = (web3, network, swap)->
+    abi = ERC20BridgeToken.abi 
+    addr = 
+        | swap? => network.address
+        | _ => network.ERC20BridgeToken 
     web3.eth.contract(abi).at(addr)
 export create-transaction = (config, cb)-->
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap, chainId } = config 
@@ -298,7 +298,7 @@ export create-transaction = (config, cb)-->
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     return cb err if err?
     return cb "nonce is required" if not nonce?
-    contract = get-contract-instance web3, network.address
+    contract = get-contract-instance web3, network, swap  
     to-wei = -> it `times` dec
     to-wei-eth = -> it `times` (10^18)
     to-eth = -> it `div` (10^18)
@@ -307,26 +307,27 @@ export create-transaction = (config, cb)-->
     return cb err if err?
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
     gas-estimate = round ( gas-minimal `times` 5 )
-    err, balance <- get-balance { network, account.address }
+    err, balance <- get-eth-balance { network, address: account.address }
     return cb err if err?
-    balance-eth = to-eth balance
-    to-send = amount `plus` amount-fee
-    return cb "Balance #{balance} is not enough to send tx #{to-send}" if +balance < +to-send
-    console.log "Data" config.data   
-    if not (config.data? and swap?) then 
-        console.log "NO DATA WAS SPECIFIED or it is swap!"   
-        data =
-            | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
-            | _ => contract.transfer.get-data recipient, value 
-    tx = new Tx do
+    fee-in = network.txFeeIn.to-upper-case!    
+    return cb "Not enought balance on #{fee-in} wallet to send tx with fee #{amount-fee}" if +balance < +amount-fee
+    _data =
+        | swap? => contract.transferAndCall.get-data(recipient, value, "0x") 
+        | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!      
+        | _ => contract.transfer.get-data(recipient, value) 
+    _recipient = 
+        | swap? => recipient
+        | _ => network.ERC20BridgeToken  
+    configs = 
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
         gas: to-hex gas-estimate
-        to: recipient
+        to: _recipient 
         from: account.address
-        data: config.data || \0x
-        chainId: chainId 
+        data: config.data || _data || "0x"    
+        chainId: chainId    
+    tx = new Tx(configs)
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -363,26 +364,23 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
 get-web3 = (network)->
     { web3-provider } = network.api
     new Web3(new Web3.providers.HttpProvider(web3-provider))
-export get-balance = ({ network, address} , cb)->
-    err, address <- to-eth-address address
-    return cb err if err?
-    abi = ERC20BridgeToken.abi
-    web3 = get-web3 network   
-    ERC20BridgeToken_ = web3.eth.contract(abi).at(network.ERC20BridgeToken)    
-    number = ERC20BridgeToken_.balance-of(address)
+export get-balance = ({ network, address, swap} , cb)->
+    #err, address <- to-eth-address address
+    #return cb err if err?
+    web3 = get-web3 network
+    contract = get-contract-instance web3, network, swap 
+    number = contract.balance-of(address)
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
-#console.log \test
-#to-eth-address "VADyNxJR9PjWrQzJVmoaKxqaS8Mk", console.log
-#console.log to-velas-address Buffer.from("0b6a35fafb76e0786db539633652a8553ac28d67", 'hex')
-#
-#
+export get-eth-balance = ({ network, address} , cb)->
+    err, number <- make-query network, \eth_getBalance , [ address, \latest ]
+    return cb err if err?
+    dec = get-dec network
+    balance = number `div` dec
+    cb null, balance
 #
 # SERVICE
-#
-#
-#
 #
 export get-sync-status = ({ network }, cb)->
     err, estimate <- make-query network, \eth_getSyncing , [ ]
