@@ -9,7 +9,7 @@ require! {
     \bs58 : { decode, encode }
     \ethereumjs-common : { default: Common }
     \../addresses.js : { vlxToEth, ethToVlx }
-    \crypto-js/sha3 : \sha3   
+    \crypto-js/sha3 : \sha3
 }
 isChecksumAddress = (address) ->
     address = address.replace '0x', ''
@@ -160,8 +160,8 @@ transform-tx = (network, description, t)-->
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    gas-used = t.gas-used ? 0
-    gas-price = t.gas-price ? 0
+    gas-used = t.gas-used || 0
+    gas-price = t.gas-price || 0
     fee = gas-used `times` gas-price `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
