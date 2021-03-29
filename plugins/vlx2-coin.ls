@@ -12,13 +12,13 @@ mainnet-config =
         url : \https://explorer.velas.com
         apiUrl : \https://explorer.velas.com/api
     networks:
-        evm:
-            id: "evm"    
-            name: "Ethereum"    
-            HomeBridge          : "0x38E20F6224449eCB50A81188147cbf990a00eA44"        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
-            referTo             : "vlx_erc20"   
+        #evm:
+            #id: "evm"    
+            #name: "Ethereum"    
+            #HomeBridge          : "0x38E20F6224449eCB50A81188147cbf990a00eA44"        
+            #ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+            #ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
+            #eferTo             : "vlx_erc20"   
         native:
             id: "native" 
             name: "Velas Native" 
@@ -38,17 +38,17 @@ testnet-config =
     mask: \V0000000000000
     api:
         provider: \velas2
-        web3Provider : \https://explorer.testnet.velas.com/rpc
-        url : \https://explorer.testnet.veladev.net
-        apiUrl : \https://explorer.testnet.veladev.net/api
+        web3Provider : \https://bridge.next.velas.com/rpc
+        url : \https://bridge.next.velas.com
+        apiUrl : \https://bridge.next.velas.com/api
     networks:
-#        evm:
-#            id: "evm"    
-#            name: "Velas EVM"    
-#            HomeBridge          : "0x38E20F6224449eCB50A81188147cbf990a00eA44"        
-#            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-#            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
-#            referTo             : "vlx_erc20"   
+        #evm:
+            #id: "evm"    
+            #name: "Velas EVM"    
+            #HomeBridge          : "0x38E20F6224449eCB50A81188147cbf990a00eA44"        
+            #ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+            #ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
+            #referTo             : "vlx_erc20"   
         native:
             id: "native" 
             name: "Velas Native" 
