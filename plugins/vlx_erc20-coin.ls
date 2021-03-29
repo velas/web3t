@@ -1,17 +1,23 @@
 mainnet-config =
+    disabled: true,
     decimals: 18
     tx-fee: \0.0014
+    txFeeIn: "eth"
+    txBridgeFeeIn: 'eth'
     tx-fee-options:
         auto: \0.0020
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
+    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
+    ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
     api:
-        provider: \erc20    
-        web3Provider : \https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648
-        url : \https://etherscan.io
-        apiUrl : \https://api.etherscan.io/api
+        provider: \velas_erc20    
+        web3Provider: 'https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648',
+        url: 'https://etherscan.io',
+        apiUrl: 'https://api.etherscan.io/api'
 testnet-config =
+    disabled: true
     decimals: 18
     tx-fee: \0.0014
     address: \0xD6933C1aE9E20A536D793E25Ea1C3ba38ce02c2D
@@ -21,9 +27,12 @@ testnet-config =
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     txFeeIn: "eth"
+    txBridgeFeeIn: "eth"
+    address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+    ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
     api:
         provider: \velas_erc20 
-        web3Provider: 'https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648',
+        web3Provider: 'https://ropsten-rpc.devnet.veladev.net',
         url: 'https://ropsten.etherscan.io',
         apiUrl: 'https://api-ropsten.etherscan.io/api'
 
@@ -31,7 +40,7 @@ export mainnet =  mainnet-config
 export testnet = testnet-config
 export color = \#9E4FEB
 export type = \coin
-export enabled = yes
+export enabled = no  
 export name = 'Velas_erc20'
 export token = \vlx_erc20
 export nickname = \vlx_erc20  

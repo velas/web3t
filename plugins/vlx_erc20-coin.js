@@ -1,47 +1,46 @@
 var mainnetConfig, testnetConfig, kovan, ropsten, testnet2Config, mainnet, testnet, ref$, ref1$, color, type, enabled, name, token, nickname, image, usdInfo, out$ = typeof exports != 'undefined' && exports || this;
 mainnetConfig = {
     disabled: true,
-    // name: "mainnet",
-    // decimals: 18,
-    // txFee: '0.0014',
-    // txFeeIn: "eth",
-    // txBridgeFeeIn: 'eth',
-    // txFeeOptions: {
-    //     auto: '0.0020',
-    //     cheap: '0.00014'
-    // },
-    // messagePrefix: 'Ethereum',
-    // mask: '0x0000000000000000000000000000000000000000',
-    // address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
-    // ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
-    // api: {
-    //     provider: 'velas_erc20',
-    //     web3Provider: 'https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648',
-    //     url: 'https://etherscan.io',
-    //     apiUrl: 'https://api.etherscan.io/api'
-    // }
+    decimals: 18,
+    txFee: '0.0014',
+    txFeeIn: "eth",
+    txBridgeFeeIn: 'eth',
+    txFeeOptions: {
+        auto: '0.0020',
+        cheap: '0.00014'
+    },
+    messagePrefix: 'Ethereum',
+    mask: '0x0000000000000000000000000000000000000000',
+    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
+    ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
+    api: {
+        provider: 'velas_erc20',
+        web3Provider: 'https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648',
+        url: 'https://etherscan.io',
+        apiUrl: 'https://api.etherscan.io/api'
+    }
 };
 ropsten = {
     disabled: true,
-    // name: "ropsten",
-    // decimals: 18,
-    // txFee: '0.0014',
-    // txFeeOptions: {
-    //     auto: '0.0020',
-    //     cheap: '0.0020'
-    // },
-    // messagePrefix: 'Ethereum',
-    // mask: '0x0000000000000000000000000000000000000000',
-    // txFeeIn: "eth",
-    // txBridgeFeeIn: "eth",
-    // address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
-    // ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C",
-    // api: {
-    //     provider: 'velas_erc20',
-    //     web3Provider: 'https://ropsten-rpc.devnet.veladev.net',
-    //     url: 'https://ropsten.etherscan.io',
-    //     apiUrl: 'https://api-ropsten.etherscan.io/api'
-    // }
+    name: "ropsten",
+    decimals: 18,
+    txFee: '0.0014',
+    txFeeOptions: {
+        auto: '0.0020',
+        cheap: '0.0020'
+    },
+    messagePrefix: 'Ethereum',
+    mask: '0x0000000000000000000000000000000000000000',
+    txFeeIn: "eth",
+    txBridgeFeeIn: "eth",
+    address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
+    ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C",
+    api: {
+        provider: 'velas_erc20',
+        web3Provider: 'https://ropsten-rpc.devnet.veladev.net',
+        url: 'https://ropsten.etherscan.io',
+        apiUrl: 'https://api-ropsten.etherscan.io/api'
+    }
 };
 
 kovan = {
