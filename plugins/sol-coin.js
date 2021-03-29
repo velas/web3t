@@ -37,7 +37,7 @@
     }
   };
   
-  out$.mainnet = mainnet = mainnetConfig;
+  // out$.mainnet = mainnet = mainnetConfig;
   out$.testnet = testnet = (typeof window != 'undefined' && window !== null ? (ref$ = window.location) != null ? (ref1$ = ref$.href) != null ? ref1$.indexOf('testnet2') : void 8 : void 8 : void 8) > -1 ? testnet2Config : testnetConfig;
   out$.color = color = '#9E4FEB';
   out$.type = type = 'coin';
