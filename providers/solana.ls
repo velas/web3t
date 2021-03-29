@@ -1,6 +1,6 @@
 require! {
     \moment
-    \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join, reverse, uniqueBy }
+    \prelude-ls : { map, pairs-to-obj, foldl, any, each, find, sum, filter, head, values, join, reverse, uniqueBy }
     \./superagent.js : { get, post }
     \../math.js : { plus, minus, div, times }
     \./deps.js : { BitcoinLib, bip39 }
@@ -153,7 +153,6 @@ freeOwnership = ->
     ds = lo.struct([lo.u32('tag')])
     b = Buffer.alloc(4)
     ds.encode({ tag: 2 }, b)
-    console.log "[freeOwnership]" b    
     return b
 swapNativeToEvmData = (lamports, addr)->  
     ds = lo.struct([lo.u32('tag'),
@@ -167,7 +166,6 @@ swapNativeToEvmData = (lamports, addr)->
     ds.encode({ tag: 1, lamports: lamports, array_len: 42 }, b)
     return Buffer.concat([b, Buffer.from(addr, "utf8")])
 swapNativeToEvm = (owner, lamports, addr)->
-    console.log "swapNativeToEvm"    
     EVM_STATE = new solanaWeb3.PublicKey(
         'EvmState11111111111111111111111111111111111',
     )
@@ -179,7 +177,6 @@ swapNativeToEvm = (owner, lamports, addr)->
         { pubkey: owner, isSigner: false, isWritable: true },
     ]
     transaction = new solanaWeb3.Transaction()
-    console.log "transaction" transaction   
     try    
         transaction.add(solanaWeb3.SystemProgram.assign({accountPubkey: owner, programId:EVM_CODE }))
         transaction.add(new solanaWeb3.TransactionInstruction({
@@ -195,33 +192,35 @@ swapNativeToEvm = (owner, lamports, addr)->
     catch err
         console.error "err:" err    
         return 
-    return transaction       
+    return transaction 
+receiver-is-contract = (addr)->
+    addr is "0x56454c41532d434841494e000000000053574150"      
 export create-transaction = (config, cb)->   
     err = get-error config, <[ network account amount amountFee recipient ]>
     return cb err if err?
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } = config
-    console.log "[create-transaction] config" config    
+    console.log "[create-transaction] config" config
     dec = get-dec network
     pay-account = new solanaWeb3.Account(config.account.secret-key)
     err, recentBlockhash <- getRecentBlockhash(network)
     return cb err if err?
     transaction-data = {} 
     amount = config.amount `times` dec
-    transaction =
-        | swap? and swap is yes =>
-            swapNativeToEvm(pay-account, amount, recipient)    
-        | _ => 
-            transaction-data = solanaWeb3.SystemProgram.transfer({
-                fromPubkey: pay-account.public-key
-                toPubkey: recipient
-                lamports: amount
-            })
-            new solanaWeb3.Transaction({recentBlockhash}).add(transaction-data)  
-#    try 
-#    catch err 
-#        return cb "Transaction data error: #{err}" 
-    console.log "transaction" transaction     
-    transaction.sign(pay-account)      
+    transaction = {}
+    if swap? and swap is yes and (not receiver-is-contract(recipient)) then    
+        transaction = swapNativeToEvm(pay-account.public-key, amount, recipient)
+        transaction.recentBlockhash = recentBlockhash     
+    else 
+        transaction-data = solanaWeb3.SystemProgram.transfer({
+            fromPubkey: pay-account.public-key
+            toPubkey: recipient
+            lamports: amount
+        })
+        transaction = new solanaWeb3.Transaction({recentBlockhash}).add(transaction-data)  
+    try    
+        transaction.sign(pay-account)
+    catch err 
+        console.error "Tx sign error:" err      
     encoded = transaction.serialize!.toString('base64') 
     console.log "encoded" encoded
     cb null, { raw-tx: encoded }
@@ -260,7 +259,6 @@ export get-transactions = ({ network, address}, cb)->
     return cb err if err?   
     txs = result
     return cb null, [] if txs.length is 0 
-    console.log "txs result" result 
     #return cb null, [] 
     err, all-txs <- prepare-raw-txs {txs, network, address} 
     return cb err if err?   
@@ -276,47 +274,46 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
     return cb err if err?
     tx-data = data
-    console.log "prepare-txs tx-data" tx-data   
     {fee, err, status} = tx-data.meta 
     transaction = tx-data.transaction
     {accountKeys,instructions} = transaction.message
-    console.log "accountKeys" accountKeys
     senders = 
         accountKeys
             |> filter (-> it.signer is yes)  
     sender = senders[0].pubkey
-    console.log "sender" sender
-    console.log "transaction.message" transaction.message
     receiver-index = 0    
-    receivers = 
+    _receivers = 
         accountKeys
             |> filter (it)-> 
-                is-receiver = it.signer is no and it.writable is yes and (it.pubkey.index-of("EvmState") < 0)   
+                is-receiver = it.signer is no and it.writable is yes   
                 receiver-index++ if not is-receiver      
                 is-receiver
-    console.log "receiver-index" receiver-index    
+    receiver-obj = 
+        | _receivers.length is 1 => _receivers[0]
+        | _receivers >= 1 =>
+            t = _receivers |> filter (it.pubkey.index-of("EvmState") < 0)
+            if t.length > 0 then t[0] else {}   
+        | _ => {} 
     {instructions} = transaction.message 
-    console.log "THe receivers"  receivers   
-    receiver = receivers?[0]?pubkey ? '' 
-    value = '0' 
-    if instructions[0].parsed? 
-        receiver = instructions[0].parsed.info.destination 
-        value = instructions[0].parsed.info.lamports 
+    receiver = 
+        | receiver-obj?pubkey => receiver-obj.pubkey 
+        | instructions[0]?parsed?info?destination => instructions[0].parsed.info.destination
+        | _ => ""     
+    value = 
+        | instructions[0]?parsed?info?lamports => instructions[0].parsed.info.lamports
+        | _ => get-sent-amount(tx-data)[receiver]
+    value = value ? '0' 
     time = moment(+blockTime*1000).format("X")
-    console.log "time" time   
     dec = get-dec network 
     { url, cluster, customUrl } = network.api
     uri = 
         | cluster? => "#{url}/tx/#{signature}?cluster=#{cluster}"
         | _ => "#{url}/tx/#{signature}" 
-    console.log "uri 1" uri     
     uri = uri + "&customUrl=#{customUrl}" if cluster? and customUrl?
-    console.log "uri 2" uri   
     type = 
         |  address isnt receiver => "OUT"
         |  _ => "IN"  
     recipient-type = \regular 
-    console.log "recipient-type" recipient-type
     _tx = { 
         tx: signature 
         amount: value `div` dec  
@@ -329,18 +326,30 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         type
         recipient-type 
     }
-    console.log "tx " _tx    
     t = if _tx? then [_tx] else []    
     err, other <- prepare-txs network, rest, address 
     return cb err if err?
     all =  t ++ other    
-    cb null, all   
+    cb null, all 
+get-sent-amount = (tx)->
+    return 0 if not tx?
+    index = 0    
+    post-balances = tx.meta.postBalances
+    pre-balances = tx.meta.preBalances 
+    accounts = tx.transaction.message.accountKeys
+    accounts 
+        |> map (it)->
+            preBalance = pre-balances[index] ? 0    
+            postBalance = post-balances[index] ? 0
+            index++    
+            diff = "#{preBalance}" `minus` "#{postBalance}"
+            [it.pubkey, Math.abs(+diff)] 
+        |> pairs-to-obj       
 #export isValidAddress = ({ address, network }, cb)-> 
 #    addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
 #    return cb "Address is not valid" if not addressIsValid   
 #    return cb null, address
 export get-transaction-info = (config, cb)->
-    console.log "[get-transaction-info]"    
     { network, tx } = config
     signature = tx  
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
@@ -356,7 +365,6 @@ export get-transaction-info = (config, cb)->
     sender = senders[0].pubkey
     {instructions} = transaction.message   
     receiver = instructions[0].parsed.info.destination
-    console.log "tx-data.meta.status.Ok" tx-data.meta.status.Ok    
     status =
         | (tx-data.meta.status.Ok isnt undefined) => \confirmed
         #| tx.status is \0x1 => \reverted
