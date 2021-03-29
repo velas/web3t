@@ -154,15 +154,24 @@ transform-tx = (network, description, t)-->
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    gas-used = t.gas-used ? 0
-    gas-price = t.gas-price ? 0
-    fee = gas-used `times` gas-price `div` dec
+    gas-used = 
+        | t.gas-used? => t.gas-used
+        | t.gas-used + "".length is 0 => "0" 
+        | _ => "0"          
+    gas-price = 
+        | t.gas-used? => t.gas-used
+        | t.gas-used + "".length is 0 => "0" 
+        | _ => "0"
+    t.gas-price ? "0"
+    fee = gas-used `times` (gas-price + "") `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
-get-internal-transactions = ({ network, address }, cb)->
-    err, address <- to-eth-address address
+    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    res    
+get-internal-transactions = (config, cb)->
+    { network, address } = config   
+    err, address <- to-eth-address config.address
     return cb err if err?
-    { api-url } = network.api
+    { api-url } = config.network.api
     module = \account
     action = \txlistinternal
     startblock = 0
@@ -251,9 +260,9 @@ is-address = (address) ->
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
-    err, recipient <- to-eth-address recipient
+    err, $recipient <- to-eth-address recipient
     return cb err if err?
-    return cb "address in not correct ethereum address" if not is-address recipient
+    return cb "address is not correct ethereum address" if not is-address $recipient
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- get-nonce { account, network }
     return cb err if err?
@@ -278,8 +287,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     data-parsed =
         | data? => data
         | _ => '0x'
-    query = { from: address, to: recipient, data: data-parsed }
+    query = { from: address, to: $recipient, data: data-parsed }
     err, gas-estimate <- get-gas-estimate { network, query, gas }
+    return cb err if err?
+    err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
@@ -292,9 +303,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         gas-price: to-hex gas-price
         value: to-hex value
         gas: to-hex gas-estimate
-        to: recipient
+        to: $recipient
         from: address
         data: data || "0x"
+        chainId: chainId     
     }
     tx = new Tx tx-obj, { common }
     tx.sign private-key
