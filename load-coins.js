@@ -10,7 +10,7 @@
   symblox = require('./plugins/symblox-v2.js');
   ltc = require('./plugins/ltc-coin.js');
   usdt = require('./plugins/usdt-coin.js');
-  vlxSol = require('./plugins/sol-coin.js');
+  sol = require('./plugins/sol-coin.js');
   vlx_erc20 = require('./plugins/vlx_erc20-coin.js');
   ref$ = require('prelude-ls'), objToPairs = ref$.objToPairs, pairsToObj = ref$.pairsToObj, filter = ref$.filter;
   onlyCoins = function(plugins){
@@ -31,7 +31,7 @@
   module.exports = function(config, cb){
     var def;
     def = {
-      vlx_solana: vlxSol,
+      sol: sol,
       vlx_erc20: vlx_erc20, 
       btc: btc,
       dash: dash,

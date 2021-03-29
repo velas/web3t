@@ -6,7 +6,7 @@ require! {
     \./providers/erc20.js
     \./providers/omni.js
     \./providers/velas2.js
-    #\./providers/vlx_solana.js
+    \./providers/solana.js
     #\./providers/eos.js
     #\./providers/stellar.js
     #\./providers/tron.js
@@ -18,6 +18,6 @@ extend-providers = (providers, config)->
     return if typeof! config.providers isnt \Object
     providers <<<< config.providers
 module.exports = (config, cb)->
-   def = { eth, insight, erc20, omni, velas2, blockstream, bitcore }
+   def = { eth, insight, erc20, omni, velas2, blockstream, bitcore, solana }
    extend-providers def, config
    cb null, def

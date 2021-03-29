@@ -8,7 +8,7 @@
   erc20 = require('./providers/erc20.js');
   omni = require('./providers/omni.js');
   velas2 = require('./providers/velas2.js');
-  //velas_solana = require('./providers/vlx_solana.js');
+  solana = require('./providers/solana.js');
   extendProviders = function(providers, config){
     if (toString$.call(config.providers).slice(8, -1) !== 'Object') {
       return;
@@ -23,7 +23,7 @@
       erc20: erc20,
       omni: omni,
       velas2: velas2,
-      //vlx_solana: velas_solana,
+      solana: solana,
       blockstream: blockstream,
       bitcore: bitcore
     };
