@@ -348,13 +348,15 @@ prepare-txs = (network, [tx, ...rest], cb)->
     return cb null, [] if not tx?    
     { mintTxid } = tx
     err, _coins <- get "#{get-api-url network}/tx/#{mintTxid}/coins" .timeout { deadline: 15000 } .end
-    return cb err if err?
+    console.error "prepare-txs Error: " + err if err?
+    return cb null, [] if err?
     err, result <- json-parse _coins.text
     return cb err if err?
     address = result.outputs.0.address
     value = result.outputs.0.value    
     err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 15000 } .end
-    return cb err if err?
+    console.error "prepare-txs Error: " + err if err?
+    return cb null, [] if err?
     err, result <- json-parse data.text
     return cb err if err? 
     { blockTime, txid, fee, confirmations, chain,  _id } = result 
