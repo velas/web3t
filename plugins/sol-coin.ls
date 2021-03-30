@@ -1,6 +1,6 @@
 mainnet-config = 
     disabled: true
-    decimals: 8
+    decimals: 9
     txFee: '0.0014'
     txFeeOptions:
         auto: '0.0020'
@@ -13,7 +13,7 @@ mainnet-config =
         url: 'https://explorer.solana.com',
         apiUrl: 'https://devnet.solana.com/api'
 testnet-config = 
-    decimals: 8
+    decimals: 9
     txFee: '0.0014'
     txFeeOptions: 
         auto: '0.0020'
