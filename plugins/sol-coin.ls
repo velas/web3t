@@ -22,9 +22,9 @@ testnet-config =
     mask: '3000000000000000000000000000000000'
     api: 
         provider: 'solana'
-        web3Provider: 'https://bridge.next.velas.com/rpc'
-        url: 'https://bridge.next.velas.com'
-        apiUrl: 'https://bridge.next.velas.com/api'
+        web3Provider: 'https://explorer.testnet.velas.com/rpc'
+        url: 'https://explorer.testnet.velas.com'
+        apiUrl: 'https://explorer.testnet.velas.com/api'
 export mainnet = mainnet-config
 export testnet = testnet-config       
 export color = '#9E4FEB'

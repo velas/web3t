@@ -38,9 +38,9 @@ testnet-config =
     mask: \V0000000000000
     api:
         provider: \velas2
-        web3Provider : \https://bridge.next.velas.com/rpc
-        url : \https://bridge.next.velas.com
-        apiUrl : \https://bridge.next.velas.com/api
+        web3Provider: 'https://explorer.testnet.veladev.net/rpc'
+        url: 'https://explorer.testnet.veladev.net'
+        apiUrl: 'https://explorer.testnet.veladev.net/api'
     networks:
         #evm:
             #id: "evm"    
