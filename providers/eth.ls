@@ -7,7 +7,7 @@ require! {
     #\web3 : \Web3
     \../json-parse.js
     \../deadline.js
-    \multicoin-address-validator : \WAValidator
+    #\multicoin-address-validator : \WAValidator
 }
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
@@ -116,7 +116,7 @@ is-address = (address) ->
         false
     else
         true
-export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, chainId} , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
     return cb "address in not correct ethereum address" if not is-address recipient
@@ -147,7 +147,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         to: recipient
         from: account.address
         data: data || \0x
-        #chainId: 1
+        chainId: chainId   
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -184,8 +184,8 @@ export get-balance = ({ network, address} , cb)->
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
-export isValidAddress = ({ address, network }, cb)-> 
-    console.log "eth validation"   address   
-    addressIsValid = WAValidator.validate(address, 'ETH')    
-    return cb "Address is not valid" if not addressIsValid   
-    return cb null, address
+#export isValidAddress = ({ address, network }, cb)-> 
+#    console.log "eth validation"   address   
+#    addressIsValid = WAValidator.validate(address, 'ETH')    
+#    return cb "Address is not valid" if not addressIsValid   
+#    return cb null, address

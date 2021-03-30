@@ -7,7 +7,7 @@ require! {
     \../json-parse.js
     \../deadline.js
     \bs58 : { decode }
-    \multicoin-address-validator : \WAValidator      
+    #\multicoin-address-validator : \WAValidator      
 }
 segwit-address = (public-key)->
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(public-key))
@@ -188,12 +188,15 @@ add-outputs = (config, cb)->
     { tx-type, total, value, fee, tx, recipient, account } = config
     return cb "fee, value, total are required" if not fee? or not value? or not total?
     return add-outputs-private config, cb if tx-type is \private
-    rest = total `minus` value `minus` fee
-    tx.add-output recipient, +value
-    #console.log { rest }
-    if +rest isnt 0
-        tx.add-output account.address, +rest
-    cb null
+    try  
+        rest = total `minus` value `minus` fee
+        tx.add-output recipient, +value
+        if +rest isnt 0
+            tx.add-output account.address, +rest
+        cb null
+    catch err
+        console.error err    
+        return cb err    
 #recipient
 get-error = (config, fields)->
     result =
@@ -374,10 +377,10 @@ prepare-txs = (network, [tx, ...rest], cb)->
     return cb err if err?
     all =  t ++ other    
     cb null, all   
-export isValidAddress = ({ address, network }, cb)-> 
-    addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
-    return cb "Address is not valid" if not addressIsValid   
-    return cb null, address
+#export isValidAddress = ({ address, network }, cb)-> 
+#    addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
+#    return cb "Address is not valid" if not addressIsValid   
+#    return cb null, address
 export get-transaction-info = (config, cb)->
     { network, tx } = config
     url = "#{get-api-url network}/tx/:hash".replace \:hash, tx

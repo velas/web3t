@@ -9,7 +9,6 @@ export mainnet =
     api:
         provider: \eth
         web3Provider : \https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648
-        #web3Provider: \https://mainnet.infura.io/v3/6a6c66740e9e4cea9cc8425869e9d106
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
 export ethnamed =
@@ -33,13 +32,28 @@ export ropsten =
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
+    tx-fee-in: \eth   
     api:
         provider: \eth
         web3Provider : \https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648
         url : \https://ropsten.etherscan.io
         apiUrl : \https://api-ropsten.etherscan.io/api
+kovan =
+    decimals: 18
+    tx-fee: \0.0014
+    tx-fee-options:
+        auto: \0.0014
+        cheap: \0.00014
+    message-prefix: 'Ethereum'
+    mask: \0x0000000000000000000000000000000000000000
+    tx-fee-in: \eth   
+    api:
+        provider: \eth
+        web3Provider : \https://kovan.poa.network
+        url : \https://kovan.etherscan.io
+        apiUrl : \https://kovan.etherscan.io/api
 export color = \#5838B8
-export testnet = ropsten
+export testnet = ropsten  
 export type = \coin
 export enabled = yes
 export name = 'Ethereum'

@@ -9,6 +9,8 @@ require! {
     #\./plugins/xem-coin.js : xem
     #\./plugins/xrp-coin.js : xrp
     \./plugins/usdt-coin.js : usdt
+    \./plugins/sol-coin.js : sol
+    \./plugins/vlx_erc20-coin.ls : vlx_erc20
     #\./plugins/vlx-coin.js : vlx
     #\./plugins/eos-coin.js : eos
     #\./plugins/xlm-coin.js : xlm
@@ -28,6 +30,6 @@ extend-coins = (coins, config)->
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
     #eos
-    def = { btc, dash, eth, ltc, usdt, etc, symblox  }
+    def = { btc, dash, eth, ltc, usdt, etc, vlx_erc20, sol, symblox, symblox-v2  }
     extend-coins def, config
     cb null, def

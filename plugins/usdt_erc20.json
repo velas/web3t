@@ -12,6 +12,10 @@
     "mainnet": {
         "decimals": 6,
         "txFee": "0.0050",
+        "txFeeOptions": {
+            "cheap": "0.0005",
+            "auto": "0.001"
+        },
         "txFeeIn": "eth",
         "messagePrefix": "Ethereum",
         "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
