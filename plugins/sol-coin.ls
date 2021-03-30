@@ -22,7 +22,7 @@ testnet-config =
     mask: '3000000000000000000000000000000000'
     api: 
         provider: 'solana'
-        web3Provider: 'http://bootstrap.next.velas.com:8899'
+        web3Provider: 'https://bridge.next.velas.com/rpc'
         url: 'https://bridge.next.velas.com'
         apiUrl: 'https://bridge.next.velas.com/api'
 export mainnet = mainnet-config
