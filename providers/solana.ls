@@ -207,7 +207,11 @@ export create-transaction = (config, cb)->
     transaction-data = {} 
     amount = config.amount `times` dec
     transaction = {}
-    if swap? and swap is yes and (not receiver-is-contract(recipient)) then    
+    to-hex = ->
+        new BN(it)
+    console.log "recipient" recipient
+    if swap? and swap is yes then
+        console.log "---> swapNativeToEvm"
         transaction = swapNativeToEvm(pay-account.public-key, amount, recipient)
         transaction.recentBlockhash = recentBlockhash     
     else 

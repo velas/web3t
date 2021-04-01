@@ -283,6 +283,7 @@ get-contract-instance = (web3, network, swap)->
         | _ => network.ERC20BridgeToken 
     web3.eth.contract(abi).at(addr)
 export create-transaction = (config, cb)-->
+    console.log "[erc20 create-transaction]"    
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap, chainId } = config 
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
@@ -319,7 +320,8 @@ export create-transaction = (config, cb)-->
         to: _recipient 
         from: account.address
         data: config.data || _data || "0x"    
-        chainId: chainId    
+        chainId: chainId 
+    console.log "Last data before parse:"  configs     
     tx = new Tx(configs)
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex

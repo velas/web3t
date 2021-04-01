@@ -52,6 +52,7 @@ to-eth-address = (velas-address, cb)->
 window?to-eth-address = vlxToEth if window?
 window?to-velas-address = ethToVlx if window?
 export isValidAddress =  ({ address }, cb)->
+    return cb "Given address is not valid Velas address" if address.0 isnt \V
     err <- to-eth-address address
     return cb "Given address is not valid Velas address" if err?
     cb null, yes
@@ -259,6 +260,7 @@ is-address = (address) ->
         true
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
+    console.log "Legacy vlx2 [create-transaction]"    
     dec = get-dec network
     err, $recipient <- to-eth-address recipient
     return cb err if err?
@@ -308,6 +310,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         data: data || "0x"
         chainId: chainId     
     }
+    console.log "tx before parse" tx-obj    
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
