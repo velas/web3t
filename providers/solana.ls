@@ -192,14 +192,11 @@ swapNativeToEvm = (owner, lamports, addr)->
     catch err
         console.error "err:" err    
         return 
-    return transaction 
-receiver-is-contract = (addr)->
-    addr is "0x56454c41532d434841494e000000000053574150"      
+    return transaction     
 export create-transaction = (config, cb)->   
     err = get-error config, <[ network account amount amountFee recipient ]>
     return cb err if err?
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } = config
-    console.log "[create-transaction] config" config
     dec = get-dec network
     pay-account = new solanaWeb3.Account(config.account.secret-key)
     err, recentBlockhash <- getRecentBlockhash(network)
@@ -209,7 +206,6 @@ export create-transaction = (config, cb)->
     transaction = {}
     to-hex = ->
         new BN(it)
-    console.log "recipient" recipient
     if swap? and swap is yes then
         console.log "---> swapNativeToEvm"
         transaction = swapNativeToEvm(pay-account.public-key, amount, recipient)
@@ -226,13 +222,11 @@ export create-transaction = (config, cb)->
     catch err 
         console.error "Tx sign error:" err      
     encoded = transaction.serialize!.toString('base64') 
-    console.log "encoded" encoded
     cb null, { raw-tx: encoded }
 export push-tx = (config, cb)--> 
     console.log "push tx config" config    
     err, result <- make-query config.network, \sendTransaction , [ config.raw-tx, {encoding: 'base64'} ]
     return cb err if err?
-    console.log "[push-tx] result" result    
     return cb "[push-tx] Error: #{err}" if err?    
     cb null, result   
 export get-total-received = ({ address, network }, cb)->
