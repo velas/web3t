@@ -1,7 +1,10 @@
 export mainnet =
     disabled: yes
-    decimals: 9
-    tx-fee: \0.001
+    decimals: 18  
+    tx-fee: \0.000001
+    tx-fee-options:
+        auto: \0.000020
+        cheap: \0.000020
     api:
         provider: \velas_evm
         apiUrl : \https://oldexplorer.velas.com/api/v1
@@ -9,13 +12,41 @@ export mainnet =
         historyUrl : \https://oldexplorer.velas.com/history-api/:address/txs
 
 export testnet =
-    decimals: 9
-    tx-fee: \0.001
+    disabled: no 
+    decimals: 18  
+    tx-fee: \0.000001
+    tx-fee-options:
+        auto: \0.000020
+        cheap: \0.000020
     api:
         provider: \velas_evm
-        web3Provider : \https://explorer.velas.com/rpc
-        url : \https://explorer.velas.com
-        apiUrl : \https://explorer.velas.com/api
+        web3Provider : \https://explorer.testnet.veladev.net/rpc
+        url : \https://explorer.testnet.veladev.net
+        apiUrl : \https://explorer.testnet.veladev.net/api
+    networks:
+        legacy:
+            id: "legacy"
+            name: "Velas (Legacy)"
+            HomeBridge          : null        
+            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
+            referTo             : "vlx2"
+        native:
+            id: "native"
+            name: "Velas Native"
+            HomeBridge          : null        
+            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
+            referTo             : "vlx_native" 
+        vlx_erc20:
+            disabled: yes    
+            id: "vlx_erc20"
+            name: "Velas ERC20"
+            HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
+            ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+            ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
+            referTo             : "vlx_erc20"   
+    
 export color = \#9E4FEB
 export type = \coin
 export enabled = yes
