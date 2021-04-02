@@ -269,6 +269,7 @@ prepare-raw-txs = ({ txs, network, address }, cb)->
 prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb null, [] if not tx? 
     { blockTime, signature, slot } = tx
+    console.log("______________________________ tx: ", signature)
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
     return cb err if err?
     tx-data = data
@@ -277,7 +278,7 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
     {accountKeys,instructions} = transaction.message
     senders = 
         accountKeys
-            |> filter (-> it.signer is yes)  
+            |> filter (-> it.signer is yes)
     sender = senders[0].pubkey
     receiver-index = 0    
     _receivers = 
@@ -286,18 +287,18 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
                 is-receiver = it.signer is no and it.writable is yes   
                 receiver-index++ if not is-receiver      
                 is-receiver
-    receiver-obj = 
+    receiver-obj =
         | _receivers.length is 1 => _receivers[0]
-        | _receivers >= 1 =>
-            t = _receivers |> filter (it.pubkey.index-of("EvmState") < 0)
-            if t.length > 0 then t[0] else {}   
-        | _ => {} 
-    {instructions} = transaction.message 
+        | _receivers.length >= 1 =>
+            t = _receivers |> filter (-> it.pubkey.index-of("EvmState") < 0)
+            if t.length > 0 then t[0] else {}
+        | _ => {}
+    {instructions} = transaction.message
     receiver = 
         | receiver-obj?pubkey => receiver-obj.pubkey 
         | instructions[0]?parsed?info?destination => instructions[0].parsed.info.destination
-        | _ => ""     
-    value = 
+        | _ => ""
+    value =
         | instructions[0]?parsed?info?lamports => instructions[0].parsed.info.lamports
         | _ => get-sent-amount(tx-data)[receiver]
     value = value ? '0' 
