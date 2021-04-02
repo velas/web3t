@@ -33,7 +33,7 @@
     networks: {
       legacy: {
         id: "legacy",
-        name: "Velas (Legacy)",
+        name: "Velas",
         HomeBridge: null,
         ForeignBridge: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
         ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",

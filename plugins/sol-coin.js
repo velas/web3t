@@ -36,7 +36,7 @@
     networks: {
       legacy: {
         id: "legacy",
-        name: "Velas Legacy",
+        name: "Velas",
         HomeBridge: null,
         ForeignBridge: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
         referTo: "vlx2"
