@@ -332,7 +332,7 @@ export get-transactions = ({ network, address}, cb)->
     err, result <- json-parse data.text 
     return cb err if err?
     _result = result |> uniqueBy (-> it.mintTxid) |> reverse     
-    err, all-txs <- prepare-raw-txs {txs: _result, network} 
+    err, all-txs <- prepare-raw-txs {txs: _result, network, address}
     return cb err if err?   
     return cb "Unexpected result" if typeof! all-txs isnt \Array
     txs =
@@ -340,20 +340,32 @@ export get-transactions = ({ network, address}, cb)->
             |> map transform-tx { net: network, address }
             |> filter (?)                
     cb null, txs
-prepare-raw-txs = ({ txs, network }, cb)->    
-    err, result <- prepare-txs network, txs
+prepare-raw-txs = ({ txs, network, address }, cb)->
+    err, result <- prepare-txs network, txs, address
     return cb err if err? 
     cb null, result
-prepare-txs = (network, [tx, ...rest], cb)->
-    return cb null, [] if not tx?    
+get-receiver = (account-address, sender, outputs)->
+    if account-address isnt sender
+        return account-address
+    found = outputs |> find (-> it.address? and it.address isnt "false" and it.address isnt account-address)
+    receiver =
+        | found? => found.address
+        | _ => sender
+get-value = (outputs, receiver)->
+    receiver-data = outputs |> find (-> it.address is receiver)
+    receiver-data?value ? 0
+prepare-txs = (network, [tx, ...rest], address, cb)->
+    return cb null, [] if not tx?
     { mintTxid } = tx
     err, _coins <- get "#{get-api-url network}/tx/#{mintTxid}/coins" .timeout { deadline: 15000 } .end
     console.error "prepare-txs Error: " + err if err?
     return cb null, [] if err?
     err, result <- json-parse _coins.text
     return cb err if err?
-    address = result.outputs.0.address
-    value = result.outputs.0.value    
+    {inputs, outputs} = result
+    sender = inputs[0].address
+    receiver = get-receiver(address, sender, outputs)
+    value = get-value(outputs, receiver)
     err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 15000 } .end
     console.error "prepare-txs Error: " + err if err?
     return cb null, [] if err?
@@ -363,7 +375,7 @@ prepare-txs = (network, [tx, ...rest], cb)->
     time = moment(blockTime).format("X")
     dec = get-dec network 
     _tx = {
-        address   
+        address: receiver
         value
         fee: fee `div` dec 
         chain
@@ -374,8 +386,8 @@ prepare-txs = (network, [tx, ...rest], cb)->
         coinbase: no
         mintTxid: txid,    
     }
-    t = if _tx? then [_tx] else []    
-    err, other <- prepare-txs network, rest
+    t = if _tx? then [_tx] else []
+    err, other <- prepare-txs network, rest, address
     return cb err if err?
     all =  t ++ other    
     cb null, all   

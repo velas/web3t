@@ -1,6 +1,6 @@
 require! {
     \moment
-    \prelude-ls : { map, pairs-to-obj, foldl, any, each, find, sum, filter, head, values, join, reverse, uniqueBy }
+    \prelude-ls : { map, pairs-to-obj, foldl, any, each, find, sum, filter, head, values, join, reverse, uniqueBy, sort-by }
     \./superagent.js : { get, post }
     \../math.js : { plus, minus, div, times }
     \./deps.js : { BitcoinLib, bip39 }
@@ -262,72 +262,71 @@ export get-transactions = ({ network, address}, cb)->
     return cb err if err?   
     return cb "Unexpected result" if typeof! all-txs isnt \Array                
     cb null, all-txs
-prepare-raw-txs = ({ txs, network, address }, cb)->    
-    err, result <- prepare-txs network, txs, address 
-    return cb err if err? 
+prepare-raw-txs = ({ txs, network, address }, cb)->
+    $txs = txs |> sort-by (.blockTime) |> reverse
+    err, result <- prepare-txs network, $txs, address
+    console.log "all txs" result.length
     cb null, result
 prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb null, [] if not tx? 
     { blockTime, signature, slot } = tx
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
-    return cb err if err?
-    tx-data = data
-    {fee, err, status} = tx-data.meta 
-    transaction = tx-data.transaction
-    {accountKeys,instructions} = transaction.message
-    senders = 
-        accountKeys
-            |> filter (-> it.signer is yes)  
-    sender = senders[0].pubkey
-    receiver-index = 0    
-    _receivers = 
-        accountKeys
-            |> filter (it)-> 
-                is-receiver = it.signer is no and it.writable is yes   
-                receiver-index++ if not is-receiver      
-                is-receiver
-    receiver-obj = 
-        | _receivers.length is 1 => _receivers[0]
-        | _receivers >= 1 =>
-            t = _receivers |> filter (it.pubkey.index-of("EvmState") < 0)
-            if t.length > 0 then t[0] else {}   
-        | _ => {} 
-    {instructions} = transaction.message 
-    receiver = 
-        | receiver-obj?pubkey => receiver-obj.pubkey 
-        | instructions[0]?parsed?info?destination => instructions[0].parsed.info.destination
-        | _ => ""     
-    value = 
-        | instructions[0]?parsed?info?lamports => instructions[0].parsed.info.lamports
-        | _ => get-sent-amount(tx-data)[receiver]
-    value = value ? '0' 
-    time = moment(+blockTime*1000).format("X")
-    dec = get-dec network 
-    { url, cluster, customUrl } = network.api
-    uri = 
-        | cluster? => "#{url}/tx/#{signature}?cluster=#{cluster}"
-        | _ => "#{url}/tx/#{signature}" 
-    uri = uri + "&customUrl=#{customUrl}" if cluster? and customUrl?
-    type = 
-        |  address isnt receiver => "OUT"
-        |  _ => "IN"  
-    recipient-type = \regular 
-    _tx = { 
-        tx: signature 
-        amount: value `div` dec  
-        url: uri
-        to: receiver  
-        pending: not (!tx-data.meta.status.Ok?)
-        from: sender    
-        time
-        fee: tx-data.meta.fee `div` dec 
-        type
-        recipient-type 
-    }
-    t = if _tx? then [_tx] else []    
+    console.error "Error occured while fetching tx details for signature:" signature if err?
+    t = []
+    if not err?
+        tx-data = data
+        {fee, err, status} = tx-data.meta
+        transaction = tx-data.transaction
+        {accountKeys,instructions} = transaction.message
+        senders =
+            accountKeys
+                |> filter (-> it.signer is yes)
+        sender = senders[0].pubkey
+        receiver-index = 0
+        _receivers =
+            accountKeys
+                |> filter (it)->
+                    is-receiver = it.signer is no and it.writable is yes
+                    receiver-index++ if not is-receiver
+                    is-receiver
+        receiver-obj =
+            | _receivers.length is 1 => _receivers[0]
+            | _receivers.length >= 1 =>
+                t = _receivers |> filter (-> it.pubkey.index-of("EvmState") < 0)
+                if t.length > 0 then t[0] else {}
+            | _ => {}
+        {instructions} = transaction.message
+        receiver =
+            | receiver-obj?pubkey => receiver-obj.pubkey
+            | instructions[0]?parsed?info?destination => instructions[0].parsed.info.destination
+            | _ => ""
+        value =
+            | instructions[0]?parsed?info?lamports => instructions[0].parsed.info.lamports
+            | _ => get-sent-amount(tx-data)[receiver]
+        value = value ? '0'
+        time = moment(+blockTime*1000).format("X")
+        dec = get-dec network
+        { url, cluster, customUrl } = network.api
+        uri = "#{url}/tx/#{signature}"
+        type =
+            |  address isnt receiver => "OUT"
+            |  _ => "IN"
+        recipient-type = \regular
+        _tx = {
+            tx: signature
+            amount: value `div` dec
+            url: uri
+            to: receiver
+            pending: not (!tx-data.meta.status.Ok?)
+            from: sender
+            time
+            fee: tx-data.meta.fee `div` dec
+            type
+            recipient-type
+        }
+        t = [_tx]
     err, other <- prepare-txs network, rest, address 
-    return cb err if err?
-    all =  t ++ other    
+    all =  t ++ other
     cb null, all 
 get-sent-amount = (tx)->
     return 0 if not tx?
