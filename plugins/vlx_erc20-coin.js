@@ -23,7 +23,7 @@
     }
   };
   testnetConfig = {
-    disabled: false,
+    disabled: true,
     decimals: 18,
     txFee: '0.0014',
     txFeeOptions: {

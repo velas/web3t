@@ -17,7 +17,7 @@ mainnet-config =
         url: 'https://etherscan.io',
         apiUrl: 'https://api.etherscan.io/api'
 testnet-config =
-    disabled: no 
+    disabled: yes
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options:
