@@ -47,6 +47,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb "estimate gas err: #{err.message ? err}" if err?
+    estimate = 74000    
     res = gas-price `times` from-hex(estimate)
     #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
