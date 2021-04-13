@@ -85,8 +85,8 @@
         if (err != null) {
           return cb("estimate gas err: " + ((ref$ = err.message) != null ? ref$ : err));
         }
-        estimate = 74000;
-        res = times(gasPrice, fromHex(estimate));
+        estimate = 36000;
+        res = times(gasPrice, estimate);
         val = div(res, dec);
         return cb(null, val);
       });

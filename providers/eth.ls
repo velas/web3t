@@ -34,6 +34,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network }
     return cb err if err?
+    console.log "gas-price" gas-price
     value =
         | amount? => amount `times` dec
         | _ => 0
@@ -47,9 +48,9 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb "estimate gas err: #{err.message ? err}" if err?
-    estimate = 74000    
-    res = gas-price `times` from-hex(estimate)
-    #res = if +res1 is 0 then 21000 * 8 else res1
+    estimate = 36000    
+    res = gas-price `times` estimate
+    #res = gas-price `times` from-hex(estimate)
     val = res `div` dec
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
