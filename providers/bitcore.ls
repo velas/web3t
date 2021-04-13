@@ -56,7 +56,6 @@ calc-fee-per-byte = (config, cb)->
     fee-type = \cheap
     amount-fee = o.cheap
     recipient = config.account.address
-    #console.log { config.amount, amount-fee }
     err, data <- create-transaction { fee-type, amount-fee , recipient, ...config }
     return cb null, o.cheap if "#{err}".index-of("Not Enough Funds (Unspent Outputs)") > -1
     return cb err, o.cheap if err?
@@ -64,7 +63,15 @@ calc-fee-per-byte = (config, cb)->
     #bytes = decode(data.raw-tx).to-string(\hex).length / 2
     bytes = data.raw-tx.length / 2
     infelicity = 1
-    calc-fee = (bytes + infelicity) `times` o.fee-per-byte
+    err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
+    return cb err if err?
+    vals = values data.body
+    calced-fee-per-kb =
+        | vals.0 is -1 => network.tx-fee
+        | _ => vals.0
+    fee-per-byte = calced-fee-per-kb `div` 1000    
+    calc-fee = (bytes + infelicity) `times` fee-per-byte
+    console.log "fee-per-tx" calc-fee    
     final-price =
         | calc-fee > +o.cheap => calc-fee
         | _ => o.cheap
@@ -73,7 +80,7 @@ calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     o = network?tx-fee-options
     tx-fee = o?[fee-type] ? network.tx-fee ? 0
     return cb null, tx-fee if fee-type isnt \auto
-    network = global.store?.current?.network || \mainnet
+    $network = global.store?.current?.network || \mainnet
     err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
     return cb err if err?
     vals = values data.body
