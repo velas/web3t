@@ -23,8 +23,9 @@ testnet-config =
     api: 
         provider: 'solana'
         web3Provider: 'https://explorer.testnet.velas.com/rpc'
-        url: 'https://explorer.testnet.velas.com'
+        url: 'https://native.velas.com'
         apiUrl: 'https://explorer.testnet.velas.com/api'
+        cluster: 'testnet'    
     networks:
         legacy:
             id: "legacy"
