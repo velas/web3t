@@ -19568,6 +19568,7 @@ var solanaWeb3 = (function (exports) {
 
 
     async sendTransaction(transaction, signers, options) {
+        console.log("index.cjs.js [sendTransaction]");
       if (transaction.nonceInfo) {
         transaction.sign(...signers);
       } else {
@@ -21946,37 +21947,42 @@ var solanaWeb3 = (function (exports) {
         stakePubkey,
         authorizedPubkey,
         splitStakePubkey,
-        lamports
+        lamports,
+        seed,
+        base,
       } = params;
       const transaction = new Transaction();
-      transaction.add(SystemProgram.createAccount({
+      transaction.add(SystemProgram.createAccountWithSeed({
         fromPubkey: authorizedPubkey,
         newAccountPubkey: splitStakePubkey,
         lamports: 0,
+        seed: seed,
         space: this.space,
-        programId: this.programId
+        programId: this.programId,
+        basePubkey: base
       }));
       const type = STAKE_INSTRUCTION_LAYOUTS.Split;
       const data = encodeData(type, {
         lamports
       });
-      return transaction.add({
-        keys: [{
-          pubkey: stakePubkey,
-          isSigner: false,
-          isWritable: true
-        }, {
-          pubkey: splitStakePubkey,
-          isSigner: false,
-          isWritable: true
-        }, {
-          pubkey: authorizedPubkey,
-          isSigner: true,
-          isWritable: false
-        }],
+      const keys = [{
+        pubkey: stakePubkey,
+        isSigner: false,
+        isWritable: true
+      }, {
+        pubkey: splitStakePubkey,
+        isSigner: false,
+        isWritable: true
+      }, {
+        pubkey: authorizedPubkey,
+        isSigner: true,
+        isWritable: false
+      }];
+      return transaction.add(new TransactionInstruction({
+        keys,
         programId: this.programId,
         data
-      });
+      }));
     }
     /**
      * Generate a Transaction that withdraws deactivated Stake tokens.
