@@ -17,47 +17,12 @@ require! {
     \tweetnacl 
     \bip39 
     \./solana/index.cjs.js : solanaWeb3
-    \ed25519-hd-key : { derivePath, getMasterKeyFromSeed, getPublicKey  }
     \buffer-layout : \lo
     \assert     
+    \bip32
 }
 find-max = (first, current)->
     if current.rank < first.rank then current else first
-get-enough = ([output, ...outputs], amount, you-have, cb)->
-    return cb "Not Enough Funds (Unspent Outputs). You have #{you-have}" if not output?
-    return cb "Expected output amount, got #{output.amount}" if not output.amount?
-    output-amount = output.amount ? 0
-    next-amount = amount `minus` output-amount
-    return cb null, [output] if +next-amount <= 0
-    you-have-next = you-have `plus` output-amount
-    err, other <- get-enough outputs, next-amount, you-have-next
-    return cb err if err?
-    current =
-        | +output-amount is 0 => []
-        | _ => [output]
-    all = current ++ other
-    cb null, all
-calc-fee-per-byte = (config, cb)->
-    { network, fee-type, account } = config
-    o = network?tx-fee-options
-    tx-fee = o?[fee-type] ? network.tx-fee ? 0
-    return cb null, tx-fee if fee-type isnt \auto
-    fee-type = \cheap
-    amount-fee = o.cheap
-    recipient = config.account.address
-    #console.log { config.amount, amount-fee }
-    err, data <- create-transaction { fee-type, amount-fee , recipient, ...config }
-    return cb null, o.cheap if "#{err}".index-of("Not Enough Funds (Unspent Outputs)") > -1
-    return cb err, o.cheap if err?
-    return cb "raw-tx is expected" if typeof! data.raw-tx isnt \String
-    #bytes = decode(data.raw-tx).to-string(\hex).length / 2
-    bytes = data.raw-tx.length / 2
-    infelicity = 1
-    calc-fee = (bytes + infelicity) `times` o.fee-per-byte
-    final-price =
-        | calc-fee > +o.cheap => calc-fee
-        | _ => o.cheap
-    cb null, final-price
 export calc-fee = (config, cb)->
     { network, tx, tx-type, account } = config
     err, result <- make-query network, \getRecentBlockhash , []
@@ -143,12 +108,16 @@ getRecentBlockhash = (network, cb)->
     cb null, result.value.blockhash
 export get-account = (mnemonic, index, cb)->
     seed = bip39.mnemonic-to-seed(mnemonic)
-    hexSeed = seed.to-string(\hex)     
-    { key, chainCode} = derivePath("m/#{index}'/2147483647'", hexSeed)
-    pair = tweetnacl.sign.keyPair.fromSeed(new Uint8Array(key))
-    private-key = toBase58(pair.secretKey) 
-    public-key = toBase58(pair.publicKey)
-    cb null, { address: public-key, private-key, public-key, secret-key: pair.secretKey }     
+    hexSeed = seed.to-string(\hex)    
+    derivedSeed = bip32.fromSeed(seed).derivePath("m/44'/5655640'/"+index+"'/0").privateKey
+    privateKeyBuff = tweetnacl.sign.keyPair.fromSeed(derivedSeed).secretKey
+    publicKey = tweetnacl.sign.keyPair.fromSeed(derivedSeed).publicKey 
+    #pair = tweetnacl.sign.keyPair.fromSeed(new Uint8Array(key))
+    #{ key, chainCode} = derivePath("m/44'/5655640'/"+index+"'/0/0", hexSeed)
+    #pair = tweetnacl.sign.keyPair.fromSeed(new Uint8Array(key))
+    private-key = toBase58(privateKeyBuff) 
+    public-key = toBase58(publicKey)
+    cb null, { address: public-key, private-key, public-key, secret-key: privateKeyBuff }     
 freeOwnership = ->
     ds = lo.struct([lo.u32('tag')])
     b = Buffer.alloc(4)
@@ -297,8 +266,8 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
             | _ => {}
         {instructions} = transaction.message
         receiver =
-            | receiver-obj?pubkey => receiver-obj.pubkey
             | instructions[0]?parsed?info?destination => instructions[0].parsed.info.destination
+            | receiver-obj?pubkey => receiver-obj.pubkey
             | _ => ""
         value =
             | instructions[0]?parsed?info?lamports => instructions[0].parsed.info.lamports
@@ -307,10 +276,12 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         time = moment(+blockTime*1000).format("X")
         dec = get-dec network
         { url, cluster, customUrl } = network.api
-        uri = "#{url}/tx/#{signature}"
+        $cluster = if cluster? then "?cluster=#{cluster}" else ""   
+        uri = "#{url}/tx/#{signature}" + $cluster
         type =
             |  address isnt receiver => "OUT"
             |  _ => "IN"
+        #console.log "#{signature}  address*" type  
         recipient-type = \regular
         _tx = {
             tx: signature
