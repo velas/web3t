@@ -14,7 +14,7 @@ mainnet-config =
     networks:
         evm:
             id: "evm"    
-            name: "Ethereum"   
+            name: "Velas EVM"   
             referTo             : "vlx_evm"   
         native:
             id: "native" 
