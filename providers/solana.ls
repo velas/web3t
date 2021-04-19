@@ -44,7 +44,6 @@ make-query = (network, method, params, cb)->
         method
         params
     }
-    console.log "post" web3-provider    
     err, data <- post web3-provider, query .end
     return cb "query err: #{err.message ? err}" if err?
     return cb data.body.error if data.body.error?
