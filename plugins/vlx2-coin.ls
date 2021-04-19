@@ -11,9 +11,19 @@ mainnet-config =
         web3Provider : \https://explorer.velas.com/rpc
         url : \https://explorer.velas.com
         apiUrl : \https://explorer.velas.com/api
+    networks:      
+        native:
+            id: "native" 
+            name: "Velas Native" 
+            HomeBridge          : "0x56454c41532d434841494e000000000053574150"
+            ForeignBridge       : "" 
+            ERC20BridgeToken    : ""
+            referTo             : "vlx_native"
+        evm:
+            id: "evm"    
+            name: "Velas EVM"   
+            referTo             : "vlx_evm"  
 testnet-config =
-    #because it unavailable frequently
-    # disabled: yes
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options:
@@ -23,24 +33,32 @@ testnet-config =
     mask: \V0000000000000
     api:
         provider: \velas2
-        web3Provider : \https://explorer.testnet.veladev.net/rpc
-        url : \https://explorer.testnet.veladev.net
-        apiUrl : \https://explorer.testnet.veladev.net/api
-testnet2-config =
-    disabled: yes
-    decimals: 18
-    tx-fee: \0.0014
-    tx-fee-options:
-        auto: \0.0020
-        cheap: \0.00014
-    message-prefix: 'Ethereum'
-    mask: \V0000000000000
-    api:
-        provider: \velas2
-        web3Provider : \https://tn.yopta.net/rpc
-        #web3Provider: \https://mainnet.infura.io/v3/6a6c66740e9e4cea9cc8425869e9d106
-        url : \https://testnet-v2.velas.com
-        apiUrl : "http://139.59.138.137"
+        web3Provider: 'https://explorer.testnet.velas.com/rpc'
+        url: 'https://explorer.testnet.velas.com'
+        apiUrl: 'https://explorer.testnet.velas.com/api'
+    networks:
+        native:
+            id: "native" 
+            name: "Velas Native" 
+            HomeBridge          : "0x56454c41532d434841494e000000000053574150"
+            ForeignBridge       : "" 
+            ERC20BridgeToken    : ""
+            referTo             : "vlx_native"
+        vlx_erc20:
+            disabled: yes    
+            id: "vlx_erc20"
+            name: "Velas ERC20"
+            HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
+            ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+            ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
+            referTo             : "vlx_erc20"     
+        evm:
+            id: "evm"
+            name: "Velas EVM"
+            HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
+            ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+            ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
+            referTo             : "vlx_evm" 
 export mainnet =  mainnet-config
 export testnet = if window?location?.href?.index-of('testnet2') > -1 then testnet2-config else testnet-config
 export color = \#9E4FEB

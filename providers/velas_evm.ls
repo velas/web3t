@@ -24,10 +24,6 @@ isAddress = (address) ->
         false
     else
         if (//^(0x)?[0-9a-f]{40}$//.test address) or //^(0x)?[0-9A-F]{40}$//.test address then true else isChecksumAddress address
-to-velas-address = (eth-address-buffer)->
-    #return cb "eth-address is not correct" if isAddress eth-address
-    s1 = encode eth-address-buffer
-    "V#{s1}"
 to-eth-address = (velas-address, cb)->
     return cb "required velas-address as a string" if typeof! velas-address isnt \String
     return cb null, velas-address if isAddress velas-address
@@ -50,23 +46,18 @@ to-eth-address = (velas-address, cb)->
     # catch err
     #     cb err
 window?to-eth-address = vlxToEth if window?
-window?to-velas-address = ethToVlx if window?
 export isValidAddress =  ({ address }, cb)->
-    return cb "Given address is not valid Velas address" if address.0 isnt \V
     err <- to-eth-address address
     return cb "Given address is not valid Velas address" if err?
     cb null, yes
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
-    w = wallet.derive-path("m0").derive-child(index).get-wallet!
-    #NEW_ADDRESS
-    address = ethToVlx w.get-address!.to-string(\hex)
-    address2 = \0x + w.get-address!.to-string(\hex)
-    #address = to-velas-address w.get-address! #.to-string(\hex)
+    w = wallet.derive-path("m/44'/5655640'/"+index+"'/0/0").get-wallet!
+    address = \0x + w.get-address!.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
-    { address, private-key, public-key, address2 }
+    { address, private-key, public-key }
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
@@ -123,12 +114,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     data-parsed =
         | data? => data
         | _ => '0x'
-    err, from <- to-eth-address account.address
-    console.error "calc-fee from address #{err}" if err?
-    return cb "Given address is not valid Velas address" if err?
-    err, to <- to-eth-address to
-    console.error "calc-fee from address #{err}" if err?
-    return cb "Given address is not valid Velas address" if err?
+    from = account.address
     query = { from, to, data: data-parsed }
     err, estimate <- get-gas-estimate { network, query, gas }
     return cb err if err?
@@ -170,8 +156,6 @@ transform-tx = (network, description, t)-->
     res    
 get-internal-transactions = (config, cb)->
     { network, address } = config   
-    err, address <- to-eth-address config.address
-    return cb err if err?
     { api-url } = config.network.api
     module = \account
     action = \txlistinternal
@@ -191,8 +175,6 @@ get-internal-transactions = (config, cb)->
         result.result |> map transform-tx network, 'internal'
     cb null, txs
 get-external-transactions = ({ network, address }, cb)->
-    err, address <- to-eth-address address
-    return cb err if err?
     { api-url } = network.api
     module = \account
     action = \txlist
@@ -216,11 +198,9 @@ export get-transactions = ({ network, address }, cb)->
     page = 1
     offset = 20
     err, external <- get-external-transactions { network, address, page, offset }
-    console.log err if err?
-    external = [] if err?  
+    return cb err if err?
     err, internal <- get-internal-transactions { network, address, page, offset }
-    console.log err if err?
-    internal = [] if err? 
+    return cb err if err?
     all = external ++ internal
     ordered =
         all
@@ -311,7 +291,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         data: data || "0x"
         chainId: chainId     
     }
-    console.log "tx before parse" tx-obj    
+    console.log "tx-obj" tx-obj   
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
@@ -329,16 +309,13 @@ export check-tx-status = ({ network, tx }, cb)->
 export get-total-received = ({ address, network }, cb)->
     err, txs <- get-transactions { address, network }
     return cb err if err?
-    err, address <- to-eth-address account.address
-    return cb err if err?
+    address = account.address
     total =
         txs |> filter (-> it.to.to-upper-case! is address.to-upper-case!)
             |> map (.amount)
             |> foldl plus, 0
     cb null, total
 export get-unconfirmed-balance = ({ network, address} , cb)->
-    err, address <- to-eth-address address
-    return cb err if err?
     err, number <- make-query network, \eth_getBalance , [ address, \pending ]
     return cb err if err?
     #err, number <- web3.eth.get-balance address
@@ -347,24 +324,11 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
     balance = number `div` dec
     cb null, balance
 export get-balance = ({ network, address} , cb)->
-    err, address <- to-eth-address address
-    return cb err if err?
     err, number <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
-#console.log \test
-#to-eth-address "VADyNxJR9PjWrQzJVmoaKxqaS8Mk", console.log
-#console.log to-velas-address Buffer.from("0b6a35fafb76e0786db539633652a8553ac28d67", 'hex')
-#
-#
-#
-# SERVICE
-#
-#
-#
-#
 export get-sync-status = ({ network }, cb)->
     err, estimate <- make-query network, \eth_getSyncing , [ ]
     return cb err if err?

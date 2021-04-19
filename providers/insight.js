@@ -9,7 +9,8 @@
   jsonParse = require('../json-parse.js');
   deadline = require('../deadline.js');
   decode = require('bs58').decode;
-  WAValidator = require('multicoin-address-validator');
+
+  //WAValidator = require('multicoin-address-validator');
   segwitAddress = function(publicKey){
     var witnessScript, scriptPubKey;
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(publicKey));
@@ -772,18 +773,19 @@
       });
     });
   };
-  out$.isValidAddress = isValidAddress = function(arg$, cb){
-    var address, network, token, addressIsValid;
-    address = arg$.address, network = arg$.network, token = arg$.token;
-    if (token != null) {
-      token = token.toUpperCase();
-    }
-    addressIsValid = WAValidator.validate(address, token, 'both');
-    if (!addressIsValid) {
-      return cb("Address is not valid");
-    }
-    return cb(null, address);
-  };
+  // out$.isValidAddress = isValidAddress = function(arg$, cb){
+  //   var address, network, token, addressIsValid;
+  //   address = arg$.address, network = arg$.network, token = arg$.token;
+  //   if (token != null) {
+  //     token = token.toUpperCase();
+  //   }
+  //   addressIsValid = WAValidator.validate(address, token, 'both');
+  //   if (!addressIsValid) {
+  //     return cb("Address is not valid");
+  //   }
+  //   return cb(null, address);
+  // };
+
   function import$(obj, src){
     var own = {}.hasOwnProperty;
     for (var key in src) if (own.call(src, key)) obj[key] = src[key];

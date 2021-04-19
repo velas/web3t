@@ -8,7 +8,7 @@
   ref$ = require('./deps.js'), Web3 = ref$.Web3, Tx = ref$.Tx, BN = ref$.BN, hdkey = ref$.hdkey, bip39 = ref$.bip39;
   jsonParse = require('../json-parse.js');
   deadline = require('../deadline.js');
-  WAValidator = require('multicoin-address-validator');
+  //WAValidator = require('multicoin-address-validator');
   getEthereumFullpairByIndex = function(mnemonic, index, network){
     var seed, wallet, w, address, privateKey, publicKey;
     seed = bip39.mnemonicToSeed(mnemonic);
@@ -85,7 +85,7 @@
         if (err != null) {
           return cb("estimate gas err: " + ((ref$ = err.message) != null ? ref$ : err));
         }
-        estimate = 36000;
+        estimate = 74000;
         res = times(gasPrice, estimate);
         val = div(res, dec);
         return cb(null, val);
@@ -360,16 +360,17 @@
       return cb(null, balance);
     });
   };
-  out$.isValidAddress = isValidAddress = function(arg$, cb){
-    var address, network, addressIsValid;
-    address = arg$.address, network = arg$.network;
-    console.log("eth validation", address);
-    addressIsValid = WAValidator.validate(address, 'ETH');
-    if (!addressIsValid) {
-      return cb("Address is not valid");
-    }
-    return cb(null, address);
-  };
+
+  // out$.isValidAddress = isValidAddress = function(arg$, cb){
+  //   var address, network, addressIsValid;
+  //   address = arg$.address, network = arg$.network;
+  //   addressIsValid = WAValidator.validate(address, 'ETH');
+  //   if (!addressIsValid) {
+  //     return cb("Address is not valid");
+  //   }
+  //   return cb(null, address);
+  // };
+
   function curry$(f, bound){
     var context,
     _curry = function(args) {

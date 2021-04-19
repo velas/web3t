@@ -8,7 +8,7 @@
   jsonParse = require('../json-parse.js');
   deadline = require('../deadline.js');
   ref$ = require('./deps.js'), BitcoinLib = ref$.BitcoinLib, bip39 = ref$.bip39;
-  WAValidator = require('multicoin-address-validator');
+  //WAValidator = require('multicoin-address-validator');
   getBitcoinFullpairByIndex = function(mnemonic, index, network){
     var seed, hdnode, address, privateKey, publicKey;
     seed = bip39.mnemonicToSeedHex(mnemonic);
@@ -504,15 +504,16 @@
       });
     });
   };
-  out$.isValidAddress = isValidAddress = function(arg$, cb){
-    var address, network, addressIsValid;
-    address = arg$.address, network = arg$.network;
-    addressIsValid = WAValidator.validate(address, 'BTC', 'both');
-    if (!addressIsValid) {
-      return cb("Address is not valid");
-    }
-    return cb(null, address);
-  };
+  // out$.isValidAddress = isValidAddress = function(arg$, cb){
+  //   var address, network, addressIsValid;
+  //   address = arg$.address, network = arg$.network;
+  //   addressIsValid = WAValidator.validate(address, 'BTC', 'both');
+  //   if (!addressIsValid) {
+  //     return cb("Address is not valid");
+  //   }
+  //   return cb(null, address);
+  // };
+
   function import$(obj, src){
     var own = {}.hasOwnProperty;
     for (var key in src) if (own.call(src, key)) obj[key] = src[key];

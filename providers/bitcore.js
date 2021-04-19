@@ -90,15 +90,18 @@
     feeType = 'cheap';
     amountFee = o.cheap;
     recipient = config.account.address;
-    return createTransaction((import$({
+    data = import$({
       feeType: feeType,
       amountFee: amountFee,
       recipient: recipient
-    }, config)), function(err, data){
+    }, config);
+    console.log("[calcFeePerByte] data", data);
+    return createTransaction(data, function(err, data){
       var bytes, infelicity, calcFee, finalPrice;
       if ((err + "").indexOf("Not Enough Funds (Unspent Outputs)") > -1) {
         return cb(null, o.cheap);
       }
+      console.error("[createTransaction] Error", err);
       if (err != null) {
         return cb(err, o.cheap);
       }
@@ -398,15 +401,21 @@
     if (fee == null || value == null || total == null) {
       return cb("fee, value, total are required");
     }
+    console.log("[addOutputs]");
     if (txType === 'private') {
       return addOutputsPrivate(config, cb);
     }
-    rest = minus(minus(total, value), fee);
-    tx.addOutput(recipient, +value);
-    if (+rest !== 0) {
-      tx.addOutput(account.address, +rest);
+    try {
+      throw new Error("my own error");
+      rest = minus(minus(total, value), fee);
+      tx.addOutput(recipient, +value);
+      if (+rest !== 0) {
+        tx.addOutput(account.address, +rest);
+      }
+      return cb(null);
+    }catch (e) {
+      cb(e);  
     }
-    return cb(null);
   };
   getError = function(config, fields){
     var result;

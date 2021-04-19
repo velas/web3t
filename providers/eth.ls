@@ -7,7 +7,7 @@ require! {
     #\web3 : \Web3
     \../json-parse.js
     \../deadline.js
-    \multicoin-address-validator : \WAValidator
+    #\multicoin-address-validator : \WAValidator
 }
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
@@ -34,7 +34,6 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network }
     return cb err if err?
-    console.log "gas-price" gas-price
     value =
         | amount? => amount `times` dec
         | _ => 0
@@ -48,9 +47,9 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb "estimate gas err: #{err.message ? err}" if err?
-    estimate = 36000    
-    res = gas-price `times` estimate
-    #res = gas-price `times` from-hex(estimate)
+    estimate = 36000   
+    res = gas-price `times` from-hex(estimate)
+    #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
@@ -118,7 +117,7 @@ is-address = (address) ->
         false
     else
         true
-export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, chainId} , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
     return cb "address in not correct ethereum address" if not is-address recipient
@@ -149,7 +148,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         to: recipient
         from: account.address
         data: data || \0x
-        #chainId: 1
+        chainId: chainId   
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -186,8 +185,8 @@ export get-balance = ({ network, address} , cb)->
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
-export isValidAddress = ({ address, network }, cb)-> 
-    console.log "eth validation"   address   
-    addressIsValid = WAValidator.validate(address, 'ETH')    
-    return cb "Address is not valid" if not addressIsValid   
-    return cb null, address
+#export isValidAddress = ({ address, network }, cb)-> 
+#    console.log "eth validation"   address   
+#    addressIsValid = WAValidator.validate(address, 'ETH')    
+#    return cb "Address is not valid" if not addressIsValid   
+#    return cb null, address

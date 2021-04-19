@@ -100,12 +100,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-eth = -> it `div` (10^18)
     value = to-wei amount
     err, gas-price-bn <- calc-gas-price { web3, fee-type }
-    #gas-price = round (gas-price-bn `plus` ( gas-price-bn `div` 100 ))
-    gas-price = gas-price-bn.to-fixed!
     return cb err if err?
+    gas-price = gas-price-bn.to-fixed!
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
     gas-estimate = round ( gas-minimal `times` 5 )
-    #console.log { gas-estimate, amount-fee }, gas-price.to-fixed!
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance account.address
     return cb err if err?
