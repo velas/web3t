@@ -17,11 +17,6 @@
       apiUrl: 'https://explorer.velas.com/api'
     },
     networks: {
-      evm: {
-        id: "evm",
-        name: "Velas EVM",
-        referTo: "vlx_evm"
-      },
       native: {
         id: "native",
         name: "Velas Native",
@@ -29,6 +24,11 @@
         ForeignBridge: "",
         ERC20BridgeToken: "",
         referTo: "vlx_native"
+      },
+      evm: {
+        id: "evm",
+        name: "Velas EVM",
+        referTo: "vlx_evm"
       }
     }
   };
@@ -48,6 +48,14 @@
       apiUrl: 'https://explorer.testnet.velas.com/api'
     },
     networks: {
+      native: {
+        id: "native",
+        name: "Velas Native",
+        HomeBridge: "0x56454c41532d434841494e000000000053574150",
+        ForeignBridge: "",
+        ERC20BridgeToken: "",
+        referTo: "vlx_native"
+      },
       vlx_erc20: {
         disabled: true,
         id: "vlx_erc20",
@@ -56,14 +64,6 @@
         ForeignBridge: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9",
         ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C",
         referTo: "vlx_erc20"
-      },
-      native: {
-        id: "native",
-        name: "Velas Native",
-        HomeBridge: "0x56454c41532d434841494e000000000053574150",
-        ForeignBridge: "",
-        ERC20BridgeToken: "",
-        referTo: "vlx_native"
       },
       evm: {
         id: "evm",

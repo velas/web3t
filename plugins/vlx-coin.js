@@ -16,15 +16,15 @@
       url: 'https://explorer.velas.com'
     },
     networks: {
-      legacy: {
-        id: "legacy",
-        name: "Velas",
-        referTo: "vlx2"
-      },
       native: {
         id: "native",
         name: "Velas Native",
         referTo: "vlx_native"
+      },
+      legacy: {
+        id: "legacy",
+        name: "Velas",
+        referTo: "vlx2"
       }
     }
   };
@@ -43,15 +43,15 @@
       apiUrl: 'https://explorer.testnet.velas.com/api'
     },
     networks: {
-      legacy: {
-        id: "legacy",
-        name: "Velas",
-        referTo: "vlx2"
-      },
       native: {
         id: "native",
         name: "Velas Native",
         referTo: "vlx_native"
+      },
+      legacy: {
+        id: "legacy",
+        name: "Velas",
+        referTo: "vlx2"
       },
       vlx_erc20: {
         disabled: true,
