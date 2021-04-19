@@ -9,9 +9,9 @@ mainnet-config =
     mask: '3000000000000000000000000000000000'
     api:  
         provider: 'solana'
-        web3Provider: 'https://api.mainnet-beta.solana.com/rpc'
+        web3Provider: 'https://api.velas.com'
         url: 'https://native.velas.com',
-        apiUrl: 'https://api.mainnet-beta.solana.com'
+        apiUrl: 'https://api.velas.com'
     networks:
         legacy:
             id: "legacy"
