@@ -182,6 +182,7 @@ get-internal-transactions = (config, cb)->
     page = 1
     offset = 20
     query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
+    console.log "#{api-url}?#{query}"   
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
@@ -216,9 +217,11 @@ export get-transactions = ({ network, address }, cb)->
     page = 1
     offset = 20
     err, external <- get-external-transactions { network, address, page, offset }
-    return cb err if err?
+    console.log err if err?
+    external = [] if err?  
     err, internal <- get-internal-transactions { network, address, page, offset }
-    return cb err if err?
+    console.log err if err?
+    internal = [] if err? 
     all = external ++ internal
     ordered =
         all

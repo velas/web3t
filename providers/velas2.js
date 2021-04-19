@@ -358,6 +358,7 @@
         page: page,
         offset: offset
       });
+      console.log(apiUrl + "?" + query);
       return get(apiUrl + "?" + query).timeout({
         deadline: deadline
       }).end(function(err, resp){
@@ -442,7 +443,10 @@
       offset: offset
     }, function(err, external){
       if (err != null) {
-        return cb(err);
+        console.log(err);
+      }
+      if (err != null) {
+        external = [];
       }
       return getInternalTransactions({
         network: network,
@@ -452,7 +456,10 @@
       }, function(err, internal){
         var all, ordered;
         if (err != null) {
-          return cb(err);
+          console.log(err);
+        }
+        if (err != null) {
+          internal = [];
         }
         all = external.concat(internal);
         ordered = reverse(
@@ -539,6 +546,7 @@
   out$.createTransaction = createTransaction = curry$(function(arg$, cb){
     var network, account, recipient, amount, amountFee, data, feeType, txType, gasPrice, gas, dec;
     network = arg$.network, account = arg$.account, recipient = arg$.recipient, amount = arg$.amount, amountFee = arg$.amountFee, data = arg$.data, feeType = arg$.feeType, txType = arg$.txType, gasPrice = arg$.gasPrice, gas = arg$.gas;
+    console.log("Legacy vlx2 [create-transaction]");
     dec = getDec(network);
     return toEthAddress(recipient, function(err, $recipient){
       var privateKey;
@@ -635,6 +643,7 @@
                       data: data || "0x",
                       chainId: chainId
                     };
+                    console.log("tx before parse", txObj);
                     tx = new Tx(txObj, {
                       common: common
                     });
