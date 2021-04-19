@@ -75,7 +75,7 @@
     var seed, wallet, w, address, privateKey, publicKey;
     seed = bip39.mnemonicToSeed(mnemonic);
     wallet = hdkey.fromMasterSeed(seed);
-    w = wallet.derivePath("m/44'/5655640/" + index + "'/0/0").getWallet();
+    w = wallet.derivePath("m/44'/5655640'/" + index + "'/0/0").getWallet();
     address = '0x' + w.getAddress().toString('hex');
     privateKey = w.getPrivateKeyString();
     publicKey = w.getPublicKeyString();
@@ -592,6 +592,7 @@
                       data: data || "0x",
                       chainId: chainId
                     };
+                    console.log("tx-obj", txObj);
                     tx = new Tx(txObj, {
                       common: common
                     });
