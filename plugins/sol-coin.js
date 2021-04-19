@@ -14,7 +14,7 @@
     api: {
       provider: 'solana',
       web3Provider: 'https://api.mainnet-beta.solana.com/rpc',
-      url: 'https://native.velas.com/',
+      url: 'https://native.velas.com',
       apiUrl: 'https://api.mainnet-beta.solana.com'
     },
     networks: {
