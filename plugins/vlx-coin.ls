@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes
+    disabled: no 
     decimals: 18  
     tx-fee: \0.000001
     tx-fee-options:
@@ -7,10 +7,18 @@ export mainnet =
         cheap: \0.000020
     api:
         provider: \velas_evm
-        apiUrl : \https://oldexplorer.velas.com/api/v1
-        url: \https://oldexplorer.velas.com
-        historyUrl : \https://oldexplorer.velas.com/history-api/:address/txs
-
+        apiUrl : \https://explorer.velas.com/api
+        web3Provider : \https://explorer.velas.com/rpc
+        url: \https://explorer.velas.com
+    networks: 
+        legacy:
+            id: "legacy"
+            name: "Velas" 
+            referTo: "vlx2"   
+        native:
+            id: "native"
+            name: "Velas Native"
+            referTo             : "vlx_native" 
 export testnet =
     disabled: no 
     decimals: 18  
@@ -27,16 +35,10 @@ export testnet =
         legacy:
             id: "legacy"
             name: "Velas"
-            HomeBridge          : null        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
             referTo             : "vlx2"
         native:
             id: "native"
             name: "Velas Native"
-            HomeBridge          : null        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
             referTo             : "vlx_native" 
         vlx_erc20:
             disabled: yes    

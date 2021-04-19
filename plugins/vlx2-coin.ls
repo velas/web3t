@@ -12,17 +12,14 @@ mainnet-config =
         url : \https://explorer.velas.com
         apiUrl : \https://explorer.velas.com/api
     networks:
-        #evm:
-            #id: "evm"    
-            #name: "Ethereum"    
-            #HomeBridge          : "0x38E20F6224449eCB50A81188147cbf990a00eA44"        
-            #ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-            #ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
-            #eferTo             : "vlx_erc20"   
+        evm:
+            id: "evm"    
+            name: "Ethereum"   
+            referTo             : "vlx_evm"   
         native:
             id: "native" 
             name: "Velas Native" 
-            HomeBridge          : ""
+            HomeBridge          : "0x56454c41532d434841494e000000000053574150"
             ForeignBridge       : "" 
             ERC20BridgeToken    : ""
             referTo             : "vlx"

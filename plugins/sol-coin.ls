@@ -1,24 +1,33 @@
 mainnet-config = 
-    disabled: true
+    disabled: false 
     decimals: 9
     txFee: '0.0014'
     txFeeOptions:
         auto: '0.0020'
         cheap: '0.0020'   
-    messagePrefix: 'Ethereum'
+    messagePrefix: 'Solana'
     mask: '3000000000000000000000000000000000'
     api:  
         provider: 'solana'
-        web3Provider: 'https://api.mainnet-beta.solana.com/rpc'
-        url: 'https://explorer.solana.com',
-        apiUrl: 'https://devnet.solana.com/api'
+        web3Provider: 'https://explorer.velas.com/rpc'
+        url: 'https://explorer.velas.com',
+        apiUrl: 'https://explorer.velas.com/api'
+    networks:
+        legacy:
+            id: "legacy"
+            name: "Velas"
+            referTo             : "vlx2" 
+        evm:
+            id: "evm"
+            name: "Velas EVM"
+            referTo             : "vlx_evm" 
 testnet-config = 
     decimals: 9
     txFee: '0.0014'
     txFeeOptions: 
         auto: '0.0020'
         cheap: '0.0020'   
-    messagePrefix: 'Ethereum'
+    messagePrefix: 'Solana'
     mask: '3000000000000000000000000000000000'
     api: 
         provider: 'solana'
@@ -30,14 +39,10 @@ testnet-config =
         legacy:
             id: "legacy"
             name: "Velas"
-            HomeBridge          : null        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
             referTo             : "vlx2" 
         evm:
             id: "evm"
             name: "Velas EVM"
-            HomeBridge          : null        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
             referTo             : "vlx_evm"   
 export mainnet = mainnet-config
 export testnet = testnet-config       
