@@ -2,20 +2,20 @@
 (function(){
   var mainnetConfig, testnetConfig, mainnet, testnet, color, type, enabled, name, token, nickname, image, usdInfo, out$ = typeof exports != 'undefined' && exports || this;
   mainnetConfig = {
-    disabled: false,
+    disabled: true,
     decimals: 9,
     txFee: '0.0014',
     txFeeOptions: {
       auto: '0.0020',
       cheap: '0.0020'
     },
-    messagePrefix: 'Solana',
+    messagePrefix: 'Ethereum',
     mask: '3000000000000000000000000000000000',
     api: {
       provider: 'solana',
-      web3Provider: 'https://explorer.velas.com/rpc',
-      url: 'https://explorer.velas.com',
-      apiUrl: 'https://explorer.velas.com/api'
+      web3Provider: 'https://api.mainnet-beta.solana.com/rpc',
+      url: 'https://mainnet.velas.com',
+      apiUrl: 'https://api.mainnet-beta.solana.com'
     },
     networks: {
       legacy: {
@@ -37,7 +37,7 @@
       auto: '0.0020',
       cheap: '0.0020'
     },
-    messagePrefix: 'Solana',
+    messagePrefix: 'Ethereum',
     mask: '3000000000000000000000000000000000',
     api: {
       provider: 'solana',
