@@ -1,5 +1,5 @@
 mainnet-config = 
-    disabled: true
+    disabled: false 
     decimals: 9
     txFee: '0.0014'
     txFeeOptions:

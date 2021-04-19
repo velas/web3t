@@ -2,7 +2,7 @@
 (function(){
   var mainnetConfig, testnetConfig, mainnet, testnet, color, type, enabled, name, token, nickname, image, usdInfo, out$ = typeof exports != 'undefined' && exports || this;
   mainnetConfig = {
-    disabled: true,
+    disabled: false,
     decimals: 9,
     txFee: '0.0014',
     txFeeOptions: {
