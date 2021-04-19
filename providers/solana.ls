@@ -44,6 +44,7 @@ make-query = (network, method, params, cb)->
         method
         params
     }
+    console.log "post" web3-provider    
     err, data <- post web3-provider, query .end
     return cb "query err: #{err.message ? err}" if err?
     return cb data.body.error if data.body.error?
@@ -312,11 +313,20 @@ get-sent-amount = (tx)->
             index++    
             diff = "#{preBalance}" `minus` "#{postBalance}"
             [it.pubkey, Math.abs(+diff)] 
-        |> pairs-to-obj       
-#export isValidAddress = ({ address, network }, cb)-> 
-#    addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
-#    return cb "Address is not valid" if not addressIsValid   
-#    return cb null, address
+        |> pairs-to-obj   
+get-action = (instructions, {receiver})->
+    res = instructions 
+        |> find (it)->   
+            it.parsed.info.destination is receiver
+    action = 
+        | res? => res.parsed.type   
+        | _ => \transfer  
+export isValidAddress = ({ address, network }, cb)-> 
+    try    
+        valid-key = new solanaWeb3.PublicKey(address)
+    catch err       
+        return cb "Address is not valid"  
+    return cb null, address
 export get-transaction-info = (config, cb)->
     { network, tx } = config
     signature = tx  
