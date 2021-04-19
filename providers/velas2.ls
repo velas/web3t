@@ -182,7 +182,6 @@ get-internal-transactions = (config, cb)->
     page = 1
     offset = 20
     query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
-    console.log "#{api-url}?#{query}"   
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
@@ -263,7 +262,6 @@ is-address = (address) ->
         true
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
-    console.log "Legacy vlx2 [create-transaction]"    
     dec = get-dec network
     err, $recipient <- to-eth-address recipient
     return cb err if err?
