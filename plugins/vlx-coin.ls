@@ -28,9 +28,9 @@ export testnet =
         cheap: \0.000020
     api:
         provider: \velas_evm
-        web3Provider : \https://explorer.testnet.veladev.net/rpc
-        url : \https://explorer.testnet.veladev.net
-        apiUrl : \https://explorer.testnet.veladev.net/api
+        web3Provider : \https://explorer.testnet.velas.com/rpc
+        url : \https://explorer.testnet.velas.com
+        apiUrl : \https://explorer.testnet.velas.com/api
     networks:
         legacy:
             id: "legacy"

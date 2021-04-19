@@ -33,9 +33,9 @@ testnet-config =
     mask: \V0000000000000
     api:
         provider: \velas2
-        web3Provider: 'https://explorer.testnet.veladev.net/rpc'
-        url: 'https://explorer.testnet.veladev.net'
-        apiUrl: 'https://explorer.testnet.veladev.net/api'
+        web3Provider: 'https://explorer.testnet.velas.com/rpc'
+        url: 'https://explorer.testnet.velas.com'
+        apiUrl: 'https://explorer.testnet.velas.com/api'
     networks:
         vlx_erc20:
             disabled: yes    
