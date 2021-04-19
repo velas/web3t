@@ -17,10 +17,15 @@
       apiUrl: 'https://explorer.velas.com/api'
     },
     networks: {
+      evm: {
+        id: "evm",
+        name: "Ethereum",
+        referTo: "vlx_evm"
+      },
       native: {
         id: "native",
         name: "Velas Native",
-        HomeBridge: "",
+        HomeBridge: "0x56454c41532d434841494e000000000053574150",
         ForeignBridge: "",
         ERC20BridgeToken: "",
         referTo: "vlx"
