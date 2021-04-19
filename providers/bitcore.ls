@@ -74,7 +74,7 @@ calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     tx-fee = o?[fee-type] ? network.tx-fee ? 0
     return cb null, tx-fee if fee-type isnt \auto
     network = global.store?.current?.network || \mainnet
-    err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
+    err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline: 5000 } .end
     return cb err if err?
     vals = values data.body
     exists = vals.0 ? -1
@@ -134,7 +134,7 @@ add-amount = (network, it)-->
 #mock = [{"address":"GbyU4HML1rX8gcdVB2dNfE4RszCwKFYuuv","txid":"2b598e790c06e106709ea230b4553e9b867f234aa6e84ad700f81efe68bb563e","vout":0,"scriptPubKey":"76a914c6df968d5d5e5103290559629f966c5efe6cfbfb88ac","amount":1,"satoshis":100000000,"height":275994,"confirmations":598},{"address":"GbyU4HML1rX8gcdVB2dNfE4RszCwKFYuuv","txid":"e815481a072b33390e0a2dad5df7ff1726c39d3542558e933f0aa475613c4145","vout":0,"scriptPubKey":"76a914c6df968d5d5e5103290559629f966c5efe6cfbfb88ac","amount":1,"satoshis":100000000,"height":275988,"confirmations":604},{"address":"GbyU4HML1rX8gcdVB2dNfE4RszCwKFYuuv","txid":"f9897905e569aed3067c532d5a1e11bd018a4b60231caf62c66db4e7ec9234c5","vout":1,"scriptPubKey":"76a914c6df968d5d5e5103290559629f966c5efe6cfbfb88ac","amount":0.00001,"satoshis":1000,"height":275987,"confirmations":605}]
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
-    err, data <- get "#{get-api-url network}/address/#{address}/?unspent=true" .timeout { deadline } .end
+    err, data <- get "#{get-api-url network}/address/#{address}/?unspent=true" .timeout { deadline: 5000 } .end
     return cb "cannot get outputs - err #{err.message ? err}" if err?
     #mock
     data.body
@@ -251,14 +251,14 @@ export push-tx = ({ network, raw-tx, tx-type } , cb)-->
     cb null, res.body?txid
 export get-total-received = ({ address, network }, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/address/#{address}/totalReceived" .timeout { deadline } .end
+    err, data <- get "#{get-api-url network}/address/#{address}/totalReceived" .timeout { deadline: 5000 } .end
     return cb err if err? or data.text.length is 0
     dec = get-dec network
     num = data.text `div` dec
     cb null, num
 export get-unconfirmed-balance = ({ network, address} , cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/address/#{address}/unconfirmedBalance" .timeout { deadline } .end
+    err, data <- get "#{get-api-url network}/address/#{address}/unconfirmedBalance" .timeout { deadline: 5000 } .end
     return cb err if err? or data.text.length is 0
     try
         json = JSON.parse(data.text)
@@ -272,7 +272,7 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
     cb null, num
 export get-balance = ({ address, network } , cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/address/#{address}/balance" .timeout { deadline } .end
+    err, data <- get "#{get-api-url network}/address/#{address}/balance" .timeout { deadline: 5000 } .end
     console.log "#{get-api-url network}/address/#{address}/balance"
     return cb err if err? or data.text.length is 0
     #check that data.text has number
@@ -327,7 +327,7 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/address/#{address}/txs?limit=100" .timeout { deadline: 15000 } .end
+    err, data <- get "#{get-api-url network}/address/#{address}/txs?limit=100" .timeout { deadline: 5000 } .end
     return cb err if err?
     err, result <- json-parse data.text 
     return cb err if err?
