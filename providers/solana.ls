@@ -238,6 +238,14 @@ prepare-raw-txs = ({ txs, network, address }, cb)->
     err, result <- prepare-txs network, $txs, address
     console.log "all txs" result.length
     cb null, result
+get-index-of-obj = (arr, pubKey)->
+    index = -1
+    count = 0
+    arr |> each (it)->
+        count++
+        if it.pubkey is pubKey
+            index = count
+    index
 prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb null, [] if not tx?
     #console.log "prepare-txs" tx
@@ -247,56 +255,93 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
     t = []
     if not err? and data?
         tx-data = data
+        sender = ''
+        receiver = ''
+        hash = ''
+        senderIndex = ''
+        amount = 0
         {fee, err, status} = tx-data.meta
         transaction = tx-data.transaction
         {accountKeys,instructions} = transaction.message
-        senders =
-            accountKeys
-                |> filter (-> it.signer is yes)
-        sender = senders[0].pubkey
-        receiver-index = 0
-        _receivers =
-            accountKeys
-                |> filter (it)->
-                    is-receiver = it.signer is no and it.writable is yes
-                    receiver-index++ if not is-receiver
-                    is-receiver
-        receiver-obj =
-            | _receivers.length is 1 => _receivers[0]
-            | _receivers.length >= 1 =>
-                t = _receivers |> filter (-> (it.pubkey.index-of("EvmState") < 0) or (it.pubkey.index-of("Stake") < 0))
-                if t.length > 0 then t[0] else {}
-            | _ => {}
-        {instructions} = transaction.message
-        receiver =
-            | instructions[0]?parsed?info?destination => instructions[0].parsed.info.destination
-            | receiver-obj?pubkey => receiver-obj.pubkey
-            | _ => ""
-        value =
-            | instructions[0]?parsed?info?lamports => instructions[0].parsed.info.lamports
-            | _ => get-sent-amount(tx-data)[receiver]
-        value = value ? '0'
+        type = instructions[0]?parsed?type
+        try
+            if type is "assign" then
+                #sender      = instructions[0].parsed.info.owner
+                sender      = instructions[0].parsed.info.account
+                receiver    = instructions[0].parsed.info.owner
+                hash        = transaction.signatures[0]
+                senderIndex = get-index-of-obj(accountKeys, sender)
+                amount      = get-sent-amount(tx-data)[sender] ? 0
+            if type is "delegate" then
+                sender      = instructions[0].parsed.info.stakeAccount
+                receiver    = instructions[0].parsed.info.voteAccount
+                hash        = transaction.signatures[0]
+                senderIndex = get-index-of-obj(accountKeys, sender)
+                amount      = get-sent-amount(tx-data)[sender] ? 0
+            if type is "createAccountWithSeed" then
+                sender      = instructions[0].parsed.info.base
+                receiver    = instructions[0].parsed.info.newAccount
+                amount      = instructions[0].parsed.info.lamports
+                hash        = transaction.signatures[0]
+            if type is "deactivate" then
+                receiver    = accountKeys[3].pubkey
+                hash        = transaction.signatures[0]
+                amount      = get-sent-amount(tx-data)[3]
+            if type is "withdraw" then
+                sender      = instructions[0].parsed.info.stakeAccount ? instructions[0].parsed.info.stakeAccount
+                receiver    = instructions[0].parsed.info.withdrawAuthority
+                amount      = instructions[0].parsed.info.lamports
+                hash        = transaction.signatures[0]
+            if type is "split" then
+                amount      = instructions[1].parsed.info.lamports
+                receiver    = instructions[1].parsed.info.newSplitAccount
+                hash        = transaction.signatures[0]
+            if type is "transfer" then
+                sender      = instructions[0].parsed.info.source
+                receiver    = instructions[0].parsed.info.destination
+                amount      = instructions[0].parsed.info.lamports
+                hash        = transaction.signatures[0]
+            if not type?
+                senders =
+                    accountKeys
+                        |> filter (-> it.signer is yes)
+                receiver-index = 0
+                receivers =
+                    accountKeys
+                        |> filter (it)->
+                            is-receiver = it.signer is no and it.writable is yes
+                            receiver-index++ if not is-receiver
+                            is-receiver
+                sender = accountKeys[0].pubkey
+                receiver    = accountKeys[2].pubkey
+                hash        = transaction.signatures[0]
+                amount = get-sent-amount(tx-data)[receiver] ? 0
+        catch e
+            console.error "error:" e
         time = moment(+blockTime*1000).format("X")
         dec = get-dec network
         { url, cluster, customUrl } = network.api
         $cluster = if cluster? then "?cluster=#{cluster}" else ""   
-        uri = "#{url}/tx/#{signature}" + $cluster
-        type =
+        uri = "#{url}/tx/#{hash}" + $cluster
+        _type =
             |  address isnt receiver => "OUT"
             |  _ => "IN"
         #console.log "#{signature}  address*" type  
         recipient-type = \regular
+        is-stake = instructions[0]?program in <[ stake createAccountWithSeed delegate deactivate ]>
+        tx-type = if type? and (is-stake is yes) then "Staking: " + type else null
         _tx = {
-            tx: signature
-            amount: value `div` dec
+            tx: hash
+            amount: amount `div` dec
             url: uri
             to: receiver
             pending: not (!tx-data.meta.status.Ok?)
-            from: sender
+            from: (sender ? "unknown")
             time
             fee: tx-data.meta.fee `div` dec
-            type
+            type: _type
             recipient-type
+            tx-type: tx-type
         }
         t = [_tx]
     err, other <- prepare-txs network, rest, address 
