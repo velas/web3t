@@ -222,13 +222,15 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, result <- make-query network, \getConfirmedSignaturesForAddress2 , [ address, {limit: 25} ]
+    err, result <- make-query network, \getConfirmedSignaturesForAddress2 , [ address, {limit: 20} ]
     return cb err if err?   
     txs = result
+    #console.log "Got raw txs" txs
     return cb null, [] if txs.length is 0 
     #return cb null, [] 
     err, all-txs <- prepare-raw-txs {txs, network, address} 
-    return cb err if err?   
+    return cb err if err?
+    #console.log "Native all-txs" all-txs
     return cb "Unexpected result" if typeof! all-txs isnt \Array                
     cb null, all-txs
 prepare-raw-txs = ({ txs, network, address }, cb)->
@@ -237,12 +239,13 @@ prepare-raw-txs = ({ txs, network, address }, cb)->
     console.log "all txs" result.length
     cb null, result
 prepare-txs = (network, [tx, ...rest], address, cb)->
-    return cb null, [] if not tx? 
+    return cb null, [] if not tx?
+    #console.log "prepare-txs" tx
     { blockTime, signature, slot } = tx
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
     console.error "Error occured while fetching tx details for signature:" signature if err?
     t = []
-    if not err?
+    if not err? and data?
         tx-data = data
         {fee, err, status} = tx-data.meta
         transaction = tx-data.transaction
@@ -261,7 +264,7 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         receiver-obj =
             | _receivers.length is 1 => _receivers[0]
             | _receivers.length >= 1 =>
-                t = _receivers |> filter (-> it.pubkey.index-of("EvmState") < 0)
+                t = _receivers |> filter (-> (it.pubkey.index-of("EvmState") < 0) or (it.pubkey.index-of("Stake") < 0))
                 if t.length > 0 then t[0] else {}
             | _ => {}
         {instructions} = transaction.message
