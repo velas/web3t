@@ -65,8 +65,7 @@ calc-fee-per-byte = (config, cb)->
     bytes = data.raw-tx.length / 2
     infelicity = 1
     err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
-    return cb err if err?
-    vals = values data.body
+    vals = if data? and not err? then values data.body else [0.0024295] 
     calced-fee-per-kb = 
         | vals.0 is -1 => network.tx-fee
         | _ => vals.0       
