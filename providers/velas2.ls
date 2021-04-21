@@ -166,7 +166,11 @@ transform-tx = (network, description, t)-->
     t.gas-price ? "0"
     fee = gas-used `times` (gas-price + "") `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    tx-type =
+        | t.to is "V8sA8Q5jR44E4q6S59eUhhSJQiRBBFdZA8" or t.to is "0x56454c41532d434841494e000000000053574150"
+            => "Swap EVM to Native"
+        | _ => null
+    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description, tx-type }
     res    
 get-internal-transactions = (config, cb)->
     { network, address } = config   
