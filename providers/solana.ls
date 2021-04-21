@@ -253,6 +253,7 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
     console.error "Error occured while fetching tx details for signature:" signature if err?
     t = []
+    #console.log "raw-tx" data
     if not err? and data?
         tx-data = data
         sender = ''
@@ -284,9 +285,10 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
                 amount      = instructions[0].parsed.info.lamports
                 hash        = transaction.signatures[0]
             if type is "deactivate" then
-                receiver    = accountKeys[3].pubkey
+                sender      = instructions[0].parsed.info.stakeAuthority
+                receiver    = instructions[0].programId
                 hash        = transaction.signatures[0]
-                amount      = get-sent-amount(tx-data)[3]
+                amount      = get-sent-amount(tx-data)[sender] ? 0
             if type is "withdraw" then
                 sender      = instructions[0].parsed.info.stakeAccount ? instructions[0].parsed.info.stakeAccount
                 receiver    = instructions[0].parsed.info.withdrawAuthority
@@ -326,10 +328,18 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         _type =
             |  address isnt receiver => "OUT"
             |  _ => "IN"
-        #console.log "#{signature}  address*" type  
+        #console.log "#{signature}  address*" type
         recipient-type = \regular
-        is-stake = instructions[0]?program in <[ stake createAccountWithSeed delegate deactivate ]>
-        tx-type = if type? and (is-stake is yes) then "Staking: " + type else null
+        is-stake = instructions[0]?parsed?type in <[ stake createAccountWithSeed delegate deactivate ]>
+        tx-type =
+            | type? and type in <[ stake  delegate deactivate withdraw]> =>
+                (type + " Stake").to-upper-case!
+            | type? and type in <[ createAccount createAccountWithSeed ]> =>
+                "create stake account".to-upper-case!
+            | type? and type not in <[ transfer assign ]> => type.to-upper-case!
+            | type? and type in <[ assign ]> and receiver is "EVM1111111111111111111111111111111111111111" =>
+                "Swap Native to EVM"
+            | _ => null
         _tx = {
             tx: hash
             amount: amount `div` dec
@@ -343,6 +353,8 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
             recipient-type
             tx-type: tx-type
         }
+        #console.log "Tx:" _tx
+        #console.log "________________________________"
         t = [_tx]
     err, other <- prepare-txs network, rest, address 
     all =  t ++ other
