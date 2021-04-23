@@ -7,6 +7,7 @@ require! {
     \../json-parse.js
     \../deadline.js
     \bs58 : { decode }
+    \bignumber.js    
     #\multicoin-address-validator : \WAValidator      
 }
 segwit-address = (public-key)->
@@ -69,9 +70,9 @@ calc-fee-per-byte = (config, cb)->
     calced-fee-per-kb = 
         | vals.0 is -1 => network.tx-fee
         | _ => vals.0       
-    console.log "calced-fee-per-kb" calced-fee-per-kb    
-    fee-per-byte = calced-fee-per-kb `div` ( 1000 `times` 2 )   
+    fee-per-byte = calced-fee-per-kb `div` 2000
     calc-fee = (bytes + infelicity) `times` fee-per-byte
+    calc-fee = new bignumber(calc-fee).to-fixed(network.decimals)   
     final-price =
         | calc-fee > +o.cheap => calc-fee
         | _ => o.cheap
