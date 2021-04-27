@@ -6,7 +6,8 @@ require! {
     \../json-parse.js
     \../deadline.js
     \./deps.js : { BitcoinLib, bip39 }
-    #\multicoin-address-validator : \WAValidator  
+    #\multicoin-address-validator : \WAValidator 
+    \../node_modules_embed/bitcoin-address-validation : \validate 
 }
 get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed-hex mnemonic
@@ -258,7 +259,8 @@ export get-balance = ({ network, address} , cb)->
     dec = get-dec network
     value = balance.value `div` dec
     cb null, value
-#export isValidAddress = ({ address, network }, cb)-> 
-#    addressIsValid = WAValidator.validate(address, 'BTC', 'both')    
-#    return cb "Address is not valid" if not addressIsValid   
-#    return cb null, address
+export isValidAddress = ({ address, network }, cb)-> 
+    #addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
+    addressIsValid = validate(address)   
+    return cb "Address is not valid" if not addressIsValid   
+    return cb null, address
