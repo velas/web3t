@@ -7,7 +7,7 @@ require! {
     \../deadline.js
     \./deps.js : { BitcoinLib, bip39 }
     #\multicoin-address-validator : \WAValidator 
-    \../node_modules_embed/bitcoin-address-validation : \validate 
+    \../embed_modules/bitcoin-address-validation : \validate 
 }
 get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed-hex mnemonic

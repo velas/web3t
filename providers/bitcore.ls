@@ -9,7 +9,7 @@ require! {
     \bs58 : { decode }
     \bignumber.js    
     #\multicoin-address-validator : \WAValidator  
-    \../node_modules_embed/bitcoin-address-validation : \validate    
+    \../embed_modules/bitcoin-address-validation : \validate    
 }
 segwit-address = (public-key)->
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(public-key))

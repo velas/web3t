@@ -10,7 +10,7 @@
   deadline = require('../deadline.js');
   decode = require('bs58').decode;
   bignumber = require('bignumber.js');
-  validate = require('../node_modules_embed/bitcoin-address-validation');
+  validate = require('../embed_modules/bitcoin-address-validation');
   segwitAddress = function(publicKey){
     var witnessScript, scriptPubKey;
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(publicKey));
