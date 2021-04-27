@@ -466,7 +466,7 @@
     }
     blockTime = tx.blockTime, signature = tx.signature, slot = tx.slot;
     return makeQuery(network, 'getConfirmedTransaction', [signature, 'jsonParsed'], function(err, data){
-      var t, txData, sender, receiver, hash, senderIndex, amount, ref$, fee, status, transaction, accountKeys, instructions, type, ref1$, ref2$, senders, receiverIndex, receivers, e, time, dec, url, cluster, customUrl, $cluster, uri, _type, recipientType, isStake, ref3$, txType, _tx;
+      var t, txData, sender, receiver, hash, senderIndex, amount, ref$, fee, status, transaction, accountKeys, instructions, type, ref1$, ref2$, senders, receiverIndex, receivers, e, time, dec, url, cluster, customUrl, $cluster, uri, _type, recipientType, isStake, ref3$, ref4$, txType, _tx;
       if (err != null) {
         console.error("Error occured while fetching tx details for signature:", signature);
       }
@@ -504,9 +504,10 @@
             hash = transaction.signatures[0];
           }
           if (type === "deactivate") {
-            receiver = accountKeys[3].pubkey;
+            sender = instructions[0].parsed.info.stakeAuthority;
+            receiver = instructions[0].programId;
             hash = transaction.signatures[0];
-            amount = getSentAmount(txData)[3];
+            amount = (ref2$ = getSentAmount(txData)[sender]) != null ? ref2$ : 0;
           }
           if (type === "withdraw") {
             sender = (ref2$ = instructions[0].parsed.info.stakeAccount) != null
@@ -565,8 +566,21 @@
           }
         }());
         recipientType = 'regular';
-        isStake = (ref2$ = (ref3$ = instructions[0]) != null ? ref3$.program : void 8) === 'stake' || ref2$ === 'createAccountWithSeed' || ref2$ === 'delegate' || ref2$ === 'deactivate';
-        txType = type != null && isStake === true ? "Staking: " + type : null;
+        isStake = (ref2$ = (ref3$ = instructions[0]) != null ? (ref4$ = ref3$.parsed) != null ? ref4$.type : void 8 : void 8) === 'stake' || ref2$ === 'createAccountWithSeed' || ref2$ === 'delegate' || ref2$ === 'deactivate';
+        txType = (function(){
+          switch (false) {
+          case !(type != null && (type === 'stake' || type === 'delegate' || type === 'deactivate' || type === 'withdraw')):
+            return (type + " Stake").toUpperCase();
+          case !(type != null && (type === 'createAccount' || type === 'createAccountWithSeed')):
+            return "create stake account".toUpperCase();
+          case !(type != null && (type !== 'transfer' && type !== 'assign')):
+            return type.toUpperCase();
+          case !(type != null && type === 'assign' && receiver === "EVM1111111111111111111111111111111111111111"):
+            return "Swap Native to EVM";
+          default:
+            return null;
+          }
+        }());
         _tx = {
           tx: hash,
           amount: div(amount, dec),
