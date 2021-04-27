@@ -4,10 +4,10 @@
   out$.mainnet = mainnet = {
     disabled: false,
     decimals: 18,
-    txFee: '0.000001',
+    txFee: '0.002',
     txFeeOptions: {
-      auto: '0.000020',
-      cheap: '0.000020'
+      auto: '0.002',
+      cheap: '0.002'
     },
     api: {
       provider: 'velas_evm',
