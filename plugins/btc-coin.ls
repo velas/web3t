@@ -1,11 +1,11 @@
 export mainnet =
     decimals: 8
-    tx-fee: \0.0000004
+    tx-fee: \0.00004
     tx-fee-auto-mode: \per-byte
     tx-fee-options:
-        auto: \0.000001
-        cheap: \0.0000004
-        fee-per-byte: \0.0000005
+        auto: \0.00001
+        cheap: \0.00004
+        fee-per-byte: \0.000005
     mask: '1000000000000000000000000000000000'
     api:
         provider: \bitcore
@@ -36,9 +36,9 @@ export testnet =
         linktx: \https://bitpay.com/insight/#/BTC/testnet/tx/:hash
         decimal: 8
     tx-fee-options:
-        auto: \0.000001
-        cheap: \0.0000004
-        fee-per-byte: \0.0000005
+        auto: \0.00001
+        cheap: \0.00004
+        fee-per-byte: \0.000005
     messagePrefix: '\x18Bitcoin Signed Message:\n'
     topup: \https://testnet.manu.backend.hamburg/faucet
     bech32: 'tb'
