@@ -146,10 +146,9 @@ transform-tx = (network, description, t)-->
         | t.gas-used + "".length is 0 => "0" 
         | _ => "0"          
     gas-price = 
-        | t.gas-used? => t.gas-used
-        | t.gas-used + "".length is 0 => "0" 
+        | t.gas-price? => t.gas-price
+        | t.gas-price + "".length is 0 => "0"
         | _ => "0"
-    t.gas-price ? "0"
     fee = gas-used `times` (gas-price + "") `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }

@@ -160,11 +160,10 @@ transform-tx = (network, description, t)-->
         | t.gas-used + "".length is 0 => "0" 
         | _ => "0"          
     gas-price = 
-        | t.gas-used? => t.gas-used
-        | t.gas-used + "".length is 0 => "0" 
+        | t.gas-price? => t.gas-price
+        | t.gas-price + "".length is 0 => "0"
         | _ => "0"
-    t.gas-price ? "0"
-    fee = gas-used `times` (gas-price + "") `div` dec
+    fee = (gas-used `times` (gas-price + "")) `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     tx-type =
         | t.to is "V8sA8Q5jR44E4q6S59eUhhSJQiRBBFdZA8" or t.to is "0x56454c41532d434841494e000000000053574150"
