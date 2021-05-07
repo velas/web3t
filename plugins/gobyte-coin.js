@@ -90,7 +90,7 @@
     }
   ];
   out$.type = type = 'coin';
-  out$.enabled = enabled = true;
+  out$.enabled = enabled = false;
   out$.name = name = 'Gobyte';
   out$.token = token = 'gbx';
   out$.image = image = 'https://res.cloudinary.com/nixar-work/image/upload/v1548537659/gobyte.png';
