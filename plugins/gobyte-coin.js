@@ -64,31 +64,6 @@
   };
   out$.txTypes = txTypes = ['regular', 'instant'];
   out$.color = color = '#545DF1';
-  
-  out$.links = links = [
-    {
-      image: 'https://www.gobyte.network/img/fb.png',
-      href: 'https://wwww.facebook.com/gobytenetwork'
-    }, {
-      image: 'https://www.gobyte.network/img/twitter.png',
-      href: 'https://twitter.com/gobytenetwork'
-    }, {
-      image: 'https://www.gobyte.network/img/reddit.png',
-      href: 'https://www.reddit.com/r/gobytenetwork/'
-    }, {
-      image: 'https://www.gobyte.network/img/slack.png',
-      href: 'https://gobyte.slack.com/'
-    }, {
-      image: 'https://www.gobyte.network/img/discordapp.png',
-      href: 'https://discord.gobyte.network/'
-    }, {
-      image: 'https://www.gobyte.network/img/telegram.png',
-      href: 'https://t.me/gobytenetwork'
-    }, {
-      image: 'https://www.gobyte.network/img/github.png',
-      href: 'https://github.com/gobytecoin/gobyte'
-    }
-  ];
   out$.type = type = 'coin';
   out$.enabled = enabled = false;
   out$.name = name = 'Gobyte';
