@@ -64,12 +64,7 @@
   };
   out$.txTypes = txTypes = ['regular', 'instant'];
   out$.color = color = '#545DF1';
-  out$.branding = branding = {
-    logo: 'https://www.gobyte.network/img/logo.svg',
-    title: "GoByte Multicurrency Wallet",
-    important: true,
-    topup: 'gobyte'
-  };
+  
   out$.links = links = [
     {
       image: 'https://www.gobyte.network/img/fb.png',
