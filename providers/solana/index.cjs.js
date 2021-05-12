@@ -19274,6 +19274,7 @@ var solanaWeb3 = (function (exports) {
 
       return {
         blockhash: new PublicKey(result.blockhash).toString(),
+        blockTime: unsafeRes.result.blockTime,
         previousBlockhash: new PublicKey(result.previousBlockhash).toString(),
         parentSlot: result.parentSlot,
         transactions: result.transactions.map(result => {
