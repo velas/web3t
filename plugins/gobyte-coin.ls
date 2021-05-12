@@ -53,12 +53,7 @@ export testnet =
     dust-threshold: 5460
 export tx-types = <[ regular instant ]>
 export color = \#545DF1
-export branding =
-    logo: \https://www.gobyte.network/img/logo.svg
-    title: "GoByte Multicurrency Wallet"
-    important: yes
-    topup: \gobyte
-export links =
+links =
     *   image: \https://www.gobyte.network/img/fb.png
         href: \https://wwww.facebook.com/gobytenetwork
     *   image: \https://www.gobyte.network/img/twitter.png
@@ -74,8 +69,9 @@ export links =
     *   image: \https://www.gobyte.network/img/github.png
         href: \https://github.com/gobytecoin/gobyte
 export type = \coin
-export enabled = yes
+export enabled = no
 export name = 'Gobyte'
+export nickname = \gbx
 export token = \gbx
 export image = \https://res.cloudinary.com/nixar-work/image/upload/v1548537659/gobyte.png
 export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=GBX&tsyms=USD).GBX.USD"

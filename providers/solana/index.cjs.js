@@ -19229,6 +19229,28 @@ var solanaWeb3 = (function (exports) {
       assert(typeof res.result !== 'undefined');
       return res.result;
     }
+
+    async getConfirmedBlocksWithLimit(slot, limit) {
+      const unsafeRes = await this._rpcRequest('getConfirmedBlocksWithLimit', [slot, limit]);
+      console.log("unsafeRes", unsafeRes);
+      //const res = GetConfirmedBlockRpcResult(unsafeRes);
+      const res = unsafeRes;
+
+      if (res.error) {
+        throw new Error('failed to get confirmed block: ' + res.error.message);
+      }
+
+      const result = res.result;
+      assert(typeof result !== 'undefined');
+
+      if (!result) {
+        throw new Error('Confirmed block ' + slot + ' not found');
+      }
+
+      return unsafeRes;
+
+    }
+
     /**
      * Fetch a list of Transactions and transaction statuses from the cluster
      * for a confirmed block
@@ -19568,7 +19590,7 @@ var solanaWeb3 = (function (exports) {
 
 
     async sendTransaction(transaction, signers, options) {
-        console.log("index.cjs.js [sendTransaction]");
+      console.log("index.cjs.js [sendTransaction]");
       if (transaction.nonceInfo) {
         transaction.sign(...signers);
       } else {
