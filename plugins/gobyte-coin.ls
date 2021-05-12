@@ -53,11 +53,6 @@ export testnet =
     dust-threshold: 5460
 export tx-types = <[ regular instant ]>
 export color = \#545DF1
-export branding =
-    logo: \https://www.gobyte.network/img/logo.svg
-    title: "GoByte Multicurrency Wallet"
-    important: yes
-    topup: \gobyte
 export type = \coin
 export enabled = false
 export name = 'Gobyte'
