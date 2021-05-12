@@ -19259,7 +19259,6 @@ var solanaWeb3 = (function (exports) {
 
     async getConfirmedBlock(slot) {
       const unsafeRes = await this._rpcRequest('getConfirmedBlock', [slot]);
-      console.log("[getConfirmedBlock] res", unsafeRes); 
       const res = GetConfirmedBlockRpcResult(unsafeRes);
 
       if (res.error) {
