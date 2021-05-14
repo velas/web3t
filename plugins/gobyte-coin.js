@@ -69,5 +69,5 @@
   out$.name = name = 'Gobyte';
   out$.token = token = 'gbx';
   out$.image = image = 'https://res.cloudinary.com/nixar-work/image/upload/v1548537659/gobyte.png';
-  out$.usdInfo = usdInfo = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=GBX&tsyms=USD).GBX.USD";
+  out$.usdInfo = usdInfo = "url(https://explorer.velas.com/ticker).gbx_price";
 }).call(this);
