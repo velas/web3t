@@ -18386,11 +18386,12 @@ var solanaWeb3 = (function (exports) {
         throw new Error('failed to get balance of account ' + publicKey.toBase58() + ': ' + e);
       });
     }
-    
-    
+
     async getBlockProduction(identity) {
       const unsafeRes = await this._rpcRequest('getBlockProduction', [{identity}]);
       const res = GetBlockTimeRpcResult(unsafeRes);
+      assert(typeof res.result !== 'undefined');
+      return res.result;
     }
     
     /**
