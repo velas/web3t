@@ -18386,6 +18386,13 @@ var solanaWeb3 = (function (exports) {
         throw new Error('failed to get balance of account ' + publicKey.toBase58() + ': ' + e);
       });
     }
+    
+    
+    async getBlockProduction(identity) {
+      const unsafeRes = await this._rpcRequest('getBlockProduction', [{identity}]);
+      const res = GetBlockTimeRpcResult(unsafeRes);
+    }
+    
     /**
      * Fetch the estimated production time of a block
      */
