@@ -23,5 +23,5 @@
   out$.enabled = enabled = true;
   out$.token = token = 'eth_rs';
   out$.image = image = './res/eth-ethnamed.png';
-  out$.usdInfo = usdInfo = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT,ETC&tsyms=USD).ETH.USD";
+  out$.usdInfo = usdInfo = "url(https://explorer.velas.com/ticker).eth_price";
 }).call(this);

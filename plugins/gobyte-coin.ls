@@ -53,14 +53,9 @@ export testnet =
     dust-threshold: 5460
 export tx-types = <[ regular instant ]>
 export color = \#545DF1
-export branding =
-    logo: \https://www.gobyte.network/img/logo.svg
-    title: "GoByte Multicurrency Wallet"
-    important: yes
-    topup: \gobyte
 export type = \coin
 export enabled = false
 export name = 'Gobyte'
 export token = \gbx
 export image = \https://res.cloudinary.com/nixar-work/image/upload/v1548537659/gobyte.png
-export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=GBX&tsyms=USD).GBX.USD"
+export usd-info = "url(https://explorer.velas.com/ticker).gbx_price"
