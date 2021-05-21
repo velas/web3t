@@ -18386,6 +18386,41 @@ var solanaWeb3 = (function (exports) {
         throw new Error('failed to get balance of account ' + publicKey.toBase58() + ': ' + e);
       });
     }
+
+    async getBlockProduction(identity) {
+        const unsafeRes = await this._rpcRequest('getBlockProduction', [{identity}]);
+        //assert(typeof unsafeRes.result !== 'undefined');
+        return unsafeRes;
+    }
+
+    async getConfirmedBlocks(start_slot, end_slot) {
+        const unsafeRes = await this._rpcRequest('getConfirmedBlocks', [start_slot, end_slot]);
+        console.log("unsafeRes", unsafeRes);
+        //const res = GetConfirmedBlockRpcResult(unsafeRes);
+        const res = unsafeRes;
+
+        if (res.error) {
+            throw new Error('failed to get confirmed block: ' + res.error.message);
+        }
+
+        const result = res.result;
+        assert(typeof result !== 'undefined');
+
+        if (!result) {
+            throw new Error('Confirmed block ' + slot + ' not found');
+        }
+
+        return unsafeRes;
+
+    }
+
+
+    async getLeaderSchedule(identity) {
+        const unsafeRes = await this._rpcRequest('getLeaderSchedule', [{identity}]);
+        //assert(typeof res.result !== 'undefined');
+        return unsafeRes;
+    }
+    
     /**
      * Fetch the estimated production time of a block
      */
