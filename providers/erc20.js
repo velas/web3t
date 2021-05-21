@@ -387,10 +387,10 @@
         feeType: feeType
       }, function(err, gasPriceBn){
         var gasPrice, gasMinimal, gasEstimate;
-        gasPrice = gasPriceBn.toFixed();
         if (err != null) {
           return cb(err);
         }
+        gasPrice = gasPriceBn.toFixed();
         gasMinimal = div(toWeiEth(amountFee), gasPrice);
         gasEstimate = round(times(gasMinimal, 5));
         if (toString$.call(web3.eth.getBalance).slice(8, -1) !== 'Function') {
