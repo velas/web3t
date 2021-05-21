@@ -53,29 +53,9 @@ export testnet =
     dust-threshold: 5460
 export tx-types = <[ regular instant ]>
 export color = \#545DF1
-export branding =
-    logo: \https://www.gobyte.network/img/logo.svg
-    title: "GoByte Multicurrency Wallet"
-    important: yes
-    topup: \gobyte
-export links =
-    *   image: \https://www.gobyte.network/img/fb.png
-        href: \https://wwww.facebook.com/gobytenetwork
-    *   image: \https://www.gobyte.network/img/twitter.png
-        href: \https://twitter.com/gobytenetwork
-    *   image: \https://www.gobyte.network/img/reddit.png
-        href: \https://www.reddit.com/r/gobytenetwork/
-    *   image: \https://www.gobyte.network/img/slack.png
-        href: \https://gobyte.slack.com/
-    *   image: \https://www.gobyte.network/img/discordapp.png
-        href: \https://discord.gobyte.network/
-    *   image: \https://www.gobyte.network/img/telegram.png
-        href: \https://t.me/gobytenetwork
-    *   image: \https://www.gobyte.network/img/github.png
-        href: \https://github.com/gobytecoin/gobyte
 export type = \coin
-export enabled = yes
+export enabled = false
 export name = 'Gobyte'
 export token = \gbx
 export image = \https://res.cloudinary.com/nixar-work/image/upload/v1548537659/gobyte.png
-export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=GBX&tsyms=USD).GBX.USD"
+export usd-info = "url(https://explorer.velas.com/ticker).gbx_price"

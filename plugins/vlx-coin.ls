@@ -1,10 +1,10 @@
 export mainnet =
     disabled: no 
     decimals: 18  
-    tx-fee: \0.000001
+    tx-fee: \0.002   
     tx-fee-options:
-        auto: \0.000020
-        cheap: \0.000020
+        auto: \0.002
+        cheap: \0.002
     api:
         provider: \velas_evm
         apiUrl : \https://explorer.velas.com/api

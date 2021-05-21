@@ -1,10 +1,10 @@
 mainnet-config = 
     disabled: false 
     decimals: 9
-    txFee: '0.0014'
+    txFee: '0.000005'
     txFeeOptions:
-        auto: '0.0020'
-        cheap: '0.0020'   
+        auto: '0.000005'
+        cheap: '0.000005'   
     messagePrefix: 'Ethereum'
     mask: '3000000000000000000000000000000000'
     api:  
@@ -23,10 +23,10 @@ mainnet-config =
             referTo             : "vlx_evm" 
 testnet-config = 
     decimals: 9
-    txFee: '0.0014'
+    txFee: '0.000005'
     txFeeOptions: 
-        auto: '0.0020'
-        cheap: '0.0020'   
+        auto: '0.000005'
+        cheap: '0.000005'   
     messagePrefix: 'Ethereum'
     mask: '3000000000000000000000000000000000'
     api: 

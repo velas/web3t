@@ -8,7 +8,8 @@ require! {
     \../deadline.js
     \bs58 : { decode }
     \bignumber.js    
-    #\multicoin-address-validator : \WAValidator      
+    #\multicoin-address-validator : \WAValidator  
+    \../embed_modules/bitcoin-address-validation : \validate    
 }
 segwit-address = (public-key)->
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(public-key))
@@ -399,10 +400,11 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb err if err?
     all =  t ++ other    
     cb null, all   
-#export isValidAddress = ({ address, network }, cb)-> 
-#    addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
-#    return cb "Address is not valid" if not addressIsValid   
-#    return cb null, address
+export isValidAddress = ({ address, network }, cb)-> 
+    #addressIsValid = WAValidator.validate(address, 'BTC', 'both')   
+    addressIsValid = validate(address)   
+    return cb "Address is not valid" if not addressIsValid   
+    return cb null, address
 export get-transaction-info = (config, cb)->
     { network, tx } = config
     url = "#{get-api-url network}/tx/:hash".replace \:hash, tx
