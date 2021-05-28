@@ -20,6 +20,6 @@ extend-coins = (coins, config)->
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
     #eos
-    def = { btc, dash, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2  }
+    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2  }
     extend-coins def, config
     cb null, def
