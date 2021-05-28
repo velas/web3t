@@ -276,7 +276,7 @@
     return new BN(it);
   };
   transformTx = curry$(function(network, description, t){
-    var url, dec, tx, amount, time, gasUsed, gasPrice, fee, recipientType, ref$, res;
+    var url, dec, tx, amount, time, gasUsed, gasPrice, fee, recipientType, ref$, txType, res;
     url = network.api.url;
     dec = getDec(network);
     network = 'eth';
@@ -316,6 +316,14 @@
     t.gasPrice == null && "0";
     fee = div(times(gasUsed, gasPrice + ""), dec);
     recipientType = ((ref$ = t.input) != null ? ref$ : "").length > 3 ? 'contract' : 'regular';
+    txType = (function(){
+      switch (false) {
+      case !(t.to === "V8sA8Q5jR44E4q6S59eUhhSJQiRBBFdZA8" || t.to === "0x56454c41532d434841494e000000000053574150"):
+        return "Swap EVM to Native";
+      default:
+        return null;
+      }
+    }());
     res = {
       network: network,
       tx: tx,
@@ -326,7 +334,8 @@
       from: t.from,
       to: t.to,
       recipientType: recipientType,
-      description: description
+      description: description,
+      txType: txType
     };
     return res;
   });
@@ -358,7 +367,6 @@
         page: page,
         offset: offset
       });
-      console.log(apiUrl + "?" + query);
       return get(apiUrl + "?" + query).timeout({
         deadline: deadline
       }).end(function(err, resp){
@@ -546,7 +554,6 @@
   out$.createTransaction = createTransaction = curry$(function(arg$, cb){
     var network, account, recipient, amount, amountFee, data, feeType, txType, gasPrice, gas, dec;
     network = arg$.network, account = arg$.account, recipient = arg$.recipient, amount = arg$.amount, amountFee = arg$.amountFee, data = arg$.data, feeType = arg$.feeType, txType = arg$.txType, gasPrice = arg$.gasPrice, gas = arg$.gas;
-    console.log("Legacy vlx2 [create-transaction]");
     dec = getDec(network);
     return toEthAddress(recipient, function(err, $recipient){
       var privateKey;
