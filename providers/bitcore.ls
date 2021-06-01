@@ -219,13 +219,8 @@ export create-transaction = (config, cb)->
     err = get-error config, <[ network account amount amountFee recipient ]>
     return cb err if err?
     { network, account, recipient, amount, amount-fee, fee-type, tx-type} = config
-    amount-fee = new bignumber(amount-fee).toFixed(network.decimals)    
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
-    try 
-        amount = new bignumber(amount ? 0).toFixed(network.decimals)
-    catch e 
-        console.log "new bignumber error:" e      
     amount-with-fee = amount `plus` amount-fee
     err, outputs <- get-enough outputs, amount-with-fee, 0
     return cb err if err?
