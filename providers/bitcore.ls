@@ -11,6 +11,7 @@ require! {
     #\multicoin-address-validator : \WAValidator  
     \../embed_modules/bitcoin-address-validation : \validate    
 }
+console.log("dsdsdsdsdsdsdsdsd")
 segwit-address = (public-key)->
     witnessScript = BitcoinLib.script.witnessPubKeyHash.output.encode(BitcoinLib.crypto.hash160(public-key))
     scriptPubKey = BitcoinLib.script.scriptHash.output.encode(BitcoinLib.crypto.hash160(witnessScript))
@@ -64,14 +65,14 @@ calc-fee-per-byte = (config, cb)->
     return cb err, o.cheap if err?
     return cb "raw-tx is expected" if typeof! data.raw-tx isnt \String
     #bytes = decode(data.raw-tx).to-string(\hex).length / 2
-    bytes = data.raw-tx.length / 2
+    bytes = new bignumber(data.raw-tx.length) `div` 2
     infelicity = 1
     err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
     vals = if data? and not err? then values data.body else [0.0024295] 
     calced-fee-per-kb = 
         | vals.0 is -1 => network.tx-fee
         | _ => vals.0       
-    fee-per-byte = calced-fee-per-kb `div` 2000
+    fee-per-byte = calced-fee-per-kb `div` new bignumber(2000)
     calc-fee = (bytes + infelicity) `times` fee-per-byte
     calc-fee = new bignumber(calc-fee).to-fixed(network.decimals)   
     final-price =
