@@ -30,7 +30,6 @@
     var def;
     def = {
       btc: btc,
-      dash: dash,
       eth: eth,
       ltc: ltc,
       usdt: usdt,
