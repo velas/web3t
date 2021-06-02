@@ -288,14 +288,11 @@ export get-balance = ({ address, network } , cb)->
     try
         json = JSON.parse(data.text)
         dec = get-dec network
-        num = json.balance `div` dec
+        #num = (json.confirmed `minus` json.unconfirmed ) `div` dec
+        num = json.confirmed `div` dec
         return cb null, num
     catch e
-        return cb e.message
-    dec = get-dec network
-    num = data.text `div` dec
-    #return cb null, "2.00001"
-    cb null, num
+        return cb e.message 
 transform-in = ({ net, address }, t)->
     #tr = BitcoinLib.Transaction.fromHex(t.script)  
     tx = t.mintTxid
