@@ -219,7 +219,6 @@ export create-transaction = (config, cb)->
     err = get-error config, <[ network account amount amountFee recipient ]>
     return cb err if err?
     { network, account, recipient, amount, amount-fee, fee-type, tx-type} = config
-    amount-fee = new bignumber(amount-fee).toFixed(network.decimals)    
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
     amount-with-fee = amount `plus` amount-fee
@@ -289,14 +288,11 @@ export get-balance = ({ address, network } , cb)->
     try
         json = JSON.parse(data.text)
         dec = get-dec network
-        num = json.balance `div` dec
+        #num = (json.confirmed `minus` json.unconfirmed ) `div` dec
+        num = json.confirmed `div` dec
         return cb null, num
     catch e
-        return cb e.message
-    dec = get-dec network
-    num = data.text `div` dec
-    #return cb null, "2.00001"
-    cb null, num
+        return cb e.message 
 transform-in = ({ net, address }, t)->
     #tr = BitcoinLib.Transaction.fromHex(t.script)  
     tx = t.mintTxid
