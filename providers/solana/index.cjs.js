@@ -18845,8 +18845,11 @@ var solanaWeb3 = (function (exports) {
      */
 
 
-    async getParsedProgramAccounts(programId, commitment) {
+    async getParsedProgramAccounts(programId, filter, commitment) {
       const args = this._buildArgs([programId.toBase58()], commitment, 'jsonParsed');
+      if(filter){
+        args[1].filters = filter.filters; 
+      }
 
       const unsafeRes = await this._rpcRequest('getProgramAccounts', args);
       const res = GetParsedProgramAccountsRpcResult(unsafeRes);
