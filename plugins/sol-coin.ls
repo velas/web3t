@@ -43,9 +43,33 @@ testnet-config =
         evm:
             id: "evm"
             name: "Velas EVM"
-            referTo             : "vlx_evm"   
+            referTo             : "vlx_evm"
+devnet-config =
+    decimals: 9
+    txFee: '0.000005'
+    txFeeOptions:
+        auto: '0.000005'
+        cheap: '0.000005'
+    messagePrefix: 'Ethereum'
+    mask: '3000000000000000000000000000000000'
+    api:
+        provider: 'solana'
+        web3Provider: 'https://api.devnet.velas.com'
+        url: 'https://native.velas.com'
+        apiUrl: 'https://api.devnet.velas.com/api'
+        cluster: 'devnet'
+    networks:
+        legacy:
+            id: "legacy"
+            name: "Velas"
+            referTo             : "vlx2"
+        evm:
+            id: "evm"
+            name: "Velas EVM"
+            referTo             : "vlx_evm"
 export mainnet = mainnet-config
-export testnet = testnet-config       
+export testnet = testnet-config
+export devnet  = devnet-config
 export color = '#9E4FEB'
 export type = 'coin'
 export enabled = true

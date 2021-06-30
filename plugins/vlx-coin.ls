@@ -47,7 +47,37 @@ export testnet =
             HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
             ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
             ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
-            referTo             : "vlx_erc20"   
+            referTo             : "vlx_erc20"
+
+export devnet =
+    disabled: no
+    decimals: 18
+    tx-fee: \0.000001
+    tx-fee-options:
+        auto: \0.000020
+        cheap: \0.000020
+    api:
+        provider: \velas_evm
+        web3Provider : \http://rpc.gw.devnet.veladev.net/
+        url : \https://explorer.devnet.veladev.net
+        apiUrl : \http://rpc.gw.devnet.veladev.net/api
+    networks:
+        native:
+            id: "native"
+            name: "Velas Native"
+            referTo             : "vlx_native"
+        legacy:
+            id: "legacy"
+            name: "Velas"
+            referTo             : "vlx2"
+        vlx_erc20:
+            disabled: yes
+            id: "vlx_erc20"
+            name: "Velas ERC20"
+            HomeBridge          : ""
+            ForeignBridge       : ""
+            ERC20BridgeToken    : ""
+            referTo             : "vlx_erc20"
     
 export color = \#9E4FEB
 export type = \coin
