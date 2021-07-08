@@ -17737,6 +17737,7 @@ var solanaWeb3 = (function (exports) {
     executable: 'boolean',
     owner: 'string',
     lamports: 'number',
+    lamportsStr: 'string?',
     data: struct$1.union([['string', struct$1.literal('base64')], struct$1.pick({
       program: 'string',
       parsed: 'any',
