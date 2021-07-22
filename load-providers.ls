@@ -1,17 +1,19 @@
 require! {
-    \./providers/eth.js
-    \./providers/insight.js
-    \./providers/bitcore.js
-    \./providers/erc20.js
-    \./providers/omni.js
-    \./providers/velas2.js
-    \./providers/solana.js
-    \./providers/velas_evm.js
+    \./providers/eth.ls
+    \./providers/insight.ls
+    \./providers/bitcore.ls
+    \./providers/erc20.ls
+    \./providers/omni.ls
+    \./providers/velas2.ls
+    \./providers/solana.ls
+    \./providers/velas_evm.ls
+    \./providers/bnb.ls
+    \./providers/velas_bep20.ls
 }
 extend-providers = (providers, config)->
     return if typeof! config.providers isnt \Object
     providers <<<< config.providers
 module.exports = (config, cb)->
-   def = { eth, insight, erc20, omni, velas2, velas_evm, bitcore, solana }
+   def = { eth, insight, erc20, omni, velas2, velas_evm, bitcore, solana, bnb, velas_bep20 }
    extend-providers def, config
    cb null, def
