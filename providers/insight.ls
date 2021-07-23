@@ -366,11 +366,6 @@ transform-tx = ({ net, address }, t)-->
         to = address 
         
     if type is \out   
-        unspend =
-            vout 
-                |> filter incoming-vout address    
-                |> head
-        amount = unspend?value 
         outcoming =
             vout
                 |> map outcoming-vouts address
