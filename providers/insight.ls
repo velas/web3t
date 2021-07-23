@@ -268,7 +268,6 @@ export push-tx = ({ network, rawtx, tx-type } , cb)-->
         | tx-type is \instant => \sendix
         | _ => \send
     err, res <- post "#{get-api-url network}/tx/#{send-type}", { rawtx } .end
-    console.log "err, res" err, res            
     if err? and res?text? and not res?body?txid? then
         err = prepare-error-msg(res?text)    
     return cb "Error: #{err}" if err?
