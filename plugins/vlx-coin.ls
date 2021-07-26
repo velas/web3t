@@ -7,9 +7,9 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \velas_evm
-        apiUrl : \https://explorer.velas.com/api
+        apiUrl : \https://evmexplorer.velas.com/api
         web3Provider : \https://explorer.velas.com/rpc
-        url: \https://explorer.velas.com
+        url: \https://evmexplorer.velas.com
     networks:           
         native:
             id: "native"
