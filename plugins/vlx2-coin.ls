@@ -11,18 +11,22 @@ mainnet-config =
         web3Provider : \https://explorer.velas.com/rpc
         url : \https://explorer.velas.com
         apiUrl : \https://explorer.velas.com/api
+        
+    HomeBridge          : "0x38E20F6224449eCB50A81188147cbf990a00eA44"
+    ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+    ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9"
+        
     networks:      
         native:
             id: "native" 
             name: "Velas Native" 
-            HomeBridge          : "0x56454c41532d434841494e000000000053574150"
-            ForeignBridge       : "" 
-            ERC20BridgeToken    : ""
-            referTo             : "vlx_native"
+            referTo: "vlx_native"
         evm:
             id: "evm"    
             name: "Velas EVM"   
-            referTo             : "vlx_evm"  
+            referTo: "vlx_evm"  
+            
+            
 testnet-config =
     decimals: 18
     tx-fee: \0.0014
@@ -36,36 +40,29 @@ testnet-config =
         web3Provider: 'https://explorer.testnet.velas.com/rpc'
         url: 'https://explorer.testnet.velas.com'
         apiUrl: 'https://explorer.testnet.velas.com/api'
+        
+    HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"
+    ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9" 
+    ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
+    
     networks:
         native:
             id: "native" 
             name: "Velas Native" 
-            HomeBridge          : "0x56454c41532d434841494e000000000053574150"
-            ForeignBridge       : "" 
-            ERC20BridgeToken    : ""
-            referTo             : "vlx_native"
+            referTo: "vlx_native"
         vlx_erc20:
             #disabled: yes    
             id: "vlx_erc20"
             name: "Velas ERC20"
-            HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
-            ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
-            ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
-            referTo             : "vlx_erc20"     
+            referTo: "vlx_erc20"     
         evm:
             id: "evm"
-            name: "Velas EVM"
-            HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
-            ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
-            ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
-            referTo             : "vlx_evm" 
+            name: "Velas EVM" 
+            referTo: "vlx_evm" 
         vlx_bep20:
             id: "vlx_bep20"
             name: "Velas (BSC)" 
-            HomeBridge          : "0x97B7eb15cA5bFa82515f6964a3EAa1fE71DFB7A7"        
-            ForeignBridge       : "0x719C8490730ADBBA514eec7173515a4A572dA736"
-            ERC20BridgeToken    : "0x77622C2F95846dDaB1300F46685CC953C17A78df" 
-            referTo             : "vlx_bep20"
+            referTo: "vlx_bep20"
 export mainnet =  mainnet-config
 export testnet = if window?location?.href?.index-of('testnet2') > -1 then testnet2-config else testnet-config
 export color = \#9E4FEB

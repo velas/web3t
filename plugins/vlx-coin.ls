@@ -31,6 +31,11 @@ export testnet =
         web3Provider : \https://explorer.testnet.velas.com/rpc
         url : \https://explorer.testnet.velas.com
         apiUrl : \https://explorer.testnet.velas.com/api
+        
+    HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
+    ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+    ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
+    
     networks:
         native:
             id: "native"
@@ -44,9 +49,6 @@ export testnet =
             disabled: yes    
             id: "vlx_erc20"
             name: "Velas ERC20"
-            HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
-            ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
-            ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
             referTo             : "vlx_erc20"
 
 export devnet =
@@ -74,9 +76,6 @@ export devnet =
             disabled: yes
             id: "vlx_erc20"
             name: "Velas ERC20"
-            HomeBridge          : ""
-            ForeignBridge       : ""
-            ERC20BridgeToken    : ""
             referTo             : "vlx_erc20"
     
 export color = \#9E4FEB

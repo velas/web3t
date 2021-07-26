@@ -28,26 +28,25 @@ testnet-config =
     txFeeIn: "eth"
     txBridgeFeeIn: "eth"
     address: "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
-    ERC20BridgeToken: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
+    
+    ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"    
+    HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
+    ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+    
     api:
         provider: \velas_erc20 
         web3Provider: 'https://rpc-tokenbridge.gw.testnet.veladev.net',
         url: 'https://ropsten.etherscan.io',
         apiUrl: 'https://api-ropsten.etherscan.io/api'
+        
     networks:
         legacy:
             id: "legacy"
             name: "Velas"
-            HomeBridge          : null        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
             referTo             : "vlx2"
         evm:
             id: "evm"
             name: "Velas EVM"
-            HomeBridge          : null        
-            ForeignBridge       : "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
-            ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9" 
             referTo             : "vlx_evm"   
 
 export mainnet =  mainnet-config

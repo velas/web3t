@@ -32,18 +32,16 @@ export testnet =
         web3Provider : \https://data-seed-prebsc-1-s1.binance.org:8545
         url : \https://testnet.bscscan.com
         apiUrl : \https://api-testnet.bscscan.com/api 
-    ERC20BridgeToken: "0x77622C2F95846dDaB1300F46685CC953C17A78df"
+    ERC20BridgeToken : "0x77622C2F95846dDaB1300F46685CC953C17A78df"
+    HomeBridge       : "0x97B7eb15cA5bFa82515f6964a3EAa1fE71DFB7A7" 
+    ForeignBridge    : "0x719C8490730ADBBA514eec7173515a4A572dA736"   
     txFeeIn: "bnb"
     txBridgeFeeIn: "bnb"    
     networks:           
         legacy:
             id: "legacy"
             name: "Velas" 
-            referTo: "vlx2"
-            HomeBridge          : "0x97B7eb15cA5bFa82515f6964a3EAa1fE71DFB7A7"        
-            ForeignBridge       : "0x719C8490730ADBBA514eec7173515a4A572dA736"
-            ERC20BridgeToken    : "0x77622C2F95846dDaB1300F46685CC953C17A78df"   
-
+            referTo: "vlx2"  
     
 export color = \#9E4FEB
 export type = \coin
