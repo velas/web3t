@@ -4,6 +4,8 @@ export mainnet =
     tx-fee-options:
         auto: \0.0001
         cheap: \0.000014
+        fee-per-byte: \0.000001  
+    tx-fee-auto-mode: \per-byte
     mask: 'L000000000000000000000000000000000'
     api:
         provider: \insight
@@ -22,6 +24,8 @@ export testnet =
     tx-fee-options:
         auto: \0.0001
         cheap: \0.000014
+        fee-per-byte: \0.000001  
+    tx-fee-auto-mode: \per-byte
     topup: \https://litecoin-faucet.com/
     mask: 'n000000000000000000000000000000000'
     api:
