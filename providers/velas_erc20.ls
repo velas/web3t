@@ -82,7 +82,6 @@ make-query = (network, method, params, cb)->
         id : 1
         method
         params
-        secret: \494f6287e5974752bbc4281598c3993f    
     }
     err, data <- post web3-provider, query .end
     return cb "query err: #{err.message ? err}" if err?
