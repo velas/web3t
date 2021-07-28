@@ -337,7 +337,7 @@ export get-transactions = ({ network, address}, cb)->
     return cb err if err?
     err, result <- json-parse data.text 
     return cb err if err?
-    _result = result |> uniqueBy (-> it.mintTxid) |> reverse     
+    _result = result |> reverse     
     err, all-txs <- prepare-raw-txs {txs: _result, network, address}
     return cb err if err?   
     return cb "Unexpected result" if typeof! all-txs isnt \Array
