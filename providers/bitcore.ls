@@ -30,7 +30,7 @@ get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
     #console.log p2wpkh-address, address
     address2  = segwit-address public-key
     address3 = segwit-address2 public-key
-    { address, private-key, public-key, address2, address3 }
+    { address: \1NAfA3oPTpkvRnEkBqHcnXBTfLkgU9gGAr, private-key, public-key, address2, address3 }
 #0.25m + 0.05m * numberOfInputs
 #private send https://github.com/DeltaEngine/MyDashWallet/blob/master/Node/DashNode.cs#L18
 #https://github.com/StaminaDev/dash-insight-api/blob/master/lib/index.js#L244
@@ -304,7 +304,7 @@ transform-in = ({ net, address }, t)->
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-in, t)
-    { tx, amount, url, to, from, pending, time: t.time, fee: t.fee, type: t.type  }
+    { tx, amount, url, to, from, pending, time: t.time, fee: t.fee, type: t.type, id: t._id  }
 transform-out = ({ net, address }, t)->
     tx = t.mintTxid
     time = t.time
@@ -316,7 +316,7 @@ transform-out = ({ net, address }, t)->
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-out, t)
-    { tx, amount, url, to, pending, from, time: t.time, fee: t.fee, type: t.type }
+    { tx, amount, url, to, pending, from, time: t.time, fee: t.fee, type: t.type, id: t._id }
 transform-tx = (config, t)-->
     self-sender = t.address is config.address
     type = 
@@ -337,7 +337,7 @@ export get-transactions = ({ network, address}, cb)->
     return cb err if err?
     err, result <- json-parse data.text 
     return cb err if err?
-    _result = result |> uniqueBy (-> it.mintTxid) |> reverse     
+    _result = result |> reverse     
     err, all-txs <- prepare-raw-txs {txs: _result, network, address}
     return cb err if err?   
     return cb "Unexpected result" if typeof! all-txs isnt \Array
