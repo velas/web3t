@@ -7,6 +7,7 @@ require! {
     #\web3 : \Web3
     \../json-parse.js
     \../deadline.js
+    \bignumber.js 
     #\multicoin-address-validator : \WAValidator
 }
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
@@ -51,7 +52,8 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     res = gas-price `times` from-hex(estimate)
     #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
-    cb null, val
+    fee = new bignumber(val).to-fixed(8)
+    cb null, fee
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-ethereum-fullpair-by-index mnemonic, index, network
     cb null, result
