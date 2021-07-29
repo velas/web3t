@@ -30,7 +30,7 @@ get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
     #console.log p2wpkh-address, address
     address2  = segwit-address public-key
     address3 = segwit-address2 public-key
-    { address: \1NAfA3oPTpkvRnEkBqHcnXBTfLkgU9gGAr, private-key, public-key, address2, address3 }
+    { address, private-key, public-key, address2, address3 }
 #0.25m + 0.05m * numberOfInputs
 #private send https://github.com/DeltaEngine/MyDashWallet/blob/master/Node/DashNode.cs#L18
 #https://github.com/StaminaDev/dash-insight-api/blob/master/lib/index.js#L244
