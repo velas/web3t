@@ -22,7 +22,7 @@ export testnet =
         provider: \huobi    
         web3Provider : \https://http-testnet.hecochain.com
         url : \https://testnet.hecoinfo.com
-        apiUrl : \https://testnet.hecoinfo.com/api 
+        apiUrl : \https://api-testnet.hecoinfo.com/api 
   
 
     
