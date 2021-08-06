@@ -160,7 +160,10 @@ transform-tx = (network, description, t)-->
     gas-price = t.gas-price ? 0
     fee = gas-used `times` gas-price `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    { network, tx, status, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    from = 
+        | t.from is \0x0000000000000000000000000000000000000000 => "EVM to VLX ETHEREUM Swap" 
+        | _ => t.from
+    { network, tx, status, amount, fee, time, url, from, t.to, recipient-type, description }
 get-internal-transactions = ({ network, address }, cb)->
     err, address <- to-eth-address address
     return cb err if err?
@@ -203,6 +206,10 @@ get-external-transactions = ({ network, address }, cb)->
     txs =
         result.result |> map transform-tx network, 'external'
     cb null, txs
+    
+up = (s)->
+    (s ? "").to-upper-case!
+    
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
     module = \account
@@ -219,7 +226,7 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
-            #|> filter -> it.contract-address is network.address
+            |> filter -> it.contract-address is network.address and up(it.tokenSymbol) is \VLX
             |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs
@@ -280,10 +287,10 @@ get-contract-instance = (web3, network, swap)->
     addr = 
         | swap? => network.address
         | _ => network.ERC20BridgeToken 
-    web3.eth.contract(abi).at(addr)
+    web3.eth.contract(abi).at("0xfeff2e74ec612a288ae55fe9f6e40c52817a1b6c")
 export create-transaction = (config, cb)-->
     console.log "[erc20 create-transaction]"    
-    { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap, chainId } = config 
+    { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } = config 
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
     dec = get-dec network
@@ -299,10 +306,12 @@ export create-transaction = (config, cb)-->
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
-    gas-estimate = round ( gas-minimal `times` 5 )
+    gas-estimate = round ( gas-minimal `times` 2 )
     err, balance <- get-eth-balance { network, address: account.address }
     return cb err if err?
-    fee-in = network.txFeeIn.to-upper-case!    
+    fee-in = network.txFeeIn.to-upper-case! 
+    err, chainId <- make-query network, \eth_chainId , []
+    return cb err if err?   
     return cb "Not enought balance on #{fee-in} wallet to send tx with fee #{amount-fee}" if +balance < +amount-fee
     _data =
         | swap? => contract.transferAndCall.get-data(recipient, value, "0x") 
@@ -364,6 +373,7 @@ export get-balance = ({ network, address, swap} , cb)->
     web3 = get-web3 network
     contract = get-contract-instance web3, network, swap 
     number = contract.balance-of(address)
+    console.log "balance of erc20 number " number   
     dec = get-dec network
     balance = number `div` dec
     cb null, balance

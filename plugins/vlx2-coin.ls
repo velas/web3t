@@ -63,6 +63,10 @@ testnet-config =
             id: "vlx_bep20"
             name: "Velas (BSC)" 
             referTo: "vlx_bep20"
+        vlx_huobi:
+            id: "vlx_huobi"
+            name: "Velas (HECO)" 
+            referTo: "vlx_huobi"
 export mainnet =  mainnet-config
 export testnet = if window?location?.href?.index-of('testnet2') > -1 then testnet2-config else testnet-config
 export color = \#9E4FEB

@@ -31,8 +31,12 @@ export testnet =
         provider: \velas_huobi
         web3Provider : \https://http-testnet.hecochain.com
         url : "https://testnet.hecoinfo.com"
-        apiUrl : "https://testnet.hecoinfo.com/api"
-    ERC20BridgeToken: "0x77622C2F95846dDaB1300F46685CC953C17A78df"
+        apiUrl : "https://api-testnet.hecoinfo.com/api"
+    
+    ERC20BridgeToken    : "0x77622C2F95846dDaB1300F46685CC953C17A78df"
+    HomeBridge          : "0x8c8884Fdb4f9a6ca251Deef70670DF7C4c48045D"
+    ForeignBridge       : "0x719C8490730ADBBA514eec7173515a4A572dA736" 
+    
     txFeeIn: "huobi"
     txBridgeFeeIn: "huobi"    
     networks:           

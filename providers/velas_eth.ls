@@ -4,6 +4,7 @@ require! {
     \../math.js : { plus, minus, times, div }
     \./superagent.js : { get, post }
     \./deps.js : { Web3, Tx, BN, hdkey, bip39 }
+    \../addresses.js : { ethToVlx, vlxToEth }
     \../json-parse.js
     \../deadline.js
     \crypto-js/sha3 : \sha3
@@ -12,7 +13,7 @@ get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
     w = wallet.derive-path("m0").derive-child(index).get-wallet!
-    address = "0x" + w.get-address!.to-string(\hex)
+    address = ethToVlx("0x" + w.get-address!.to-string(\hex))
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
     { address, private-key, public-key }
@@ -21,6 +22,8 @@ get-contract-instance = (web3, addr)->
     | typeof! web3.eth.contract is \Function => web3.eth.contract(abi).at(addr)
     | _ => new web3.eth.Contract(abi, addr)
 is-address = (address) ->
+    if address.starts-with \V
+        address = vlxToEth address
     if not //^(0x)?[0-9a-f]{40}$//i.test address
         false
     else
@@ -30,9 +33,13 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { web3, fee-type }
     return cb err if err?
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
-    return cb err if err?
     from = account.address
+    if to?.starts-with \V
+        to = vlxToEth to
+    if from?.starts-with \V
+        from = vlxToEth from
+    err, nonce <- web3.eth.get-transaction-count from, \pending
+    return cb err if err?
     err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb err if err?
     dec = get-dec network
@@ -53,28 +60,28 @@ transform-tx = (network, t)-->
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee = t.cumulative-gas-used `times` t.gas-price `div` dec
-    from = 
-        | _ => t.from
-    { network, tx, amount, fee, time, url, from, t.to }
+    { network, tx, amount, fee, time, url, t.from, t.to }
 up = (s)->
     (s ? "").to-upper-case!
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
+    if address.starts-with \V
+        address = vlxToEth address
     module = \account
     action = \tokentx
     startblock = 0
     endblock = 99999999
     sort = \asc
-    apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
-    query = stringify { module, action, apikey, address, sort, startblock, endblock }
+    query = stringify { module, action, address, sort, startblock, endblock }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse resp.text
     return cb err if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
+    console.log "eth vlx txs"    
     txs =
         result.result
-            |> filter -> up(it.tokenSymbol) is \USDT 
+            |> filter -> it.contract-address is ethToVlx network.address 
             |> map transform-tx network
     cb null, txs
 get-web3 = (network)->
@@ -89,13 +96,16 @@ calc-gas-price = ({ web3, fee-type }, cb)->
 round = (num)->
     Math.round +num
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data} , cb)-->
-    console.log "[create transation] data" data
-    console.log "[create transation] recipient" recipient 
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    from = account.address
+    if from?.starts-with \V
+        from = vlxToEth from
+    if recipient?.starts-with \V
+        recipient = vlxToEth recipient
+    err, nonce <- web3.eth.get-transaction-count from, \pending
     return cb err if err?
     return cb "nonce is required" if not nonce?
     contract = get-contract-instance web3, network.address
@@ -104,37 +114,35 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-eth = -> it `div` (10^18)
     value = to-wei amount
     err, gas-price-bn <- calc-gas-price { web3, fee-type }
-    return cb err if err?
+    #gas-price = round (gas-price-bn `plus` ( gas-price-bn `div` 100 ))
     gas-price = gas-price-bn.to-fixed!
+    return cb err if err?
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
     gas-estimate = round ( gas-minimal `times` 5 )
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
-    err, balance <- web3.eth.get-balance account.address
+    err, balance <- web3.eth.get-balance from
     return cb err if err?
     balance-eth = to-eth balance
     return cb "Balance is not enough to send tx" if +balance-eth < +amount-fee
-    err, erc-balance <- get-balance { network, account.address }
+    err, erc-balance <- get-balance { network, address: from }
     return cb err if err?
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
     $data =
-        | data? and data isnt "0x" => data    
+        | data? and data isnt "0x" => data 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
-    #console.log \tx-build, { nonce, gas-price, gas-estimate, to: network.address, account.address, data }
-    to = 
-        | data? and data isnt "0x" => recipient    
-        | _ => network.address    
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
         gas: to-hex gas-estimate
-        to: to   
-        from: account.address
+        to: recipient
+        from: from
         data: $data || \0x
         chainId: chainId 
+    #console.log \sign
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -160,6 +168,8 @@ export get-total-received = ({ address, network }, cb)->
 export get-unconfirmed-balance = ({ network, address} , cb)->
     cb "Not Implemented"
 export get-balance = ({ network, address} , cb)->
+    if address.starts-with \V
+        address = vlxToEth address
     web3 = get-web3 network
     contract = get-contract-instance web3, network.address
     balance-of =
@@ -170,7 +180,12 @@ export get-balance = ({ network, address} , cb)->
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
-export isValidAddress = ({ address, network }, cb)->   
+export isValidAddress = ({ address, network }, cb)->
+    if address.starts-with \V
+        try    
+            address = vlxToEth address
+        catch 
+            return cb "Address is not valid"    
     if not //^(0x)?[0-9a-f]{40}$//i.test address
         return cb "Address is not valid"   
     else
@@ -225,4 +240,4 @@ isChecksumAddress = (address) ->
     while i < 40
         return no if (parseInt addressHash[i], 16) > 7 and address[i].toUpperCase! isnt address[i] or (parseInt addressHash[i], 16) <= 7 and address[i].toLowerCase! isnt address[i]
         i++
-    yes  
+    yes      

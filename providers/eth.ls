@@ -44,7 +44,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
         | data? => data
         | _ => '0x'
     from = account.address
-    query = { from, to, data: data-parsed }
+    query = { from, to: account.address, data: data-parsed }
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb "estimate gas err: #{err.message ? err}" if err?
@@ -122,7 +122,7 @@ is-address = (address) ->
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, chainId} , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
-    return cb "address in not correct ethereum address" if not is-address recipient
+    return cb "address is not correct ethereum address" if not is-address recipient
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- get-nonce { account, network }
     return cb err if err?

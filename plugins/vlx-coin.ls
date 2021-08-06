@@ -60,9 +60,9 @@ export devnet =
         cheap: \0.000020
     api:
         provider: \velas_evm
-        web3Provider : \https://explorer.devnet.veladev.net/rpc
-        url : \https://explorer.devnet.veladev.net
-        apiUrl : \https://explorer.devnet.veladev.net/api
+        web3Provider : \https://explorer.devnet.velas.com/rpc
+        url : \https://explorer.devnet.velas.com  
+        apiUrl : \https://explorer.devnet.velas.com/api
     networks:
         native:
             id: "native"

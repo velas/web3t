@@ -12,6 +12,7 @@ export mainnet =
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     nickname: \eth
+    
 export ethnamed =
     decimals: 18
     tx-fee: \0.0014
@@ -26,6 +27,7 @@ export ethnamed =
         url : \http://web3.space:8000
         apiUrl : \http://web3.space:8000/api
     nickname: \eth
+    
 export ropsten =
     decimals: 18
     tx-fee: \0.0014
@@ -34,13 +36,24 @@ export ropsten =
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
-    tx-fee-in: \eth   
     api:
         provider: \eth
         web3Provider : \https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648
         url : \https://ropsten.etherscan.io
         apiUrl : \https://api-ropsten.etherscan.io/api
     nickname: \eth
+    
+    ERC20BridgeToken    : ""    
+    HomeBridge          : "0xb1FAB785Cb5F2d9782519942921e9afCDf2C60e0"        
+    ForeignBridge       : "0xA5D512085006867974405679f2c9476F4F7Fa903"
+    BridgeableToken     : "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344" 
+    
+    networks:
+        vlx_eth:
+            disabled: yes    
+            id: "vlx_eth"
+            name: "Ethereum (Velas)"
+            referTo: "vlx_eth" 
 kovan =
     decimals: 18
     tx-fee: \0.0014
