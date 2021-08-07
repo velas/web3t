@@ -61,7 +61,6 @@ get-ethereum-fullpair-by-index = (mnemonic, index, network)->
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
-    console.log data if typeof! data?text isnt \String
     return cb "expected text" if typeof! data?text isnt \String
     try
         сonsole.log \try-parse, data.text, JSON.parse
@@ -290,7 +289,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         data: data || "0x"
         chainId: chainId     
     }
-    console.log "tx-obj" tx-obj   
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex

@@ -282,7 +282,6 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
 export get-balance = ({ address, network } , cb)->
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/address/#{address}/balance" .timeout { deadline: 5000 } .end
-    console.log "#{get-api-url network}/address/#{address}/balance"
     return cb err if err? or data.text.length is 0
     #check that data.text has number
     try

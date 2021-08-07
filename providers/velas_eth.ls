@@ -78,7 +78,6 @@ export get-transactions = ({ network, address }, cb)->
     err, result <- json-parse resp.text
     return cb err if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
-    console.log "eth vlx txs"    
     txs =
         result.result
             |> filter -> it.contract-address is ethToVlx network.address 
@@ -154,7 +153,6 @@ export push-tx = ({ network, rawtx } , cb)-->
     send = web3.eth.send-raw-transaction ? web3.eth.send-signed-transaction
     #console.log \push-tx
     err, txid <- send rawtx
-    console.log { err, txid }
     cb err, txid
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
@@ -196,7 +194,6 @@ export isValidAddress = ({ address, network }, cb)->
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
-    console.log data if typeof! data?text isnt \String
     return cb "expected text" if typeof! data?text isnt \String
     try
         data.body = JSON.parse data.text

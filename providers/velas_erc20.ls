@@ -373,7 +373,6 @@ export get-balance = ({ network, address, swap} , cb)->
     web3 = get-web3 network
     contract = get-contract-instance web3, network, swap 
     number = contract.balance-of(address)
-    console.log "balance of erc20 number " number   
     dec = get-dec network
     balance = number `div` dec
     cb null, balance

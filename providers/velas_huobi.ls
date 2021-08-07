@@ -62,7 +62,6 @@ get-ethereum-fullpair-by-index = (mnemonic, index, network)->
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
-    console.log data if typeof! data?text isnt \String
     return cb "expected text" if typeof! data?text isnt \String
     try
         сonsole.log \try-parse, data.text, JSON.parse
@@ -262,7 +261,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         data: data || "0x"
         chainId: chainId     
     }
-    console.log "tx-obj" tx-obj   
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
@@ -310,9 +308,7 @@ get-contract-instance = (web3, network, swap)->
 export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
     swap = null    
-    contract = get-contract-instance web3, network, swap 
-    console.log "contract" contract
-    console.log "address" address     
+    contract = get-contract-instance web3, network, swap     
     number = contract.balance-of(address)
     dec = get-dec network
     balance = number `div` dec
