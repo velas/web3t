@@ -13,7 +13,7 @@ require! {
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
-    w = wallet.derive-path("m0").derive-child(index).get-wallet!
+    w = wallet.derive-path("m/44'/60'/"+index+"'/0/0").get-wallet!
     address = "0x" + w.get-address!.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!

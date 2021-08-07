@@ -11,7 +11,7 @@ require! {
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
-    w = wallet.derive-path("m0").derive-child(index).get-wallet!
+    w = wallet.derive-path("m/44'/60'/"+index+"'/0/0").get-wallet!
     address = "0x" + w.get-address!.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
@@ -89,8 +89,6 @@ calc-gas-price = ({ web3, fee-type }, cb)->
 round = (num)->
     Math.round +num
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data} , cb)-->
-    console.log "[create transation] data" data
-    console.log "[create transation] recipient" recipient 
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
     dec = get-dec network
@@ -146,7 +144,6 @@ export push-tx = ({ network, rawtx } , cb)-->
     send = web3.eth.send-raw-transaction ? web3.eth.send-signed-transaction
     #console.log \push-tx
     err, txid <- send rawtx
-    console.log { err, txid }
     cb err, txid
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
@@ -181,7 +178,6 @@ export isValidAddress = ({ address, network }, cb)->
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
-    console.log data if typeof! data?text isnt \String
     return cb "expected text" if typeof! data?text isnt \String
     try
         data.body = JSON.parse data.text
