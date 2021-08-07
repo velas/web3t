@@ -18,12 +18,12 @@ mainnet-config =
     networks:
         legacy:
             id: "legacy"
-            name: "Velas"
-            referTo             : "vlx2" 
+            name: "Velas Legacy"
+            referTo: "vlx2" 
         evm:
             id: "evm"
             name: "Velas EVM"
-            referTo             : "vlx_evm" 
+            referTo: "vlx_evm" 
 testnet-config = 
     decimals: 9
     txFee: '0.000005'
@@ -41,12 +41,12 @@ testnet-config =
     networks:
         legacy:
             id: "legacy"
-            name: "Velas"
-            referTo             : "vlx2" 
+            name: "Velas Legacy"
+            referTo: "vlx2" 
         evm:
             id: "evm"
             name: "Velas EVM"
-            referTo             : "vlx_evm"
+            referTo: "vlx_evm"
 devnet-config =
     decimals: 9
     txFee: '0.000005'
