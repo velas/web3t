@@ -1,6 +1,7 @@
 require! {
     \./plugins/btc-coin.ls : btc
     \./plugins/eth-coin.ls : eth
+    \./plugins/eth-legacy-coin.ls : eth_legacy
     \./plugins/symblox.ls : symblox
     \./plugins/symblox-v2.ls : symblox-v2
     \./plugins/ltc-coin.ls : ltc
@@ -27,6 +28,6 @@ extend-coins = (coins, config)->
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
     #eos
-    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2, bnb, vlx_bep20, huobi, vlx_huobi, vlx_usdt }
+    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2, bnb, vlx_bep20, huobi, vlx_huobi, vlx_usdt, eth_legacy }
     extend-coins def, config
     cb null, def

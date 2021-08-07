@@ -1,5 +1,6 @@
 require! {
     \./providers/eth.ls
+    \./providers/eth_legacy.ls
     \./providers/insight.ls
     \./providers/bitcore.ls
     \./providers/erc20.ls
@@ -18,6 +19,6 @@ extend-providers = (providers, config)->
     return if typeof! config.providers isnt \Object
     providers <<<< config.providers
 module.exports = (config, cb)->
-   def = { eth, insight, erc20, omni, velas2, velas_evm, bitcore, solana, bnb, velas_bep20, huobi, velas_huobi, velas_usdt, velas_eth }
+   def = { eth, insight, erc20, omni, velas2, velas_evm, bitcore, solana, bnb, velas_bep20, huobi, velas_huobi, velas_usdt, velas_eth, eth_legacy }
    extend-providers def, config
    cb null, def
