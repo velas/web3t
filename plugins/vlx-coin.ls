@@ -8,16 +8,16 @@ export mainnet =
     api:
         provider: \velas_evm
         apiUrl : \https://evmexplorer.velas.com/api
-        web3Provider : \https://explorer.velas.com/rpc
+        web3Provider : \https://evmexplorer.velas.com/rpc
         url: \https://evmexplorer.velas.com
     networks:           
         native:
             id: "native"
             name: "Velas Native"
-            referTo             : "vlx_native" 
+            referTo: "vlx_native" 
         legacy:
             id: "legacy"
-            name: "Velas" 
+            name: "Velas Legacy" 
             referTo: "vlx2" 
 export testnet =
     disabled: no 
@@ -28,9 +28,9 @@ export testnet =
         cheap: \0.000020
     api:
         provider: \velas_evm
-        web3Provider : \https://explorer.testnet.velas.com/rpc
-        url : \https://explorer.testnet.velas.com
-        apiUrl : \https://explorer.testnet.velas.com/api
+        web3Provider : \https://evmexplorer.testnet.velas.com/rpc
+        url : \https://evmexplorer.testnet.velas.com
+        apiUrl : \https://evmexplorer.testnet.velas.com/api
         
     HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
     ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
@@ -40,16 +40,16 @@ export testnet =
         native:
             id: "native"
             name: "Velas Native"
-            referTo             : "vlx_native" 
+            referTo: "vlx_native" 
         legacy:
             id: "legacy"
-            name: "Velas"
-            referTo             : "vlx2" 
+            name: "Velas Legacy"
+            referTo: "vlx2" 
         vlx_erc20:
             disabled: yes    
             id: "vlx_erc20"
             name: "Velas ERC20"
-            referTo             : "vlx_erc20"
+            referTo: "vlx_erc20"
 
 export devnet =
     disabled: no

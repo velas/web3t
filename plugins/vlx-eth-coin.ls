@@ -35,9 +35,9 @@ testnet-config =
     
     api:
         provider: \velas_eth 
-        web3Provider: 'https://explorer.testnet.velas.com/rpc',
-        url: 'https://explorer.testnet.velas.com',
-        apiUrl: 'https://explorer.testnet.velas.com/api'
+        web3Provider: 'https://evmexplorer.testnet.velas.com/rpc',
+        url: 'https://evmexplorer.testnet.velas.com',
+        apiUrl: 'https://evmexplorer.testnet.velas.com/api'
         
     networks:
         eth:

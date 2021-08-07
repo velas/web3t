@@ -13,9 +13,9 @@ mainnet-config =
     ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
     api:
         provider: \velas_usdt    
-        web3Provider: 'https://explorer.velas.com/rpc',
-        url: 'https://explorer.velas.com',
-        apiUrl: 'https://explorer.velas.com/api'
+        web3Provider: 'https://evmexplorer.velas.com/rpc',
+        url: 'https://evmexplorer.velas.com',
+        apiUrl: 'https://evmexplorer.velas.com/api'
 testnet-config =
     disabled: no 
     decimals: 6
@@ -36,9 +36,9 @@ testnet-config =
     
     api:
         provider: \velas_usdt 
-        web3Provider: 'https://explorer.testnet.velas.com/rpc',
-        url: 'https://explorer.testnet.velas.com',
-        apiUrl: 'https://explorer.testnet.velas.com/api'
+        web3Provider: 'https://evmexplorer.testnet.velas.com/rpc',
+        url: 'https://evmexplorer.testnet.velas.com',
+        apiUrl: 'https://evmexplorer.testnet.velas.com/api'
         
     networks:
         usdt_erc20:
