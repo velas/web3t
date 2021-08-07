@@ -48,7 +48,7 @@ export testnet =
     
 export color = \#9E4FEB
 export type = \coin
-export enabled = yes
+export enabled = no  
 export name = 'Velas (HECO)'
 export token = \vlx_huobi  
 export nickname = \vlx    
