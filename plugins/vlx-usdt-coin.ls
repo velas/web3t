@@ -9,8 +9,12 @@ mainnet-config =
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
+    txFeeIn: "vlx2"
+    txBridgeFeeIn: "vlx2"
     address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
+    
     ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
+    
     api:
         provider: \velas_usdt    
         web3Provider: 'https://evmexplorer.velas.com/rpc',
@@ -25,8 +29,8 @@ testnet-config =
         cheap: \0.0020
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
-    txFeeIn: "eth"
-    txBridgeFeeIn: "eth"
+    txFeeIn: "vlx2"
+    txBridgeFeeIn: "vlx2"
     address: "0x90f69A6134fD1cf45170AC55a895138da69B40aD"
     
     ERC20BridgeToken    : "0xb404c51bbc10dcbe948077f18a4b8e553d160084"    
