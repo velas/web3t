@@ -2,8 +2,6 @@ mainnet-config =
     disabled: yes 
     decimals: 6
     tx-fee: \0.0014
-    txFeeIn: "eth"
-    txBridgeFeeIn: 'eth'
     tx-fee-options:
         auto: \0.0020
         cheap: \0.00014
