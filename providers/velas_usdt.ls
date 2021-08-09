@@ -46,7 +46,6 @@ export get-keys = ({ network, mnemonic, index }, cb)->
 to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
-    console.log "[transform-tx]"    
     { url } = network.api
     dec = get-dec network
     network = \eth
