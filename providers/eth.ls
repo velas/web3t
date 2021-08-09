@@ -1,6 +1,6 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each }
+    \prelude-ls : { filter, map, foldl, each, uniqueBy }
     \../math.js : { plus, minus, times, div, from-hex }
     \./superagent.js : { get, post }
     \./deps.js : { Web3, Tx, BN, hdkey, bip39 }
@@ -86,8 +86,9 @@ export get-transactions = ({ network, address }, cb)->
     return cb "cannot parse json: #{err.message ? err}" if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
-        result.result |> map transform-tx network
-    #console.log api-url, result.result, txs
+        result.result 
+            |> uniqueBy (-> it.hash)
+            |> map transform-tx network
     cb null, txs
 #get-web3 = (network)->
 #    { web3-provider } = network.api
