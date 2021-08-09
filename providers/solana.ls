@@ -236,7 +236,6 @@ export get-transactions = ({ network, address}, cb)->
 prepare-raw-txs = ({ txs, network, address }, cb)->
     $txs = txs |> sort-by (.blockTime) |> reverse
     err, result <- prepare-txs network, $txs, address
-    console.log "all txs" result.length
     cb null, result
 get-index-of-obj = (arr, pubKey)->
     index = -1
