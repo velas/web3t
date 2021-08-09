@@ -50,7 +50,7 @@ export ropsten =
     
     networks:
         vlx_eth:
-            disabled: yes    
+            disabled: no    
             id: "vlx_eth"
             name: "Ethereum (Velas)"
             referTo: "vlx_eth" 
