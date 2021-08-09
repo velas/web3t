@@ -12,12 +12,12 @@ mainnet-config =
     address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
     ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
     api:
-        provider: \velas_usdt    
-        web3Provider: 'https://explorer.velas.com/rpc',
-        url: 'https://explorer.velas.com',
-        apiUrl: 'https://explorer.velas.com/api'
+        provider: \velas_eth    
+        web3Provider: 'https://evmexplorer.velas.com/rpc',
+        url: 'https://evmexplorer.velas.com',
+        apiUrl: 'https://evmexplorer.velas.com/api'
 testnet-config =
-    disabled: yes 
+    disabled: no 
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options:
