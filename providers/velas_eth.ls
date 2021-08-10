@@ -132,6 +132,9 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         | data? and data isnt "0x" => data 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
+
+    gas-estimate += 50000
+
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
