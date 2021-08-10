@@ -61,6 +61,27 @@ round = (num)->
     Math.round +num
 to-hex = ->
     new BN(it)
+
+prepare-internal-txs = (network, [tx, ...txs], cb)->
+    return cb null if not tx?
+    err, more-info <- get-transaction-info { network, tx: tx.hash }
+    tx.more-info = more-info
+    err <- prepare-internal-txs(network, txs)
+    cb null
+
+transform-internal-tx = (network, type, t)-->
+    { url } = network.api
+    dec = get-dec network
+    network = \eth
+    tx = t.hash
+    amount = t.value `div` dec
+    time = t.time-stamp
+    url = "#{url}/tx/#{tx}"
+    { gas-used, cumulativeGasUsed, effectiveGasPrice, status } = t.more-info.info
+    fee = cumulativeGasUsed `times` effectiveGasPrice `div` dec
+    recipient-type = if (t.input ? "").length > 3 then \contract else \regular
+    { network, tx, amount, fee, time, url, t.from, t.to, status, recipient-type, description:type }
+
 transform-tx = (network, t)-->
     { url } = network.api
     dec = get-dec network
@@ -69,9 +90,53 @@ transform-tx = (network, t)-->
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
+    fee =
+        | t.cumulative-gas-used? => t.cumulative-gas-used `times` t.gas-price `div` dec
+        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec
     { network, tx, amount, fee, time, url, t.from, t.to }
+
+get-internal-transactions = (config, cb)->
+    { network, address } = config
+    { api-url } = config.network.api
+    module = \account
+    action = \txlistinternal
+    startblock = 0
+    endblock = 99999999
+    sort = \desc
+    apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
+    page = 1
+    offset = 20
+    query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
+    err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb "cannot parse json: #{err.message ? err}" if err?
+    return cb "Unexpected result" if typeof! result?result isnt \Array
+
+    err <- prepare-internal-txs network, result.result
+    try
+        txs =
+            result.result |> map transform-internal-tx network, 'internal'
+    catch e
+        console.error e
+    cb null, txs
+
+export get-transaction-info = (config, cb)->
+    { network, tx } = config
+    query = [tx]
+    err, tx <- make-query network, \eth_getTransactionReceipt , query
+    return cb err if err?
+    status =
+        | typeof! tx isnt \Object => \pending
+        | tx.status is \0x0 => \reverted
+        | tx.status is \0x1 => \confirmed
+        | _ => \pending
+    result = { tx?from, tx?to, status, info: tx }
+    cb null, result
+
 export get-transactions = ({ network, address }, cb)->
+    page = 1
+    offset = 20
     { api-url } = network.api
     module = \account
     action = \txlist
@@ -89,7 +154,12 @@ export get-transactions = ({ network, address }, cb)->
         result.result 
             |> uniqueBy (-> it.hash)
             |> map transform-tx network
-    cb null, txs
+
+    err, internal <- get-internal-transactions { network, address, page, offset }
+    internal = [] if err?
+    all = txs ++ internal
+    cb null, all
+
 #get-web3 = (network)->
 #    { web3-provider } = network.api
 #    new Web3(new Web3.providers.HttpProvider(web3-provider))
