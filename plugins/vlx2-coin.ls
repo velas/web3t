@@ -48,11 +48,12 @@ testnet-config =
     
     networks:
         native:
+            disabled: yes
             id: "native" 
             name: "Velas Native" 
             referTo: "vlx_native"
         vlx_erc20:
-            #disabled: yes    
+            disabled: yes
             id: "vlx_erc20"
             name: "Velas ERC20"
             referTo: "vlx_erc20"     
@@ -61,10 +62,12 @@ testnet-config =
             name: "Velas EVM" 
             referTo: "vlx_evm" 
         vlx_bep20:
+            disabled: yes
             id: "vlx_bep20"
             name: "Velas (BSC)" 
             referTo: "vlx_bep20"
         vlx_huobi:
+            disabled: yes
             id: "vlx_huobi"
             name: "Velas (HECO)" 
             referTo: "vlx_huobi"
