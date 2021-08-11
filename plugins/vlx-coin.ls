@@ -50,6 +50,10 @@ export testnet =
             id: "vlx_erc20"
             name: "Velas ERC20"
             referTo: "vlx_erc20"
+        legacy:
+            id: "evm"
+            name: "Velas Legacy"
+            referTo: "vlx2"
         vlx_bep20:
             disabled: yes
             id: "vlx_bep20"
