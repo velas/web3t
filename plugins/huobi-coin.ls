@@ -10,6 +10,7 @@ export mainnet =
         apiUrl : \""
         web3Provider : ""
         url: \""
+    group: 'Heco'
             
 export testnet =
     disabled: no 
@@ -23,7 +24,7 @@ export testnet =
         web3Provider : \https://http-testnet.hecochain.com
         url : \https://testnet.hecoinfo.com
         apiUrl : \https://api-testnet.hecoinfo.com/api 
-  
+    group: 'Heco'
 
     
 export color = \#9E4FEB

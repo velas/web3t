@@ -23,7 +23,8 @@ mainnet-config =
         evm:
             id: "evm"
             name: "Velas EVM"
-            referTo: "vlx_evm" 
+            referTo: "vlx_evm"
+    group: 'Velas'
 testnet-config = 
     decimals: 9
     txFee: '0.000005'
@@ -47,6 +48,7 @@ testnet-config =
             id: "evm"
             name: "Velas EVM"
             referTo: "vlx_evm"
+    group: 'Velas'
 devnet-config =
     decimals: 9
     txFee: '0.000005'
@@ -70,11 +72,13 @@ devnet-config =
             id: "evm"
             name: "Velas EVM"
             referTo             : "vlx_evm"
+    group: 'Velas'
 export mainnet = mainnet-config
 export testnet = testnet-config
 export devnet  = devnet-config
 export color = '#9E4FEB'
 export type = 'coin'
+export wallet-index = 0
 export enabled = true
 export name = 'Velas Native'
 export token = 'vlx_native'

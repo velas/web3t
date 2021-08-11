@@ -18,7 +18,9 @@ export mainnet =
         legacy:
             id: "legacy"
             name: "Velas Legacy" 
-            referTo: "vlx2" 
+            referTo: "vlx2"
+    group: 'Velas'
+
 export testnet =
     disabled: no 
     decimals: 18  
@@ -35,21 +37,29 @@ export testnet =
     HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
     ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
     ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
-    
+
+    group: "Velas"
+
     networks:
         native:
             id: "native"
             name: "Velas Native"
-            referTo: "vlx_native" 
-        legacy:
-            id: "legacy"
-            name: "Velas Legacy"
-            referTo: "vlx2" 
+            referTo: "vlx_native"
         vlx_erc20:
-            disabled: yes    
+            disabled: no
             id: "vlx_erc20"
             name: "Velas ERC20"
             referTo: "vlx_erc20"
+        vlx_bep20:
+            disabled: yes
+            id: "vlx_bep20"
+            name: "Velas (BSC)"
+            referTo: "vlx_bep20"
+        vlx_huobi:
+            disabled: yes
+            id: "vlx_huobi"
+            name: "Velas (HECO)"
+            referTo: "vlx_huobi"
 
 export devnet =
     disabled: no
@@ -63,6 +73,9 @@ export devnet =
         web3Provider : \https://explorer.devnet.velas.com/rpc
         url : \https://explorer.devnet.velas.com  
         apiUrl : \https://explorer.devnet.velas.com/api
+
+    group: "Velas"
+
     networks:
         native:
             id: "native"

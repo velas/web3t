@@ -10,6 +10,9 @@ export mainnet =
         apiUrl : \https://api.bscscan.com/api
         web3Provider : ""
         url: \https://api.bscscan.com
+
+    group: "Binance"
+
     networks:           
         native:
             id: "native"
@@ -36,7 +39,10 @@ export testnet =
     HomeBridge       : "0x729900a7db6bC1dAb1C2c953791C232Fb2A996Cb" 
     ForeignBridge    : "0xF9a7046E40E7e1992B877E7C20C0715F10560AB5"   
     txFeeIn: "bnb"
-    txBridgeFeeIn: "bnb"    
+    txBridgeFeeIn: "bnb"
+
+    group: "Binance"
+
     networks:           
         legacy:
             id: "legacy"

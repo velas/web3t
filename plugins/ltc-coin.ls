@@ -18,6 +18,7 @@ export mainnet =
     pub-key-hash: 0x30
     script-hash: 0x32
     wif: 0xb0
+    group: 'Litecoin'
 export testnet =
     decimals: 8
     tx-fee: \0.0001
@@ -39,6 +40,7 @@ export testnet =
     pub-key-hash: 0x6f
     script-hash: 0xc4
     wif: 0xef
+    group: 'Litecoin'
 export color = \#a04b55
 export type = \coin
 export enabled = yes

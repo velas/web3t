@@ -9,7 +9,10 @@ export mainnet =
         provider: \velas_huobi
         apiUrl : \""
         web3Provider : ""
-        url: \""  
+        url: \""
+
+    group: "Heco"
+
     networks:           
         native:
             id: "native"
@@ -38,7 +41,10 @@ export testnet =
     ForeignBridge       : "0x719C8490730ADBBA514eec7173515a4A572dA736" 
     
     txFeeIn: "huobi"
-    txBridgeFeeIn: "huobi"    
+    txBridgeFeeIn: "huobi"
+
+    group: "Heco"
+
     networks:           
         legacy:
             id: "legacy"

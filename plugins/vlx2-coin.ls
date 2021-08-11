@@ -24,7 +24,8 @@ mainnet-config =
         evm:
             id: "evm"    
             name: "Velas EVM"   
-            referTo: "vlx_evm"  
+            referTo: "vlx_evm"
+    "group": "Velas"
             
             
 testnet-config =
@@ -67,10 +68,12 @@ testnet-config =
             id: "vlx_huobi"
             name: "Velas (HECO)" 
             referTo: "vlx_huobi"
+    "group": "Velas"
 export mainnet =  mainnet-config
 export testnet = if window?location?.href?.index-of('testnet2') > -1 then testnet2-config else testnet-config
 export color = \#9E4FEB
 export type = \coin
+export wallet-index = 1
 export enabled = yes
 export name = 'Velas Legacy'
 export token = \vlx2
