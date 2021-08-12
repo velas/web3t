@@ -137,6 +137,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
     gas-estimate = round ( gas-minimal `times` 5 )
+    gas-estimate += 50000    
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance from
     return cb err if err?
