@@ -35,10 +35,11 @@ testnet-config =
     mask: '3000000000000000000000000000000000'
     api: 
         provider: 'solana'
-        web3Provider: 'https://explorer.testnet.velas.com/rpc'
+        web3Provider: 'https://api.testnet.velas.com/rpc'
         url: 'https://native.velas.com'
         apiUrl: 'https://explorer.testnet.velas.com/api'
         cluster: 'testnet'    
+    HomeBridge: "0x56454c41532d434841494e000000000053574150"
     networks:
         legacy:
             id: "legacy"
