@@ -12,7 +12,7 @@ export mainnet =
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     nickname: \eth
-    group: 'Ethereum Legacy'
+    group: 'Ethereum'
     
 export ethnamed =
     decimals: 18

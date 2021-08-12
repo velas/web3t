@@ -24,7 +24,7 @@ export mainnet =
             referTo: "vlx2" 
             
 export testnet =
-    disabled: no 
+    disabled: yes 
     decimals: 18  
     tx-fee: \0.000001
     tx-fee-options:
