@@ -44,7 +44,7 @@ testnet-config =
     group: "Ethereum"
     networks:
         evm:
-            id: "evm"
+            id: "vlx_evm"
             name: "Velas EVM"
             referTo : "vlx_evm"
 
