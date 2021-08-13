@@ -245,11 +245,23 @@ get-index-of-obj = (arr, pubKey)->
         if it.pubkey is pubKey
             index = count
     index
+    
+    
+cache = 
+    transactions: {}
+    
+get-tx-data = (network, signature, cb)->
+    return cb null, cache.transactions[signature] if cache.transactions[signature]?
+    err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
+    return cb err if err?    
+    cache.transactions[signature] = data 
+    return cb null, data    
+    
 prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb null, [] if not tx?
     #console.log "prepare-txs" tx
     { blockTime, signature, slot } = tx
-    err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
+    err, data <- get-tx-data network, signature
     console.error "Error occured while fetching tx details for signature:" signature if err?
     t = []
     #console.log "raw-tx" data
