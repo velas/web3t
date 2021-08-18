@@ -43,10 +43,14 @@ testnet-config =
         apiUrl: 'https://api-ropsten.etherscan.io/api'
     group: "Ethereum"
     networks:
-        evm:
+        vlx_evm:
             id: "vlx_evm"
             name: "Velas EVM"
             referTo : "vlx_evm"
+        vlx2:
+            id: "vlx2"
+            name: "Velas Legacy"
+            referTo: "vlx2"
 
 export mainnet =  mainnet-config
 export testnet = testnet-config
