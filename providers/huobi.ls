@@ -356,3 +356,12 @@ export get-peer-count = ({ network }, cb)->
     err, estimate <- make-query network, \net_getPeerCount , [ ]
     return cb err if err?
     return cb null, estimate
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result

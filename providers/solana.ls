@@ -419,3 +419,12 @@ export get-transaction-info = (config, cb)->
         | _ => \pending
     result = { from: sender, to: receiver, status, info: tx }
     cb null, result
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result

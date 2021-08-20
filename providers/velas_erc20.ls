@@ -288,6 +288,15 @@ get-contract-instance = (web3, network, swap)->
         | swap? => network.address
         | _ => network.ERC20BridgeToken 
     web3.eth.contract(abi).at("0xfeff2e74ec612a288ae55fe9f6e40c52817a1b6c")
+    
+get-gas-estimate = ({ network, query, gas }, cb)->
+    return cb null, gas if gas?
+    err, estimate <- make-query network, \eth_estimateGas , [ query ]
+    return cb null, 1000000 if err?
+    estimate-normal = from-hex(estimate)
+    return cb null, 1000000 if +estimate-normal < 1000000
+    cb null, estimate-normal
+    
 export create-transaction = (config, cb)-->
     console.log "[erc20 create-transaction]"    
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } = config 
@@ -319,12 +328,17 @@ export create-transaction = (config, cb)-->
         | _ => contract.transfer.get-data(recipient, value) 
     _recipient = 
         | swap? => recipient
-        | _ => network.ERC20BridgeToken  
+        | _ => network.ERC20BridgeToken
+        
+    query = { config.from, to: _recipient , data: _data }
+    err, estimate <- get-gas-estimate { network, query, gas }
+    return cb err if err? 
+          
     configs = 
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
-        gas: to-hex gas-estimate
+        gas: to-hex estimate
         to: _recipient 
         from: account.address
         data: config.data || _data || "0x"    
@@ -393,3 +407,12 @@ export get-peer-count = ({ network }, cb)->
     err, estimate <- make-query network, \net_getPeerCount , [ ]
     return cb err if err?
     return cb null, estimate
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result

@@ -241,3 +241,12 @@ isChecksumAddress = (address) ->
         return no if (parseInt addressHash[i], 16) > 7 and address[i].toUpperCase! isnt address[i] or (parseInt addressHash[i], 16) <= 7 and address[i].toLowerCase! isnt address[i]
         i++
     yes      
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result
