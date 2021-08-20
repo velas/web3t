@@ -32,7 +32,7 @@ export testnet =
         cheap: \0.000020
     api:
         provider: \velas_bep20    
-        web3Provider : \https://data-seed-prebsc-1-s1.binance.org:8545
+        web3Provider : \https://data-seed-prebsc-2-s1.binance.org:8545
         url : \https://testnet.bscscan.com
         apiUrl : \https://api-testnet.bscscan.com/api 
     ERC20BridgeToken : "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee"

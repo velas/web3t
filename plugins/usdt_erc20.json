@@ -8,6 +8,7 @@
     "type": "coin",
     "color": "#4FA37C",
     "walletIndex": 2,
+    "market": "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=825&range=ALL",
     
     "testnet": {
         "decimals": 6,
@@ -21,7 +22,7 @@
         "mask": "0x0000000000000000000000000000000000000000",
         "api": {
             "provider": "erc20",
-            "web3Provider": "https://geth.ropsten.velas.com",
+            "web3Provider": "https://geth.ropsten.veladev.net",
             "url": "https://ropsten.etherscan.io",
             "apiUrl": "https://api-ropsten.etherscan.io/api"
         },
@@ -30,7 +31,7 @@
         
         "HOME_BRIDGE_ADDRESS": "0x4a114C7a9e6581eB716085655DecBB416776ec7c",
         "FOREIGN_BRIDGE_ADDRESS": "0x90f69A6134fD1cf45170AC55a895138da69B40aD",
-        "FOREIGN_BRIDGEABLE_TOKEN_ADDRESS": "0xF30aC574c31270173A201027B12c3bC9734C9C26",
+        "FOREIGN_BRIDGEABLE_TOKEN_ADDRESS": "0x4D34B0b309f6D1DA0a18eA61Ecb52720cA7D08F5",
         "ERC20_TOKEN_ADDRESS": "0xb404c51bbc10dcbe948077f18a4b8e553d160084",
         
         "networks": {
@@ -60,6 +61,19 @@
             "url": "https://etherscan.io",
             "apiUrl": "https://api.etherscan.io/api"
         },
-        "group": "Ethereum"
+
+        "HOME_BRIDGE_ADDRESS": "0x92B27C48f387DB2dcEa4469ff50267e15A6389dB",
+        "FOREIGN_BRIDGE_ADDRESS": "0x7a70b72dB9c59f30C780C4746ce2a0562502Ec2b",
+        "FOREIGN_BRIDGEABLE_TOKEN_ADDRESS": "0x271a2101D2523A7C81d025690D2d68684Bd4989B",
+        "ERC20_TOKEN_ADDRESS": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+        
+        "group": "Ethereum",
+        "networks": {
+            "vlx_usdt": {
+                "id": "vlx_usdt",
+                "name": "Tether USD (Velas EVM)",
+                "referTo": "vlx_usdt"
+            }
+        }
     }
 }

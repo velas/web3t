@@ -77,6 +77,7 @@ export testnet = if window?location?.href?.index-of('testnet2') > -1 then testne
 export color = \#9E4FEB
 export type = \coin
 export wallet-index = 1
+export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=4747&range=ALL" 
 export enabled = yes
 export name = 'Velas Legacy'
 export token = \vlx2

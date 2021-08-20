@@ -28,6 +28,7 @@ export testnet =
 export color = \#9E4FEB
 export type = \coin
 export enabled = yes
+export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=1839&range=ALL"    
 export name = 'Binance Coin'
 export token = \bnb   
 export nickname = \bnb
