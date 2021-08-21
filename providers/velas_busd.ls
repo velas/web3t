@@ -54,7 +54,7 @@ export isValidAddress =  ({ address }, cb)->
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
-    w = wallet.derive-path("m/44'/5655640'/"+index+"'/0/0").get-wallet!
+    w = wallet.derive-path("m/44'/60'/"+index+"'/0/0").get-wallet!
     address = \0x + w.get-address!.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
@@ -155,6 +155,9 @@ transform-tx = (network, description, t)-->
     res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
     res    
 
+up = (s)->
+    (s ? "").to-upper-case!
+
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
     module = \account
@@ -171,8 +174,10 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
-            |> map transform-tx network, 'external' 
+            |> filter -> up(it.contract-address) is up(network.address) 
+            |> map transform-tx network, 'external'
     cb null, txs
+    
 get-dec = (network)->
     { decimals } = network
     10^decimals
@@ -209,6 +214,7 @@ is-address = (address) ->
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
+    console.log "recipient" recipient    
     err, $recipient <- to-eth-address recipient
     return cb err if err?
     return cb "address is not correct ethereum address" if not is-address $recipient
@@ -232,12 +238,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance = balance `times` dec
     
     balance-eth = to-eth balance
-    to-send = amount `plus` amount-fee
-    return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-    # gas-estimate =
-    #     |  gas? => gas
-    #     |  +gas-price is 0 => 21000
-    #     | _ => round(to-wei(amount-fee) `div` gas-price)
+    to-send = amount
+    return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send 
     data-parsed =
         | data? => data
         | _ => '0x'
@@ -248,22 +250,32 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
-    common = Common.forCustomChain 'mainnet', { networkId }
     gas-price = buffer.gas-price
-    if fee-type is \custom or !gas-price
-        gas-price = (amount-fee `times` dec) `div` gas-estimate
-    tx-obj = {
+    web3 = get-web3 network
+    contract = get-contract-instance web3, network.address, no  
+    $data =
+        | data? and data isnt "0x" => data 
+        | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
+        | _ => contract.transfer.get-data recipient, value
+
+    $value = 
+        | not data? or data is "0x" => 0
+        | _ => value 
+        
+    $recipient =
+        | not data? or data is "0x" => network.address
+        | _ => recipient  
+ 
+    tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
-        value: to-hex value
+        value: to-hex $value
         gas: to-hex gas-estimate
         to: $recipient
         from: address
-        data: data || "0x"
-        chainId: chainId     
-    }
-    console.log "tx-obj" tx-obj   
-    tx = new Tx tx-obj, { common }
+        data: $data
+        chainId: chainId 
+    
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -299,20 +311,15 @@ get-web3 = (network)->
     { web3-provider } = network.api
     new Web3(new Web3.providers.HttpProvider(web3-provider))
     
-get-contract-instance = (web3, network, swap)->
-    TOKEN_ADDRESS = \0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee    
-    abi = ERC20BridgeToken.abi 
-    addr = 
-        | swap? => network.address
-        | _ => network.ERC20BridgeToken
-    web3.eth.contract(abi).at(TOKEN_ADDRESS)
+abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
+get-contract-instance = (web3, addr, swap)->
+    | typeof! web3.eth.contract is \Function => web3.eth.contract(abi).at(addr)
+    | _ => new web3.eth.Contract(abi, addr)
     
 export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
     swap = null    
-    contract = get-contract-instance web3, network, swap 
-    console.log "contract" contract
-    console.log "address" address     
+    contract = get-contract-instance web3, network.address, swap     
     number = contract.balance-of(address)
     dec = get-dec network
     balance = number `div` dec
