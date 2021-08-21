@@ -214,7 +214,6 @@ is-address = (address) ->
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
-    console.log "recipient" recipient    
     err, $recipient <- to-eth-address recipient
     return cb err if err?
     return cb "address is not correct ethereum address" if not is-address $recipient

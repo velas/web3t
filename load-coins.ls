@@ -10,7 +10,8 @@ require! {
     \./plugins/vlx_erc20-coin.ls : vlx_erc20
     \./plugins/vlx-coin.ls : vlx
     \./plugins/bnb-coin.ls : bnb
-    \./plugins/vlx_bep20-coin.ls : vlx_bep20
+    \./plugins/vlx_busd-coin.ls : vlx_busd
+    \./plugins/busd-coin.ls : busd
     \./plugins/huobi-coin.ls : huobi
     \./plugins/vlx-huobi-coin.ls : vlx_huobi
     \./plugins/vlx-usdt-coin.ls : vlx_usdt
@@ -29,6 +30,6 @@ extend-coins = (coins, config)->
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
     #eos
-    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2, bnb, vlx_bep20, huobi, vlx_huobi, vlx_usdt, eth_legacy, usdt_erc20_legacy }
+    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2, bnb, vlx_busd, busd, huobi, vlx_huobi, vlx_usdt, eth_legacy, usdt_erc20_legacy }
     extend-coins def, config
     cb null, def
