@@ -11,7 +11,9 @@ mainnet-config =
     txBridgeFeeIn: "vlx2"
     address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
     
-    ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
+    HOME_BRIDGE_ADDRESS: ""
+    HOME_BRIDGE_TOKEN: "" 
+    
     group: "Velas"
     
     api:
@@ -36,12 +38,10 @@ testnet-config =
     mask: \0x0000000000000000000000000000000000000000
     txFeeIn: "vlx2"
     txBridgeFeeIn: "vlx2"
-    address: "0x90f69A6134fD1cf45170AC55a895138da69B40aD"
+    address: "0x6ef054b3e3c3c83e14527e8fa593c2c4435a6ea4"
     
-    ERC20BridgeToken    : "0xb404c51bbc10dcbe948077f18a4b8e553d160084"    
-    HomeBridge          : "0x4a114C7a9e6581eB716085655DecBB416776ec7c"        
-    ForeignBridge       : "0xF30aC574c31270173A201027B12c3bC9734C9C26"
-    BridgeableToken     : "0x90f69A6134fD1cf45170AC55a895138da69B40aD"  
+    HOME_BRIDGE_ADDRESS: "0xb6A42fc8BcB09cf3Ad44A63495f6f562028c99b8"
+    HOME_BRIDGE_TOKEN: "0x90f69A6134fD1cf45170AC55a895138da69B40aD"       
     
     api:
         provider: \velas_usdt 

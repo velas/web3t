@@ -44,10 +44,9 @@ export ropsten =
         apiUrl : \https://api-ropsten.etherscan.io/api
     nickname: \eth
     
-    ERC20BridgeToken    : ""    
-    HomeBridge          : "0xb1FAB785Cb5F2d9782519942921e9afCDf2C60e0"        
-    ForeignBridge       : "0xA5D512085006867974405679f2c9476F4F7Fa903"
-    BridgeableToken     : "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344" 
+    HOME_BRIDGE:      "0xb1FAB785Cb5F2d9782519942921e9afCDf2C60e0"
+    FOREIGN_BRIDGE:   "0xA5D512085006867974405679f2c9476F4F7Fa903"
+    BRIDGEABLE_TOKEN: "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344"
     
     networks:
         vlx_eth:
