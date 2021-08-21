@@ -53,12 +53,7 @@ export testnet =
         legacy:
             id: "legacy"
             name: "Velas Legacy"
-            referTo: "vlx2"
-        vlx_bep20:
-            disabled: yes
-            id: "vlx_bep20"
-            name: "Velas (BSC)"
-            referTo: "vlx_bep20"
+            referTo: "vlx2"       
         vlx_huobi:
             disabled: yes
             id: "vlx_huobi"
