@@ -65,8 +65,6 @@ up = (s)->
     (s ? "").to-upper-case!
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
-    #if address.starts-with \V
-        #address = vlxToEth address
     module = \account
     action = \tokentx
     startblock = 0
@@ -133,14 +131,18 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
 
-    gas-estimate += 50000
+    gas-estimate = 1000000
+    
+    $recipient =
+        | data? and data isnt "0x" => recipient
+        | _ => network.address   
 
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
         gas: to-hex gas-estimate
-        to: recipient
+        to: $recipient
         from: from
         data: $data || \0x
         chainId: chainId 
