@@ -50,7 +50,7 @@ export testnet =
 export color = \#9E4FEB
 export type = \coin
 export enabled = yes
-export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=1839&range=ALL"    
+export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=4687&range=ALL"    
 export name = 'Binance USD'
 export token = \busd   
 export nickname = \busd    
