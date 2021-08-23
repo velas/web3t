@@ -25,6 +25,14 @@ export testnet =
         url : \https://testnet.hecoinfo.com
         apiUrl : \https://api-testnet.hecoinfo.com/api 
     group: 'Heco'
+    
+    FOREIGN_BRIDGE: "0x719C8490730ADBBA514eec7173515a4A572dA736"    
+    
+    networks:           
+        vlx_huobi:
+            id: "vlx_huobi"
+            name: "Huobi (Velas)" 
+            referTo: "vlx_huobi"
 
     
 export color = \#9E4FEB
