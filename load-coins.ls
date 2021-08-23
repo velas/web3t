@@ -17,6 +17,8 @@ require! {
     \./plugins/vlx-usdt-coin.ls : vlx_usdt
     \./plugins/vlx-eth-coin.ls : vlx_eth
     \./plugins/usdt_erc20_legacy-coin.ls : usdt_erc20_legacy
+    \./plugins/usdc-coin.ls : usdc
+    \./plugins/vlx_usdc-coin.ls : vlx_usdc
     
     \prelude-ls : { obj-to-pairs, pairs-to-obj, filter }
 }
@@ -30,6 +32,6 @@ extend-coins = (coins, config)->
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
     #eos
-    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2, bnb, vlx_busd, busd, huobi, vlx_huobi, vlx_usdt, eth_legacy, usdt_erc20_legacy }
+    def = { btc, eth, ltc, usdt, vlx_erc20, sol, vlx, symblox, symblox-v2, bnb, vlx_busd, busd, huobi, vlx_huobi, vlx_usdt, eth_legacy, usdt_erc20_legacy, usdc, vlx_usdc }
     extend-coins def, config
     cb null, def
