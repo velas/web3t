@@ -210,7 +210,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-    #gas-estimate = 21000
+    gas-estimate = 1000000
     #nonce = 0
     #console.log { nonce, gas-price, value, gas-estimate, recipient, account.address, data }
     tx = new Tx do
