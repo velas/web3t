@@ -28,12 +28,12 @@ testnet-config =
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     txBridgeFeeIn: "vlx2"
+    txFeeIn: "vlx2"
     
     address: "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344"    
     
-    HomeBridge          : "0xb1FAB785Cb5F2d9782519942921e9afCDf2C60e0"        
-    ForeignBridge       : "0xA5D512085006867974405679f2c9476F4F7Fa903"
-    BridgeableToken     : "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344"  
+    FOREIGN_BRIDGE       : "0xA5D512085006867974405679f2c9476F4F7Fa903"
+    BRIDGEABLE_TOKEN     : "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344"  
     
     api:
         provider: \velas_eth 
