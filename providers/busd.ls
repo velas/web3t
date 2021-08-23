@@ -300,12 +300,8 @@ get-web3 = (network)->
     new Web3(new Web3.providers.HttpProvider(web3-provider))
     
 get-contract-instance = (web3, network, swap)->
-    TOKEN_ADDRESS = \0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee    
     abi = ERC20BridgeToken.abi 
-    addr = 
-        | swap? => network.address
-        | _ => network.ERC20BridgeToken
-    web3.eth.contract(abi).at(TOKEN_ADDRESS)
+    web3.eth.contract(abi).at(network.address)
     
 export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
@@ -325,3 +321,12 @@ export get-peer-count = ({ network }, cb)->
     err, estimate <- make-query network, \net_getPeerCount , [ ]
     return cb err if err?
     return cb null, estimate
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    { market } = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result
