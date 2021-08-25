@@ -12,6 +12,14 @@ export mainnet =
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     nickname: \eth
+    HOME_BRIDGE: "0x775DB93999c339e04276040069e2a08aAF3c13d4"
+    
+    networks:
+        vlx_eth:
+            disabled: no    
+            id: "vlx_eth"
+            name: "Ethereum (Velas EVM)"
+            referTo: "vlx_eth"
     group: 'Ethereum'
 
 export ethnamed =
