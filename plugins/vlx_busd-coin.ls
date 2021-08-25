@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 18  
     tx-fee: \0.002   
     tx-fee-options:
@@ -7,21 +7,23 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \velas_busd
-        apiUrl : \https://api.bscscan.com/api
-        web3Provider : ""
-        url: \https://api.bscscan.com
+        apiUrl : \https://evmexplorer.velas.com/api
+        web3Provider : "https://explorer.velas.com/rpc"
+        url: \https://evmexplorer.velas.com
 
     group: "Velas"
+    address: "0xb670ab2BcC5682c3B8Efa504eee1Af440297f1ad"  
+    HOME_BRIDGE_ADDRESS: "0x7E0e1810A5Eb891C6Df07a585d94c79f854BFa9e"
+    HOME_BRIDGE_TOKEN:   "0xb670ab2BcC5682c3B8Efa504eee1Af440297f1ad" 
+    
+    txFeeIn: "vlx2"
+    txBridgeFeeIn: "vlx2"
 
     networks:           
-        native:
-            id: "native"
-            name: "Velas Native"
-            referTo: "vlx_native" 
-        legacy:
-            id: "legacy"
-            name: "Velas" 
-            referTo: "vlx2" 
+        busd:
+            id: "busd"
+            name: "Binance USD"
+            referTo: "busd"
             
 export testnet =
     disabled: no 
