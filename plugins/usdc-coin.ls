@@ -20,11 +20,10 @@ export mainnet =
     txBridgeFeeIn: "eth"
     
     networks:
-        vlx_busd:
-            disabled: yes    
-            id: "vlx_busd"
-            name: "Binance USD (Velas)"
-            referTo: "vlx_busd" 
+        vlx_usdc:
+            id: "vlx_usdc"
+            name: "USD Coin (Velas)"
+            referTo: "vlx_usdc" 
     
 
 export testnet =
@@ -49,7 +48,7 @@ export testnet =
      
     group: 'Ethereum'
     networks:
-        vlx_busd:
+        vlx_usdc:
             id: "vlx_usdc"
             name: "USD Coin (Velas)"
             referTo: "vlx_usdc" 
