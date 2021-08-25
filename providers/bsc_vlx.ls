@@ -211,7 +211,6 @@ up = (s)->
     (s ? "").to-upper-case!
     
 export get-transactions = ({ network, address }, cb)->
-    console.log "bsc vlx get-transactions"     
     { api-url } = network.api
     module = \account
     action = \tokentx
@@ -220,7 +219,6 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \KXYT4M24AWGIV585T7T38GUNMB4IRSY7H9
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
-    console.log "bsc query" query
     err, resp <- get "#{api-url}?#{query}" .end
     return cb err if err?
     err, result <- json-parse resp.text
