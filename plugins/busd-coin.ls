@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 18  
     tx-fee: \0.002   
     tx-fee-options:
@@ -8,15 +8,14 @@ export mainnet =
     api:
         provider: \busd
         apiUrl : \https://api.bscscan.com/api
-        web3Provider : \https://explorer.velas.com/rpc
-        url: \https://api.bscscan.com
-    group: 'Binance'
-    address             : ""   
-    FOREIGN_BRIDGE      : "" 
-    FOREIGN_ERC20_TOKEN : ""
+        web3Provider : \https://bsc-dataseed.binance.org
+        url: \https://bscscan.com
+    group: 'BSC'
+    address             : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"   
+    FOREIGN_BRIDGE      : "0xD2E678e50123A173a66352a8A2d78c0F59FDf5CF" 
+    FOREIGN_ERC20_TOKEN : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"
     networks:
         vlx_busd:
-            disabled: yes    
             id: "vlx_busd"
             name: "Binance USD (Velas)"
             referTo: "vlx_busd" 
@@ -41,7 +40,7 @@ export testnet =
     FOREIGN_BRIDGE      : "0xF9a7046E40E7e1992B877E7C20C0715F10560AB5" 
     FOREIGN_ERC20_TOKEN : "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee" 
      
-    group: 'Binance'
+    group: 'BSC'
     networks:
         vlx_busd:
             id: "vlx_busd"
