@@ -176,7 +176,6 @@ export create-transaction = (config, cb)->
     to-hex = ->
         new BN(it)
     if swap? and swap is yes then
-        console.log "---> swapNativeToEvm"
         transaction = swapNativeToEvm(pay-account.public-key, amount, recipient)
         transaction.recentBlockhash = recentBlockhash     
     else 
@@ -193,7 +192,6 @@ export create-transaction = (config, cb)->
     encoded = transaction.serialize!.toString('base64') 
     cb null, { raw-tx: encoded }
 export push-tx = (config, cb)--> 
-    console.log "push tx config" config    
     err, result <- make-query config.network, \sendTransaction , [ config.raw-tx, {encoding: 'base64'} ]
     return cb err if err?
     return cb "[push-tx] Error: #{err}" if err?    
@@ -225,12 +223,10 @@ export get-transactions = ({ network, address}, cb)->
     err, result <- make-query network, \getConfirmedSignaturesForAddress2 , [ address, {limit: 20} ]
     return cb err if err?   
     txs = result
-    #console.log "Got raw txs" txs
     return cb null, [] if txs.length is 0 
     #return cb null, [] 
     err, all-txs <- prepare-raw-txs {txs, network, address} 
     return cb err if err?
-    #console.log "Native all-txs" all-txs
     return cb "Unexpected result" if typeof! all-txs isnt \Array                
     cb null, all-txs
 prepare-raw-txs = ({ txs, network, address }, cb)->
@@ -259,12 +255,10 @@ get-tx-data = (network, signature, cb)->
     
 prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb null, [] if not tx?
-    #console.log "prepare-txs" tx
     { blockTime, signature, slot } = tx
     err, data <- get-tx-data network, signature
     console.error "Error occured while fetching tx details for signature:" signature if err?
     t = []
-    #console.log "raw-tx" data
     if not err? and data?
         tx-data = data
         sender = ''
@@ -343,7 +337,6 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         _type =
             |  address isnt receiver => "OUT"
             |  _ => "IN"
-        #console.log "#{signature}  address*" type
         recipient-type = \regular
         is-stake = instructions[0]?parsed?type in <[ stake createAccountWithSeed delegate deactivate ]>
         tx-type =
@@ -368,8 +361,6 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
             recipient-type
             tx-type: tx-type
         }
-        #console.log "Tx:" _tx
-        #console.log "________________________________"
         t = [_tx]
     err, other <- prepare-txs network, rest, address 
     all =  t ++ other
