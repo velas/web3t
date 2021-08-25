@@ -251,11 +251,9 @@ cache =
     transactions: {}
     
 get-tx-data = (network, signature, cb)->
-    console.log "[get-tx-data]" signature   
     return cb null, cache.transactions[signature] if cache.transactions[signature]?
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
     return cb err if err?  
-    console.log "[get-tx-data] make-query" data     
     cache.transactions[signature] = data 
     return cb null, data    
     
