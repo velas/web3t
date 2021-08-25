@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 18  
     tx-fee: \0.002   
     tx-fee-options:
@@ -7,9 +7,9 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \huobi
-        apiUrl : \""
-        web3Provider : ""
-        url: \""
+        apiUrl : "https://api.hecoinfo.com/api"
+        web3Provider : "https://http-mainnet.hecochain.com"
+        url: "https://hecoinfo.com"
     group: 'Heco'
             
 export testnet =
@@ -24,15 +24,7 @@ export testnet =
         web3Provider : \https://http-testnet.hecochain.com
         url : \https://testnet.hecoinfo.com
         apiUrl : \https://api-testnet.hecoinfo.com/api 
-    group: 'Heco'
-    
-    FOREIGN_BRIDGE: "0x719C8490730ADBBA514eec7173515a4A572dA736"    
-    
-    networks:           
-        vlx_huobi:
-            id: "vlx_huobi"
-            name: "Huobi (Velas)" 
-            referTo: "vlx_huobi"
+    group: 'Heco'    
 
     
 export color = \#9E4FEB
