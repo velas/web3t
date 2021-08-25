@@ -293,7 +293,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         gas: to-hex gas-estimate
         to: $recipient
         from: address
-        data: data || "0x"
+        data: data-parsed
         chainId: chainId     
     }
     console.log "tx-obj" tx-obj   

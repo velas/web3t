@@ -230,15 +230,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         
     dec = get-dec network
     balance = balance `times` dec
-        
-    
+            
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-    # gas-estimate =
-    #     |  gas? => gas
-    #     |  +gas-price is 0 => 21000
-    #     | _ => round(to-wei(amount-fee) `div` gas-price)
     data-parsed =
         | data? => data
         | _ => '0x'
@@ -251,16 +246,27 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
     gas-price = buffer.gas-price
+    
     if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
+        
+    $data =
+        | data? and data isnt "0x" => data    
+        | contract.methods? => contract.methods.transfer($recipient, value).encodeABI!
+        | _ => contract.transfer.get-data $recipient, value
+    
+    to = 
+        | data? and data isnt "0x" => recipient    
+        | _ => network.address
+        
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
-        value: to-hex value
+        value: to-hex "0"
         gas: to-hex gas-estimate
-        to: $recipient
+        to: to   
         from: address
-        data: data || "0x"
+        data: $data
         chainId: chainId     
     }
     tx = new Tx tx-obj, { common }

@@ -255,11 +255,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     $data =
         | data? and data isnt "0x" => data 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
-        | _ => contract.transfer.get-data recipient, value
-
-    $value = 
-        | not data? or data is "0x" => 0
-        | _ => value 
+        | _ => contract.transfer.get-data recipient, value 
         
     $recipient =
         | not data? or data is "0x" => network.address
@@ -268,7 +264,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
-        value: to-hex $value
+        value: to-hex "0"
         gas: to-hex gas-estimate
         to: $recipient
         from: address

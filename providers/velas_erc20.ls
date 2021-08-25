@@ -284,10 +284,7 @@ is-address = (address) ->
         true
 get-contract-instance = (web3, network, swap)->
     abi = ERC20BridgeToken.abi 
-    addr = 
-        | swap? => network.address
-        | _ => network.ERC20BridgeToken 
-    web3.eth.contract(abi).at("0xfeff2e74ec612a288ae55fe9f6e40c52817a1b6c")
+    web3.eth.contract(abi).at(network.address)
     
 get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, gas if gas?
