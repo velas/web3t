@@ -10,15 +10,30 @@ export mainnet =
         apiUrl : \https://evmexplorer.velas.com/api
         web3Provider : \https://evmexplorer.velas.com/rpc
         url: \https://evmexplorer.velas.com
+        
+    HECO_SWAP__HOME_BRIDGE: "0xe257B0f500b05C6d3f0A00D4f395Bdd2F163222E"
+        
     networks:           
         native:
             id: "native"
             name: "Velas Native"
-            referTo: "vlx_native" 
+            referTo: "vlx_native"
+        vlx_erc20:
+            id: "vlx_erc20"
+            name: "Velas ERC20"
+            referTo: "vlx_erc20"
         legacy:
             id: "legacy"
-            name: "Velas Legacy" 
-            referTo: "vlx2"
+            name: "Velas Legacy"
+            referTo: "vlx2"       
+        vlx_huobi:
+            id: "vlx_huobi"
+            name: "Velas Hecochain"
+            referTo: "vlx_huobi"
+        bsc_vlx:
+            id: "bsc_vlx"
+            name: "BSC"
+            referTo: "bsc_vlx"
     group: 'Velas'
 
 export testnet =
@@ -37,6 +52,9 @@ export testnet =
     HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
     ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
     ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
+    
+    HECO_SWAP__HOME_BRIDGE: "0x8c8884Fdb4f9a6ca251Deef70670DF7C4c48045D"
+    BSC_SWAP__HOME_BRIDGE: "0x97B7eb15cA5bFa82515f6964a3EAa1fE71DFB7A7"   
 
     group: "Velas"
 
@@ -46,7 +64,6 @@ export testnet =
             name: "Velas Native"
             referTo: "vlx_native"
         vlx_erc20:
-            disabled: no
             id: "vlx_erc20"
             name: "Velas ERC20"
             referTo: "vlx_erc20"
@@ -55,10 +72,13 @@ export testnet =
             name: "Velas Legacy"
             referTo: "vlx2"       
         vlx_huobi:
-            disabled: yes
             id: "vlx_huobi"
-            name: "Velas (HECO)"
+            name: "Velas Hecochain"
             referTo: "vlx_huobi"
+        bsc_vlx:
+            id: "bsc_vlx"
+            name: "BSC"
+            referTo: "bsc_vlx" 
 
 export devnet =
     disabled: no
