@@ -139,7 +139,6 @@ round = (num)->
 to-hex = ->
     new BN(it)
 transform-tx = (network, description, t)-->
-    console.log "[transform-tx]"    
     { url } = network.api
     dec = get-dec network
     network = \eth
