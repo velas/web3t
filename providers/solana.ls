@@ -251,9 +251,11 @@ cache =
     transactions: {}
     
 get-tx-data = (network, signature, cb)->
+    console.log "[get-tx-data]" signature   
     return cb null, cache.transactions[signature] if cache.transactions[signature]?
     err, data <- make-query network, \getConfirmedTransaction , [ signature, 'jsonParsed' ]
-    return cb err if err?    
+    return cb err if err?  
+    console.log "[get-tx-data] make-query" data     
     cache.transactions[signature] = data 
     return cb null, data    
     
@@ -270,25 +272,29 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         sender = ''
         receiver = ''
         hash = ''
-        senderIndex = ''
         amount = 0
         {fee, err, status} = tx-data.meta
         transaction = tx-data.transaction
         {accountKeys,instructions} = transaction.message
         type = instructions[0]?parsed?type
+        dec = get-dec network
         try
+            if type is "evmTransaction" then
+                { from, to, value, hash } = instructions[0].parsed.info.transaction   
+                sender      = instructions[0].parsed.info.bridgeAccount   
+                receiver    = accountKeys?2?pubkey ? to   
+                amount      = value `div` dec 
+                hash        = transaction?signatures?0 ? hash  
             if type is "assign" then
                 #sender      = instructions[0].parsed.info.owner
                 sender      = instructions[0].parsed.info.account
                 receiver    = instructions[0].parsed.info.owner
                 hash        = transaction.signatures[0]
-                senderIndex = get-index-of-obj(accountKeys, sender)
                 amount      = get-sent-amount(tx-data)[sender] ? 0
             if type is "delegate" then
                 sender      = instructions[0].parsed.info.stakeAccount
                 receiver    = instructions[0].parsed.info.voteAccount
                 hash        = transaction.signatures[0]
-                senderIndex = get-index-of-obj(accountKeys, sender)
                 amount      = get-sent-amount(tx-data)[sender] ? 0
             if type is "createAccountWithSeed" then
                 sender      = instructions[0].parsed.info.base
