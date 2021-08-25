@@ -1,19 +1,24 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 6  
     tx-fee: \0.002   
     tx-fee-options:
         auto: \0.002
         cheap: \0.002
     api:
-        provider: \busd
-        apiUrl : \https://api.bscscan.com/api
-        web3Provider : \https://explorer.velas.com/rpc
-        url: \https://api.bscscan.com
+        provider: \usdc
+        web3Provider : \http://geth.ethereum.veladev.net
+        url : \https://etherscan.io
+        apiUrl : \https://api.etherscan.io/api
     group: 'Ethereum'
+    
     address             : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"   
-    FOREIGN_BRIDGE      : "" 
-    FOREIGN_ERC20_TOKEN : ""
+    FOREIGN_BRIDGE      : "0x578a26ed597f89a05e0e163607F42C51C5015945" 
+    FOREIGN_ERC20_TOKEN : "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    
+    txFeeIn: "eth"
+    txBridgeFeeIn: "eth"
+    
     networks:
         vlx_busd:
             disabled: yes    
@@ -25,10 +30,10 @@ export mainnet =
 export testnet =
     disabled: no 
     decimals: 6  
-    tx-fee: \0.000001
+    tx-fee: \0.002 
     tx-fee-options:
-        auto: \0.000020
-        cheap: \0.000020
+        auto: \0.002
+        cheap: \0.002
     api:
         provider: \usdc 
         web3Provider : \https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648
