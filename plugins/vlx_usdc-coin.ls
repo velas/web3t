@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 6  
     tx-fee: \0.002   
     tx-fee-options:
@@ -7,10 +7,16 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \vlx_usdc 
-        apiUrl : \https://api.bscscan.com/api
-        web3Provider : ""
-        url: \https://api.bscscan.com
+        web3Provider: 'https://evmexplorer.velas.com/rpc'
+        url: 'https://evmexplorer.velas.com'
+        apiUrl: 'https://evmexplorer.velas.com/api'
 
+    address: "0xC5acB9684c8492fFF285B518bbe048C10C99411d"   
+    HOME_BRIDGE_ADDRESS: "0x314424EA1541aD870b3954a7C37533192159F4AA"
+    HOME_BRIDGE_TOKEN:   "0xC5acB9684c8492fFF285B518bbe048C10C99411d" 
+    
+    txFeeIn: "vlx2"
+    txBridgeFeeIn: "vlx2"
     group: "Velas"
 
     networks:
