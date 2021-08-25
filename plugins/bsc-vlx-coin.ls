@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 18  
     tx-fee: \0.002   
     tx-fee-options:
@@ -7,17 +7,17 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \bsc_vlx
-        apiUrl : ""
-        web3Provider : ""
-        url: ""
+        apiUrl : "https://api.bscscan.com/api"
+        web3Provider : "https://bsc-dataseed.binance.org"
+        url: "https://bscscan.com"
         
-    address: ""    
+    address: "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"    
         
-    FOREIGN_BRIDGE_TOKEN   : ""
-    FOREIGN_BRIDGE         : ""
+    FOREIGN_BRIDGE_TOKEN   : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"
+    FOREIGN_BRIDGE         : "0xD2E678e50123A173a66352a8A2d78c0F59FDf5CF"
 
-    txFeeIn: "huobi"
-    txBridgeFeeIn: "ht"
+    txFeeIn: "bnb"
+    txBridgeFeeIn: "bnb"
 
     group: "BSC"
 
