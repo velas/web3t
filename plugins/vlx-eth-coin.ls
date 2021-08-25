@@ -1,22 +1,31 @@
 mainnet-config =
-    disabled: yes 
+    disabled: no 
     decimals: 18
     tx-fee: \0.0014
-    txFeeIn: "eth"
-    txBridgeFeeIn: 'eth'
     tx-fee-options:
         auto: \0.0020
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
-    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
-    ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
+    txBridgeFeeIn: "vlx2"
+    txFeeIn: "vlx2"
+    
+    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+    FOREIGN_BRIDGE       : "0x69Eb299cf9D9E09aD40630c691D65fF5B1B078e0"
+    BRIDGEABLE_TOKEN     : "0x85219708c49aa701871Ad330A94EA0f41dFf24Ca" 
+    
     api:
         provider: \velas_eth    
         web3Provider: 'https://evmexplorer.velas.com/rpc',
         url: 'https://evmexplorer.velas.com',
         apiUrl: 'https://evmexplorer.velas.com/api'
     group: "Velas"
+    
+    networks:
+        eth:
+            id: "eth"
+            name: "Ethereum"
+            referTo: "eth"
 
 testnet-config =
     disabled: no 
