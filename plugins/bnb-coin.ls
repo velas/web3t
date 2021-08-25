@@ -1,5 +1,5 @@
 export mainnet =
-    disabled: yes 
+    disabled: no 
     decimals: 18  
     tx-fee: \0.002   
     tx-fee-options:
@@ -8,9 +8,9 @@ export mainnet =
     api:
         provider: \bnb
         apiUrl : \https://api.bscscan.com/api
-        web3Provider : \https://explorer.velas.com/rpc
+        web3Provider : \https://bsc-dataseed.binance.org
         url: \https://api.bscscan.com
-    group: 'Binance'
+    group: 'BSC'
 
 export testnet =
     disabled: no 
@@ -24,7 +24,7 @@ export testnet =
         web3Provider : \https://data-seed-prebsc-2-s1.binance.org:8545
         url : \https://testnet.bscscan.com
         apiUrl : \https://api-testnet.bscscan.com/api 
-    group: 'Binance'
+    group: 'BSC'
 export color = \#9E4FEB
 export type = \coin
 export enabled = yes
