@@ -5,15 +5,17 @@ export mainnet =
     tx-fee-options:
         auto: \0.002
         cheap: \0.002
+    txFeeIn: "bnb"
+    txBridgeFeeIn: "bnb"
     api:
         provider: \busd
         apiUrl : \https://api.bscscan.com/api
         web3Provider : \https://bsc-dataseed.binance.org
         url: \https://bscscan.com
     group: 'BSC'
-    address             : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"   
-    FOREIGN_BRIDGE      : "0xD2E678e50123A173a66352a8A2d78c0F59FDf5CF" 
-    FOREIGN_ERC20_TOKEN : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"
+    address             : "0xe9e7cea3dedca5984780bafc599bd69add087d56"   
+    FOREIGN_BRIDGE      : "0xfA69bFB1455b0eEBf39eAD67bdaE3CA6B408F25b" 
+    FOREIGN_ERC20_TOKEN : "0xe9e7cea3dedca5984780bafc599bd69add087d56"
     networks:
         vlx_busd:
             id: "vlx_busd"
