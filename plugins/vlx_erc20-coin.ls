@@ -1,5 +1,5 @@
 mainnet-config =
-    disabled: yes 
+    disabled: no 
     decimals: 18
     tx-fee: \0.0014
     txFeeIn: "eth"
@@ -9,7 +9,7 @@ mainnet-config =
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
-    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9",
+    address: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
     ERC20BridgeToken: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9",
     api:
         provider: \velas_erc20    
@@ -17,6 +17,14 @@ mainnet-config =
         url: 'https://etherscan.io',
         apiUrl: 'https://api.etherscan.io/api'
     group: "Ethereum"
+    
+    FOREIGN_BRIDGE: "0x1E4f16C92026B96D5bb42045993657d8b39253E9"    
+        
+    networks:
+        vlx_evm:
+            id: "vlx_evm"
+            name: "Velas EVM"
+            referTo : "vlx_evm"
 
 testnet-config =
     disabled: no 
@@ -33,8 +41,7 @@ testnet-config =
     address: "0xfeff2e74ec612a288ae55fe9f6e40c52817a1b6c"
     
     ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"    
-    HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
-    ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+    FOREIGN_BRIDGE      : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
     
     api:
         provider: \velas_erc20 
@@ -47,10 +54,6 @@ testnet-config =
             id: "vlx_evm"
             name: "Velas EVM"
             referTo : "vlx_evm"
-        #vlx2:
-            #id: "vlx2"
-            #name: "Velas Legacy"
-            #referTo: "vlx2"
 
 export mainnet =  mainnet-config
 export testnet = testnet-config
