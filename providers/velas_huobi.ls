@@ -226,7 +226,8 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
-            |> filter -> it.contract-address is network.address and up(it.tokenSymbol) is \VLX
+            |> filter -> 
+                up(it.contract-address) is up(network.address) and up(it.tokenSymbol) is \VLX
             |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs
