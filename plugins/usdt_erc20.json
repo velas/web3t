@@ -29,8 +29,8 @@
         
         "address": "0xb404c51bbc10dcbe948077f18a4b8e553d160084",
         
-        "FOREIGN_BRIDGEABLE_TOKEN_ADDRESS": "0xb404c51bbc10dcbe948077f18a4b8e553d160084",
-        "FOREIGN_BRIDGE_ADDRESS": "0x4D34B0b309f6D1DA0a18eA61Ecb52720cA7D08F5",
+        "FOREIGN_BRIDGE_TOKEN": "0xb404c51bbc10dcbe948077f18a4b8e553d160084",
+        "FOREIGN_BRIDGE": "0x4D34B0b309f6D1DA0a18eA61Ecb52720cA7D08F5",
         
         "networks": {
             "vlx_usdt": {
@@ -60,10 +60,8 @@
             "apiUrl": "https://api.etherscan.io/api"
         },
 
-        "HOME_BRIDGE_ADDRESS": "0x92B27C48f387DB2dcEa4469ff50267e15A6389dB",
-        "FOREIGN_BRIDGE_ADDRESS": "0x7a70b72dB9c59f30C780C4746ce2a0562502Ec2b",
-        "FOREIGN_BRIDGEABLE_TOKEN_ADDRESS": "0x271a2101D2523A7C81d025690D2d68684Bd4989B",
-        "ERC20_TOKEN_ADDRESS": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+        "FOREIGN_BRIDGE": "0x7a70b72dB9c59f30C780C4746ce2a0562502Ec2b",
+        "FOREIGN_BRIDGE_TOKEN": "0xdac17f958d2ee523a2206206994597c13d831ec7",
         
         "group": "Ethereum",
         "networks": {

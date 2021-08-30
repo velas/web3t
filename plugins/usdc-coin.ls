@@ -14,7 +14,7 @@ export mainnet =
     
     address             : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"   
     FOREIGN_BRIDGE      : "0x578a26ed597f89a05e0e163607F42C51C5015945" 
-    FOREIGN_ERC20_TOKEN : "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    FOREIGN_BRIDGE_TOKEN : "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
     
     txFeeIn: "eth"
     txBridgeFeeIn: "eth"
@@ -41,7 +41,7 @@ export testnet =
         
     address             : "0x07865c6E87B9F70255377e024ace6630C1Eaa37F"   
     FOREIGN_BRIDGE      : "0x792659eBF7F077661c05cA56f73437be9E721b2A" 
-    FOREIGN_ERC20_TOKEN : "0x07865c6E87B9F70255377e024ace6630C1Eaa37F" 
+    FOREIGN_BRIDGE_TOKEN : "0x07865c6E87B9F70255377e024ace6630C1Eaa37F" 
     
     txFeeIn: "eth"
     txBridgeFeeIn: "eth"
