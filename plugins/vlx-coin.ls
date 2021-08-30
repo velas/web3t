@@ -10,8 +10,11 @@ export mainnet =
         apiUrl : \https://evmexplorer.velas.com/api
         web3Provider : \https://evmexplorer.velas.com/rpc
         url: \https://evmexplorer.velas.com
-        
-    HECO_SWAP__HOME_BRIDGE: "0xe257B0f500b05C6d3f0A00D4f395Bdd2F163222E"
+    
+    HOME_BRIDGE:            "0x38E20F6224449eCB50A81188147cbf990a00eA44" 
+    FOREIGN_BRIDGE:         "0xA5D512085006867974405679f2c9476F4F7Fa903"    
+    HECO_SWAP__HOME_BRIDGE: "0xa480B124990a262Cc1e4937e2f6084FEe75e781B"
+    BSC_SWAP__HOME_BRIDGE:  "0x7E0e1810A5Eb891C6Df07a585d94c79f854BFa9e"
         
     networks:           
         native:
@@ -49,8 +52,8 @@ export testnet =
         url : \https://evmexplorer.testnet.velas.com
         apiUrl : \https://evmexplorer.testnet.velas.com/api
         
-    HomeBridge          : "0x57C7f6CD50a432943F40F987a1448181D5B11307"        
-    ForeignBridge       : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+    HOME_BRIDGE         : "0x57C7f6CD50a432943F40F987a1448181D5B11307" 
+    FOREIGN_BRIDGE      : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"      
     ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
     
     HECO_SWAP__HOME_BRIDGE: "0x8c8884Fdb4f9a6ca251Deef70670DF7C4c48045D"

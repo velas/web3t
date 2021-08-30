@@ -10,7 +10,7 @@ mainnet-config =
     txBridgeFeeIn: "vlx2"
     txFeeIn: "vlx2"
     
-    address: "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+    address: "0x85219708c49aa701871Ad330A94EA0f41dFf24Ca"
     FOREIGN_BRIDGE       : "0x69Eb299cf9D9E09aD40630c691D65fF5B1B078e0"
     BRIDGEABLE_TOKEN     : "0x85219708c49aa701871Ad330A94EA0f41dFf24Ca" 
     
