@@ -247,6 +247,9 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     common = Common.forCustomChain 'mainnet', { networkId }
     gas-price = buffer.gas-price
     
+    web3 = get-web3 network
+    contract = get-contract-instance web3, network.address
+    
     if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
         
@@ -305,14 +308,13 @@ get-web3 = (network)->
     { web3-provider } = network.api
     new Web3(new Web3.providers.HttpProvider(web3-provider))
     
-get-contract-instance = (web3, network, swap)->
+get-contract-instance = (web3, network)->
     abi = ERC20BridgeToken.abi 
     web3.eth.contract(abi).at(network.address)
     
 export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
-    swap = null    
-    contract = get-contract-instance web3, network, swap     
+    contract = get-contract-instance web3, network   
     number = contract.balance-of(address)
     dec = get-dec network
     balance = number `div` dec
