@@ -105,10 +105,11 @@ export get-transaction-info = (config, cb)->
 get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, gas if gas?
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    return cb null, 1000000 if err?
+    console.error "Velas ERC20 [get-gas-estimate] Error:" err if err?    
+    return cb null, 200000 if err?
     #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     estimate-normal = from-hex(estimate)
-    return cb null, 1000000 if +estimate-normal < 1000000
+    #return cb null, 200000 if +estimate-normal < 2000000
     cb null, estimate-normal
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
     return cb null if typeof! to isnt \String or to.length is 0
@@ -129,6 +130,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     err, estimate <- get-gas-estimate { network, query, gas }
     return cb err if err?
     #return cb "estimate gas err: #{err.message ? err}" if err?
+    #estimate = 36000
     res = gas-price `times` estimate
     val = res `div` dec
     cb null, val
@@ -226,7 +228,8 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
-            |> filter -> it.contract-address is network.address and up(it.tokenSymbol) is \VLX
+            |> filter -> 
+                up(it.contract-address) is up(network.address) and up(it.tokenSymbol) is \VLX
             |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs
@@ -291,7 +294,7 @@ get-gas-estimate = ({ network, query, gas }, cb)->
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     return cb null, 1000000 if err?
     estimate-normal = from-hex(estimate)
-    return cb null, 1000000 if +estimate-normal < 1000000
+    return cb null, 36000 if +estimate-normal < 36000   
     cb null, estimate-normal
     
 export create-transaction = (config, cb)-->
@@ -311,23 +314,28 @@ export create-transaction = (config, cb)-->
     value = to-wei amount
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
-    gas-minimal = to-wei-eth(amount-fee) `div` gas-price
-    gas-estimate = round ( gas-minimal `times` 2 )
+    #gas-minimal = to-wei-eth(amount-fee) `div` gas-price
+    gas-estimate =                                      
+        |  +gas-price is 0 => 0
+        | _ => round(to-wei(amount-fee) `div` gas-price)
     err, balance <- get-eth-balance { network, address: account.address }
     return cb err if err?
     fee-in = network.txFeeIn.to-upper-case! 
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?   
     return cb "Not enought balance on #{fee-in} wallet to send tx with fee #{amount-fee}" if +balance < +amount-fee
-    _data =
+    
+    $data =
+        | config.data? and config.data isnt "0x" => config.data    
         | swap? => contract.transferAndCall.get-data(recipient, value, "0x") 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!      
         | _ => contract.transfer.get-data(recipient, value) 
-    _recipient = 
-        | swap? => recipient
-        | _ => network.ERC20BridgeToken
+    
+    $recipient =
+        | data? and data isnt "0x" => recipient
+        | _ => network.address  
         
-    query = { config.from, to: _recipient , data: _data }
+    query = { config.from, to: $recipient , data: $data }
     err, estimate <- get-gas-estimate { network, query, gas }
     return cb err if err? 
           
@@ -336,11 +344,11 @@ export create-transaction = (config, cb)-->
         gas-price: to-hex gas-price
         value: to-hex "0"
         gas: to-hex estimate
-        to: _recipient 
+        to: $recipient
         from: account.address
-        data: config.data || _data || "0x"    
+        data:  $data
         chainId: chainId 
-    console.log "Last data before parse:"  configs     
+        
     tx = new Tx(configs)
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
