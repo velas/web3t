@@ -48,7 +48,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb "estimate gas err: #{err.message ? err}" if err?
-    estimate = 36000   
+    #estimate = 36000   
     res = gas-price `times` from-hex(estimate)
     #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
@@ -210,7 +210,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-    gas-estimate = 1000000
+    gas-estimate = 500000
     #nonce = 0
     #console.log { nonce, gas-price, value, gas-estimate, recipient, account.address, data }
     tx = new Tx do
