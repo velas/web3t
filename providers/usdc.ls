@@ -131,7 +131,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
 
-    gas-estimate = 1000000
+    gas-estimate = 200000
     
     $recipient =
         | data? and data isnt "0x" => recipient
