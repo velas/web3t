@@ -13,7 +13,7 @@ export mainnet =
 
     group: "Velas"
     address: "0xb670ab2BcC5682c3B8Efa504eee1Af440297f1ad"  
-    HOME_BRIDGE_ADDRESS: "0x38005FB835c4CEC59418C2f1bd555a608616d131"
+    HOME_BRIDGE: "0x38005FB835c4CEC59418C2f1bd555a608616d131"
     HOME_BRIDGE_TOKEN:   "0xb670ab2BcC5682c3B8Efa504eee1Af440297f1ad" 
     
     txFeeIn: "vlx2"
@@ -39,7 +39,7 @@ export testnet =
         apiUrl: 'https://evmexplorer.testnet.velas.com/api'
     
     address: "0xe2172a8E1762ae9962A59EE88a731522A61a4cc9"  #HOME_BRIDGEABLE_TOKEN  
-    HOME_BRIDGE_ADDRESS: "0x729900a7db6bC1dAb1C2c953791C232Fb2A996Cb"
+    HOME_BRIDGE: "0x729900a7db6bC1dAb1C2c953791C232Fb2A996Cb"
     HOME_BRIDGE_TOKEN:   "0xe2172a8E1762ae9962A59EE88a731522A61a4cc9" 
     
     txFeeIn: "vlx2"
