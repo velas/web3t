@@ -1,7 +1,7 @@
 require! {
     \qs : { stringify }
     \prelude-ls : { filter, map, foldl, each }
-    \../math.js : { plus, minus, times, div }
+    \../math.js : { plus, minus, times, div, from-hex }
     \./superagent.js : { get, post }
     \./deps.js : { Web3, Tx, BN, hdkey, bip39 }
     \../json-parse.js
@@ -28,7 +28,7 @@ is-address = (address) ->
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
-    err, gas-price <- calc-gas-price { web3, fee-type }
+    err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     return cb err if err?
@@ -88,7 +88,7 @@ calc-gas-price = ({ web3, fee-type }, cb)->
     web3.eth.get-gas-price cb
 round = (num)->
     Math.round +num
-export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas} , cb)-->
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
     dec = get-dec network
@@ -101,7 +101,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei-eth = -> it `times` (10^18)
     to-eth = -> it `div` (10^18)
     value = to-wei amount
-    err, gas-price-bn <- calc-gas-price { web3, fee-type }
+    err, gas-price-bn <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
     gas-price = gas-price-bn.to-fixed!
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
