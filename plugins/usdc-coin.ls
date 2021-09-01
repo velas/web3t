@@ -7,7 +7,7 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \usdc
-        web3Provider : \http://geth.ethereum.veladev.net
+        web3Provider : \https://geth.ethereum.veladev.net
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     group: 'Ethereum'
