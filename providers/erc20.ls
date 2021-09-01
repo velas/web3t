@@ -84,8 +84,10 @@ get-dec = (network)->
     { decimals } = network
     10^decimals
 calc-gas-price = ({ web3, fee-type }, cb)->
-    return cb null, \3000000000 if fee-type is \cheap
-    web3.eth.get-gas-price cb
+    return cb null, \3000000000 if fee-type is \cheap  
+    err, price <- web3.eth.get-gas-price
+    return cb err if err?
+    cb null price    
 round = (num)->
     Math.round +num
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas} , cb)-->
@@ -116,6 +118,9 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
+    gas-estimate = 
+        | data? and data isnt "0x" => 250000
+        | _ => 21000 
     $data =
         | data? and data isnt "0x" => data    
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
