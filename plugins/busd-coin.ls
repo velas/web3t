@@ -15,7 +15,7 @@ export mainnet =
     group: 'BSC'
     address             : "0xe9e7cea3dedca5984780bafc599bd69add087d56"   
     FOREIGN_BRIDGE      : "0xfA69bFB1455b0eEBf39eAD67bdaE3CA6B408F25b" 
-    FOREIGN_ERC20_TOKEN : "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+    FOREIGN_BRIDGE_TOKEN : "0xe9e7cea3dedca5984780bafc599bd69add087d56"     
     networks:
         vlx_busd:
             id: "vlx_busd"
@@ -40,7 +40,7 @@ export testnet =
         
     address             : "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee"   
     FOREIGN_BRIDGE      : "0xF9a7046E40E7e1992B877E7C20C0715F10560AB5" 
-    FOREIGN_ERC20_TOKEN : "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee" 
+    FOREIGN_BRIDGE_TOKEN : "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee" 
      
     group: 'BSC'
     networks:
