@@ -47,17 +47,20 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
-    dec = get-dec network
+    dec = 10^18 
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
-    from = 
-        | t.from is \V1111111111111111111111111113iMDfC => "VELAS_ETHEREUM Swap" 
-        | _ => t.from
-    { network, tx, amount, fee, time, url, from, t.to }
+    fee = 
+        | t.cumulative-gas-used? => t.cumulative-gas-used `times` t.gas-price `div` dec
+        | _ => t.gasUsed `times` t.gas-price `div` dec 
+    tx-type = 
+        | t.from is \0x0000000000000000000000000000000000000000 => "ETHEREUM → EVM Swap" 
+        | _ => null 
+    from = t.from    
+    { network, tx, amount, fee, time, url, from, t.to, tx-type }
 up = (s)->
     (s ? "").to-upper-case!
 export get-transactions = ({ network, address }, cb)->
