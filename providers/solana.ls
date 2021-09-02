@@ -346,7 +346,7 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
                 "create stake account".to-upper-case!
             | type? and type not in <[ transfer assign ]> => type.to-upper-case!
             | type? and type in <[ assign ]> and receiver is "EVM1111111111111111111111111111111111111111" =>
-                "Swap Native to EVM"
+                "Native → EVM Swap"
             | _ => null
         _tx = {
             tx: hash
