@@ -18,6 +18,7 @@ mainnet-config =
         
     networks:      
         native:
+            disabled: yes
             id: "native" 
             name: "Velas Native" 
             referTo: "vlx_native"
@@ -51,26 +52,12 @@ testnet-config =
             disabled: yes
             id: "native" 
             name: "Velas Native" 
-            referTo: "vlx_native"
-        vlx_erc20:
-            disabled: yes
-            id: "vlx_erc20"
-            name: "Velas ERC20"
-            referTo: "vlx_erc20"     
+            referTo: "vlx_native"    
         evm:
             id: "evm"
             name: "Velas EVM" 
             referTo: "vlx_evm" 
-        vlx_bep20:
-            disabled: yes
-            id: "vlx_bep20"
-            name: "Velas (BSC)" 
-            referTo: "vlx_bep20"
-        vlx_huobi:
-            disabled: yes
-            id: "vlx_huobi"
-            name: "Velas (HECO)" 
-            referTo: "vlx_huobi"
+
     "group": "Velas"
 export mainnet =  mainnet-config
 export testnet = if window?location?.href?.index-of('testnet2') > -1 then testnet2-config else testnet-config
