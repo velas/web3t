@@ -22,7 +22,7 @@ export mainnet =
     networks:           
         busd:
             id: "busd"
-            name: "Binance USD"
+            name: "Binance Smart Chain (BSC)"
             referTo: "busd"
             
 export testnet =

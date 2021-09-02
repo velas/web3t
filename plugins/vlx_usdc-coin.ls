@@ -22,7 +22,7 @@ export mainnet =
     networks:
         usdc:
             id: "usdc"
-            name: "USD Coin"
+            name: "ETHEREUM (USDC)"
             referTo: "usdc"
             
 export testnet =
@@ -49,7 +49,7 @@ export testnet =
     networks:
         usdc:
             id: "usdc"
-            name: "USD Coin"
+            name: "ETHEREUM (USDC)"
             referTo: "usdc"
     
 export color = \#9E4FEB
