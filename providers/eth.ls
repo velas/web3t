@@ -30,6 +30,17 @@ make-query = (network, method, params, cb)->
     return cb "query err: #{err.message ? err}" if err?
     return cb data.body.error if data.body.error?
     cb null, data.body.result
+    
+get-gas-estimate = (config, cb)->
+    { network, fee-type, account, amount, to, data } = config 
+    return cb null, 21000 if not data? or data is "0x"    
+    query = { from, to: account.address, data }
+    err, estimate <- make-query network, \eth_estimateGas , [ query ] 
+    res = 
+        | estimate? => from-hex(estimate) 
+        | _ => 21000
+    cb null, res  
+    
 export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     return cb null if fee-type isnt \auto
     dec = get-dec network
@@ -45,12 +56,9 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
         | _ => '0x'
     from = account.address
     query = { from, to: account.address, data: data-parsed }
-    err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
-    return cb "estimate gas err: #{err.message ? err}" if err?
-    estimate = 24000   
-    res = gas-price `times` from-hex(estimate)
-    #res = if +res1 is 0 then 21000 * 8 else res1
+    err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data } 
+    #estimate = 24000   
+    res = gas-price `times` estimate
     val = res `div` dec
     fee = new bignumber(val).to-fixed(8)
     cb null, fee
@@ -91,8 +99,9 @@ transform-tx = (network, t)-->
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee =
-        | t.cumulative-gas-used? => t.cumulative-gas-used `times` t.gas-price `div` dec
-        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec
+        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec    
+        | _ => t.cumulative-gas-used `times` t.gas-price `div` dec
+        
     { network, tx, amount, fee, time, url, t.from, t.to }
 
 get-internal-transactions = (config, cb)->
