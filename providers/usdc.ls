@@ -53,7 +53,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
-    dec = get-dec network
+    dec = 10^18  
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
