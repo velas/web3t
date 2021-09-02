@@ -159,10 +159,11 @@ transform-tx = (network, description, t)-->
     gas-price = t.gas-price ? 0
     fee = gas-used `times` gas-price `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    from = 
-        | t.from is \0x0000000000000000000000000000000000000000 => "EVM to VLX ETHEREUM Swap" 
-        | _ => t.from
-    { network, tx, status, amount, fee, time, url, from, t.to, recipient-type, description }
+    tx-type = 
+            | t.from is \0x0000000000000000000000000000000000000000 => "EVM → BSC Swap" 
+            | _ => null 
+    from = t.from 
+    { network, tx, status, amount, fee, time, url, from, t.to, recipient-type, description, tx-type }
 get-internal-transactions = ({ network, address }, cb)->
     err, address <- to-eth-address address
     return cb err if err?
