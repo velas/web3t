@@ -15,6 +15,9 @@ export mainnet =
         
     FOREIGN_BRIDGE_TOKEN   : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"
     FOREIGN_BRIDGE         : "0xD2E678e50123A173a66352a8A2d78c0F59FDf5CF"
+    
+    /* Used in getHomeFee wallet method */ 
+    HOME_BRIDGE: "0x7E0e1810A5Eb891C6Df07a585d94c79f854BFa9e"    
 
     txFeeIn: "bnb"
     txBridgeFeeIn: "bnb"
@@ -43,6 +46,9 @@ export testnet =
     address: "0x77622c2f95846ddab1300f46685cc953c17a78df"     
     FOREIGN_BRIDGE_TOKEN   : "0x77622C2F95846dDaB1300F46685CC953C17A78df"
     FOREIGN_BRIDGE         : "0x719C8490730ADBBA514eec7173515a4A572dA736"
+    
+    /* Used in getHomeFee wallet method */   
+    HOME_BRIDGE: "0x97B7eb15cA5bFa82515f6964a3EAa1fE71DFB7A7"   
     
     txFeeIn: "bnb"
     txBridgeFeeIn: "bnb"
