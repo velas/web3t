@@ -19,7 +19,7 @@ export mainnet =
     networks:
         vlx_busd:
             id: "vlx_busd"
-            name: "Binance USD (Velas)"
+            name: "Velas (BUSD)"
             referTo: "vlx_busd" 
     
 
@@ -46,7 +46,7 @@ export testnet =
     networks:
         vlx_busd:
             id: "vlx_busd"
-            name: "Binance USD (Velas)"
+            name: "Velas (BUSD)"
             referTo: "vlx_busd" 
 export color = \#9E4FEB
 export type = \coin
