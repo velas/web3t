@@ -49,7 +49,7 @@ export testnet =
     networks:
         busd:
             id: "busd"
-            name: "Binance USD"
+            name: "Binance Smart Chain (BSC)"
             referTo: "busd"
     
 export color = \#9E4FEB
