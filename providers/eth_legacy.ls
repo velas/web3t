@@ -68,7 +68,10 @@ transform-tx = (network, t)-->
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
+    fee = 
+        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec   
+        | _ => (t?cumulative-gas-used ? 0) `times` t.gas-price `div` dec    
+           
     { network, tx, amount, fee, time, url, t.from, t.to }
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
