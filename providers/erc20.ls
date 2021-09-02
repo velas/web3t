@@ -46,13 +46,15 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
-    dec = get-dec network
+    dec = 10^18 
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
+    fee = 
+        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec    
+        | _=> t.cumulative-gas-used `times` t.gas-price `div` dec
     from = 
         | _ => t.from
     { network, tx, amount, fee, time, url, from, t.to }
