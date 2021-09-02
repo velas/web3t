@@ -15,6 +15,9 @@ export mainnet =
         
     FOREIGN_BRIDGE_TOKEN   : "0xC0df9DD9a3d5771d174F72459e702E8B3F4a970F"
     FOREIGN_BRIDGE         : "0xe713E174E5efDD0A6641576aaF9AE1e14a7D9845"
+    
+    /* Used in getHomeFee wallet method */ 
+    HOME_BRIDGE: "0xe257B0f500b05C6d3f0A00D4f395Bdd2F163222E" 
 
     txFeeIn: "huobi"
     txBridgeFeeIn: "ht"
@@ -43,6 +46,9 @@ export testnet =
     
     FOREIGN_BRIDGE_TOKEN   : "0x77622C2F95846dDaB1300F46685CC953C17A78df"
     FOREIGN_BRIDGE         : "0x719C8490730ADBBA514eec7173515a4A572dA736"
+    
+    /* Used in getHomeFee wallet method */ 
+    HOME_BRIDGE: "0x729900a7db6bC1dAb1C2c953791C232Fb2A996Cb" 
     
     txFeeIn: "huobi"
     txBridgeFeeIn: "ht"
