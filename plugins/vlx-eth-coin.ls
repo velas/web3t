@@ -24,7 +24,7 @@ mainnet-config =
     networks:
         eth:
             id: "eth"
-            name: "Ethereum"
+            name: "Ethereum (ETH)"
             referTo: "eth"
 
 testnet-config =
@@ -55,7 +55,7 @@ testnet-config =
     networks:
         eth:
             id: "eth"
-            name: "Ethereum"
+            name: "Ethereum (ETH)"
             referTo: "eth"   
 
 export mainnet =  mainnet-config
