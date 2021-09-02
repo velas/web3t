@@ -154,7 +154,8 @@ transform-tx = (network, description, t)-->
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
     res    
-
+up = (s)->
+    (s ? "").to-upper-case!    
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
     module = \account
@@ -171,6 +172,7 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
+            |> filter -> up(it.contract-address) is up(network.address)
             |> map transform-tx network, 'external' 
     cb null, txs
 get-dec = (network)->
