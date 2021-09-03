@@ -60,7 +60,7 @@
             "apiUrl": "https://api.etherscan.io/api"
         },
 
-        "FOREIGN_BRIDGE": "0x7a70b72dB9c59f30C780C4746ce2a0562502Ec2b",
+        "FOREIGN_BRIDGE": "0xe470198CDa121DA5b6ad349D3577b166E5985917",
         "FOREIGN_BRIDGE_TOKEN": "0xdac17f958d2ee523a2206206994597c13d831ec7",
         
         "group": "Ethereum",
