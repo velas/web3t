@@ -343,7 +343,8 @@ export get-transactions = ({ network, address}, cb)->
     txs =
         all-txs
             |> map transform-tx { net: network, address }
-            |> filter (?)                
+            |> filter (?)              
+            |> uniqueBy (-> it.hash)  
     cb null, txs
 prepare-raw-txs = ({ txs, network, address }, cb)->
     err, result <- prepare-txs network, txs, address
