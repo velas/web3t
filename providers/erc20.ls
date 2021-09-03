@@ -46,15 +46,15 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
-    dec = 10^18 
+    dec = get-dec network
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee = 
-        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec    
-        | _=> t.cumulative-gas-used `times` t.gas-price `div` dec
+        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` (10^18)    
+        | _=> t.cumulative-gas-used `times` t.gas-price `div` (10^18) 
     from = 
         | _ => t.from
     { network, tx, amount, fee, time, url, from, t.to }
@@ -122,7 +122,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     gas-estimate = 
         | data? and data isnt "0x" => 250000
-        | _ => 21000 
+        | _ => 50000 
     $data =
         | data? and data isnt "0x" => data    
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
