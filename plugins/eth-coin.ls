@@ -18,7 +18,7 @@ export mainnet =
         vlx_eth:
             disabled: no    
             id: "vlx_eth"
-            name: "Ethereum (Velas EVM)"
+            name: "Velas EVM (ETH VRC20)"
             referTo: "vlx_eth"
     group: 'Ethereum'
 
@@ -60,7 +60,7 @@ export ropsten =
         vlx_eth:
             disabled: no    
             id: "vlx_eth"
-            name: "Ethereum (Velas EVM)"
+            name: "Velas EVM (ETH VRC20)"
             referTo: "vlx_eth"
     group: 'Ethereum'
 
