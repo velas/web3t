@@ -11,10 +11,10 @@ export mainnet =
         web3Provider : "https://bsc-dataseed.binance.org"
         url: "https://bscscan.com"
         
-    address: "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"    
+    address: "0xE9C803F48dFFE50180Bd5B01dC04DA939E3445Fc"    
         
-    FOREIGN_BRIDGE_TOKEN   : "0x6C6C7f09ac247A047BdC2b3A741714281E0c3d06"
-    FOREIGN_BRIDGE         : "0xD2E678e50123A173a66352a8A2d78c0F59FDf5CF"
+    FOREIGN_BRIDGE_TOKEN   : "0xE9C803F48dFFE50180Bd5B01dC04DA939E3445Fc"
+    FOREIGN_BRIDGE         : "0x145Fb39C9776516E455b7B050330776a1EC2Fd02"
     
     /* Used in getHomeFee wallet method */ 
     HOME_BRIDGE: "0x7E0e1810A5Eb891C6Df07a585d94c79f854BFa9e"    

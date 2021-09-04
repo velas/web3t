@@ -12,9 +12,9 @@ export mainnet =
         url: \https://evmexplorer.velas.com
 
     group: "Velas"
-    address: "0xb670ab2BcC5682c3B8Efa504eee1Af440297f1ad"  
-    HOME_BRIDGE: "0x38005FB835c4CEC59418C2f1bd555a608616d131"
-    HOME_BRIDGE_TOKEN:   "0xb670ab2BcC5682c3B8Efa504eee1Af440297f1ad" 
+    address: "0xc111c29A988AE0C0087D97b33C6E6766808A3BD3"  
+    HOME_BRIDGE: "0x902b79F10Ecc887AF6980fD13581A4d0e5db3788"
+    HOME_BRIDGE_TOKEN:   "0xc111c29A988AE0C0087D97b33C6E6766808A3BD3" 
     
     txFeeIn: "vlx2"
     txBridgeFeeIn: "vlx2"

@@ -12,7 +12,7 @@ export mainnet =
         apiUrl: 'https://evmexplorer.velas.com/api'
 
     address: "0xC5acB9684c8492fFF285B518bbe048C10C99411d"   
-    HOME_BRIDGE: "0x314424EA1541aD870b3954a7C37533192159F4AA"
+    HOME_BRIDGE: "0xe60728c7669107aeDfA20b7C9486A4Be169EBcA1"
     HOME_BRIDGE_TOKEN:   "0xC5acB9684c8492fFF285B518bbe048C10C99411d" 
     
     txFeeIn: "vlx2"

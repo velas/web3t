@@ -11,10 +11,10 @@ export mainnet =
         web3Provider : "https://http-mainnet.hecochain.com"
         url: "https://hecoinfo.com"
         
-    address: "0xC0df9DD9a3d5771d174F72459e702E8B3F4a970F"    
+    address: "0xffbc1CD089642566C1CE235641Feaf80B7798ad9"    
         
-    FOREIGN_BRIDGE_TOKEN   : "0xC0df9DD9a3d5771d174F72459e702E8B3F4a970F"
-    FOREIGN_BRIDGE         : "0xe713E174E5efDD0A6641576aaF9AE1e14a7D9845"
+    FOREIGN_BRIDGE_TOKEN   : "0xffbc1CD089642566C1CE235641Feaf80B7798ad9"
+    FOREIGN_BRIDGE         : "0xe1a1E0BE12C0aC0fE87CbBced2D68e78006d9fB6"
     
     /* Used in getHomeFee wallet method */ 
     HOME_BRIDGE: "0xe257B0f500b05C6d3f0A00D4f395Bdd2F163222E" 

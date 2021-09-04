@@ -14,7 +14,7 @@ export mainnet =
         url: \https://bscscan.com
     group: 'BSC'
     address             : "0xe9e7cea3dedca5984780bafc599bd69add087d56"   
-    FOREIGN_BRIDGE      : "0xfA69bFB1455b0eEBf39eAD67bdaE3CA6B408F25b" 
+    FOREIGN_BRIDGE      : "0x99664648b38781e22be98C8E22a7bAc26dbF95E1" 
     FOREIGN_BRIDGE_TOKEN : "0xe9e7cea3dedca5984780bafc599bd69add087d56"     
     networks:
         vlx_busd:
