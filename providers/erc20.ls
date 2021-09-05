@@ -26,6 +26,7 @@ is-address = (address) ->
     else
         true
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
+    #console.log "[calc-fee]" { data }    
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
@@ -35,6 +36,8 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
     from = account.address
     err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb err if err?
+    #console.log "[calc-fee]" { estimate } 
+    #estimate = 100000  
     dec = get-dec network
     res = gas-price `times` estimate
     val = res `div` (10^18)
@@ -92,8 +95,9 @@ calc-gas-price = ({ web3, fee-type }, cb)->
     cb null price    
 round = (num)->
     Math.round +num
-export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas, gas-price} , cb)-->
     return cb "address in not correct ethereum address" if not is-address recipient
+    #console.log "[create-tx]" {gas, gas-price, amount-fee}    
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -108,21 +112,25 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, gas-price-bn <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
     gas-price = gas-price-bn.to-fixed!
+    #console.log { gas-price } 
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
+    #console.log { gas-minimal }    
     gas-estimate = round ( gas-minimal `times` 5 )
+    #console.log { gas-estimate }    
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance account.address
     return cb err if err?
     balance-eth = to-eth balance
-    return cb "Balance is not enough to send tx" if +balance-eth < +amount-fee
+    return cb "ETH balance is not enough to send tx" if +balance-eth < +amount-fee
     err, erc-balance <- get-balance { network, account.address }
     return cb err if err?
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
     gas-estimate = 
-        | data? and data isnt "0x" => 250000
+        | data? and data isnt "0x" => 200000
         | _ => 50000 
+    #console.log "gas-estimate" gas-estimate    
     $data =
         | data? and data isnt "0x" => data    
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
