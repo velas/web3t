@@ -47,15 +47,15 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
-    dec = 10^18 
+    dec = get-dec network
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee = 
-        | t.cumulative-gas-used? => t.cumulative-gas-used `times` t.gas-price `div` dec
-        | _ => t.gasUsed `times` t.gas-price `div` dec 
+        | t.cumulative-gas-used? => t.cumulative-gas-used `times` t.gas-price `div` (10^18)
+        | _ => t.gasUsed `times` t.gas-price `div` (10^18) 
     tx-type = 
         | t.from is \0x0000000000000000000000000000000000000000 => "ETHEREUM → EVM Swap" 
         | _ => null 
@@ -230,11 +230,11 @@ isChecksumAddress = (address) ->
         i++
     yes      
     
-#export get-market-history-prices = (config, cb)->
-#    { network, coin } = config  
-#    {market} = coin    
-#    err, resp <- get market .timeout { deadline } .end
-#    return cb "cannot execute query - err #{err.message ? err }" if err?
-#    err, result <- json-parse resp.text
-#    return cb err if err?
-#    cb null, result
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result
