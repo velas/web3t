@@ -224,6 +224,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         | _ => 21000    
     #nonce = 0
     #console.log { nonce, gas-price, value, gas-estimate, recipient, account.address, data }
+    err, chainId <- make-query network, \eth_chainId , []
+    return cb err if err?
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
