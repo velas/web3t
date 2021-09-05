@@ -134,7 +134,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, description, t)-->
     { url } = network.api
-    dec = 10^18 
+    dec = get-dec network
     network = \eth
     tx =
         | t.hash? => t.hash
@@ -151,7 +151,7 @@ transform-tx = (network, description, t)-->
         | t.gas-price? => t.gas-price
         | t.gas-price + "".length is 0 => "0"
         | _ => "0"
-    fee = gas-used `times` (gas-price + "") `div` dec
+    fee = gas-used `times` (gas-price + "") `div` (10^18)
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
     res    
