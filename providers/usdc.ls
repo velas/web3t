@@ -53,13 +53,13 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
-    dec = 10^18  
+    dec = get-dec network 
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
+    fee = t.cumulative-gas-used `times` t.gas-price `div` (10^18)
     { network, tx, amount, fee, time, url, t.from, t.to }
 up = (s)->
     (s ? "").to-upper-case!
