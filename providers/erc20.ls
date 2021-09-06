@@ -129,7 +129,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     gas-estimate = 
         | data? and data isnt "0x" => 200000
-        | _ => 50000 
+        | _ => 150000 
     #console.log "gas-estimate" gas-estimate    
     $data =
         | data? and data isnt "0x" => data    
