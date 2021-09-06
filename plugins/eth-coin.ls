@@ -8,7 +8,7 @@ export mainnet =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \eth
-        web3Provider : \https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648
+        web3Provider : \http://geth.ethereum.veladev.net
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     nickname: \eth
@@ -47,14 +47,14 @@ export ropsten =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \eth
-        web3Provider : \https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648
+        web3Provider : \https://geth.ropsten.veladev.net
         url : \https://ropsten.etherscan.io
         apiUrl : \https://api-ropsten.etherscan.io/api
     nickname: \eth
     
     HOME_BRIDGE:      "0xb1FAB785Cb5F2d9782519942921e9afCDf2C60e0"
     #FOREIGN_BRIDGE:   "0xA5D512085006867974405679f2c9476F4F7Fa903"
-    #BRIDGEABLE_TOKEN: "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344"
+    FOREIGN_BRIDGE_TOKEN: "0x3538C7f88aDbc8ad1F435f7EA70287e26b926344"    
     
     networks:
         vlx_eth:
