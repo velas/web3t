@@ -25,18 +25,18 @@ export mainnet =
             id: "vlx_erc20"
             name: "Ethereum (VLX ERC20)"
             referTo: "vlx_erc20"
-        legacy:
-            id: "legacy"
-            name: "Velas Legacy"
-            referTo: "vlx2"       
-        vlx_huobi:
-            id: "vlx_huobi"
-            name: "Huobi ECO Chain (VLX HRC20)"
-            referTo: "vlx_huobi"
         bsc_vlx:
             id: "bsc_vlx"
             name: "Binance Smart Chain (VLX BEP20)"
             referTo: "bsc_vlx"
+        vlx_huobi:
+            id: "vlx_huobi"
+            name: "Huobi ECO Chain (VLX HRC20)"
+            referTo: "vlx_huobi"
+        legacy:
+            id: "legacy"
+            name: "Velas Legacy"
+            referTo: "vlx2"
     group: 'Velas'
 
 export testnet =
@@ -70,18 +70,20 @@ export testnet =
             id: "vlx_erc20"
             name: "Ethereum (VLX ERC20)"
             referTo: "vlx_erc20"
-        legacy:
-            id: "legacy"
-            name: "Velas Legacy"
-            referTo: "vlx2"       
+        bsc_vlx:
+            id: "bsc_vlx"
+            name: "Binance Smart Chain (VLX BEP20)"
+            referTo: "bsc_vlx"
         vlx_huobi:
             id: "vlx_huobi"
             name: "Huobi ECO Chain (VLX HRC20)"
             referTo: "vlx_huobi"
-        bsc_vlx:
-            id: "bsc_vlx"
-            name: "Binance Smart Chain (VLX BEP20)"
-            referTo: "bsc_vlx" 
+        legacy:
+            id: "legacy"
+            name: "Velas Legacy"
+            referTo: "vlx2"       
+        
+         
 
 export devnet =
     disabled: no
