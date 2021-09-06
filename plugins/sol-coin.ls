@@ -13,13 +13,8 @@ mainnet-config =
         url: 'https://native.velas.com',
         apiUrl: 'https://api.velas.com'
         
-    HomeBridge: "0x56454c41532d434841494e000000000053574150"
-    
+    HomeBridge: "0x56454c41532d434841494e000000000053574150"    
     networks:
-        legacy:
-            id: "legacy"
-            name: "Velas Legacy"
-            referTo: "vlx2" 
         evm:
             id: "evm"
             name: "Velas EVM"
