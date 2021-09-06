@@ -63,7 +63,7 @@ export color = \#9E4FEB
 export type = \coin
 export enabled = yes
 export wallet-index = 2
-export name = 'Tether USD VRC20'
+export name = 'Tether USD'
 export token = \vlx_usdt   
 export nickname = \usdt 
 export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=825&range=ALL" 
