@@ -234,7 +234,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance = balance `times` dec
             
     balance-eth = to-eth balance
-    to-send = amount `plus` amount-fee
+    #to-send = amount `plus` amount-fee
+    to-send = amount
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
     data-parsed =
         | data? => data
