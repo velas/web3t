@@ -32,16 +32,17 @@ make-query = (network, method, params, cb)->
     cb null, data.body.result
     
 get-gas-estimate = (config, cb)->
-    { network, fee-type, account, amount, to, data } = config 
-    return cb null, 21000 if not data? or data is "0x"    
-    query = { from, to: account.address, data }
+    { network, fee-type, account, amount, to, data, swap } = config
+    return cb null, 250000 if config.swap? and config.swap? is yes 
+    return cb null, 21000 if not config.data? or config.data is "0x"    
+    query = { from: config.account.address, to: config.account.address, config.data }
     err, estimate <- make-query network, \eth_estimateGas , [ query ] 
     res = 
         | estimate? => from-hex(estimate) 
         | _ => 21000
     cb null, res  
     
-export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
+export calc-fee = ({ network, fee-type, account, amount, to, data, swap }, cb)->
     return cb null if fee-type isnt \auto
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network }
@@ -56,8 +57,8 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
         | _ => '0x'
     from = account.address
     query = { from, to: account.address, data: data-parsed }
-    err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data } 
-    #estimate = 24000   
+    err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data: data-parsed, swap } 
+    #estimate = 24000 
     res = gas-price `times` estimate
     val = res `div` dec
     fee = new bignumber(val).to-fixed(8)
