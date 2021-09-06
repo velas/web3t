@@ -26,7 +26,7 @@ mainnet-config =
     networks:
         vlx_evm:
             id: "vlx_evm"
-            name: "Velas EVM"
+            name: "Velas EVM (VLX)"
             referTo : "vlx_evm"
 
 testnet-config =
@@ -47,7 +47,7 @@ testnet-config =
     FOREIGN_BRIDGE      : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
     
     /* Used in getHomeFee wallet method */ 
-    "HOME_BRIDGE"       : "0x57C7f6CD50a432943F40F987a1448181D5B11307"     
+    HOME_BRIDGE       : "0x57C7f6CD50a432943F40F987a1448181D5B11307"     
     
     api:
         provider: \velas_erc20 
@@ -58,7 +58,7 @@ testnet-config =
     networks:
         vlx_evm:
             id: "vlx_evm"
-            name: "Velas EVM"
+            name: "Velas EVM (VLX)"
             referTo : "vlx_evm"
 
 export mainnet =  mainnet-config
