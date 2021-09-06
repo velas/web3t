@@ -294,10 +294,10 @@ export get-balance = ({ address, network } , cb)->
         return cb e.message 
 transform-in = ({ net, address }, t)->
     #tr = BitcoinLib.Transaction.fromHex(t.script)  
-    tx = t.mintTxid
+    tx = t.hash    
     pending = t.confirmations is 0
     dec = get-dec net
-    amount = t.value `div` dec
+    amount = "#{t.value}" `div` dec
     from = address
     to = t.address
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
@@ -305,11 +305,11 @@ transform-in = ({ net, address }, t)->
     #console.log(\insight-in, t)
     { tx, amount, url, to, from, pending, time: t.time, fee: t.fee, type: t.type, id: t._id  }
 transform-out = ({ net, address }, t)->
-    tx = t.mintTxid
+    tx = t.hash    
     time = t.time
     pending = t.confirmations is 0
     dec = get-dec net
-    amount = t.value `div` dec
+    amount = "#{t.value}" `div` dec
     to = t.address
     from = address
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
@@ -342,9 +342,9 @@ export get-transactions = ({ network, address}, cb)->
     return cb "Unexpected result" if typeof! all-txs isnt \Array
     txs =
         all-txs
-            |> map transform-tx { net: network, address }
-            |> filter (?)              
-            |> uniqueBy (-> it.hash)  
+            |> filter (?)
+            |> uniqueBy (-> it.hash)
+            |> map transform-tx { net: network, address }  
     cb null, txs
 prepare-raw-txs = ({ txs, network, address }, cb)->
     err, result <- prepare-txs network, txs, address
@@ -360,23 +360,29 @@ get-receiver = (account-address, sender, outputs)->
 get-value = (outputs, receiver)->
     receiver-data = outputs |> find (-> it.address is receiver)
     receiver-data?value ? 0
-prepare-txs = (network, [tx, ...rest], address, cb)->
-    return cb null, [] if not tx?
-    { mintTxid } = tx
+    
+cache = 
+    transactions: {}
+
+get-tx-data = ({network, mintTxid, address}, cb)->
+    return cb null, cache.transactions[mintTxid] if cache.transactions[mintTxid]?
+    
     err, _coins <- get "#{get-api-url network}/tx/#{mintTxid}/coins" .timeout { deadline: 15000 } .end
     console.error "prepare-txs Error: " + err if err?
-    return cb null, [] if err?
+    return cb null if err?
     err, result <- json-parse _coins.text
     return cb err if err?
     {inputs, outputs} = result
     sender = inputs[0].address
     receiver = get-receiver(address, sender, outputs)
     value = get-value(outputs, receiver)
-    err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 15000 } .end
+    
+    err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 5000 } .end
     console.error "prepare-txs Error: " + err if err?
-    return cb null, [] if err?
+    return cb null if err?    
     err, result <- json-parse data.text
-    return cb err if err? 
+    console.error "json-parse  Error: " + err if err?
+    return cb null if err? 
     { blockTime, txid, fee, confirmations, chain,  _id } = result 
     time = moment(blockTime).format("X")
     dec = get-dec network 
@@ -390,11 +396,19 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         confirmations
         _id 
         coinbase: no
-        mintTxid: txid,    
+        hash: txid    
     }
-    t = if _tx? then [_tx] else []
-    err, other <- prepare-txs network, rest, address
-    return cb err if err?
+    
+    cache.transactions[mintTxid] = _tx 
+    cb null, _tx 
+    
+prepare-txs = (network, [tx, ...rest], address, cb)->
+    return cb null, [] if not tx?
+    { mintTxid } = tx
+    console.log "tx id " mintTxid   
+    err, tx-data <- get-tx-data({network, mintTxid, address})  
+    t = if tx-data? then [tx-data] else []
+    err, other <- prepare-txs network, rest, address    
     all =  t ++ other    
     cb null, all   
 export isValidAddress = ({ address, network }, cb)-> 
