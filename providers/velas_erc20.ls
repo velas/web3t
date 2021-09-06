@@ -144,6 +144,7 @@ to-hex = ->
 transform-tx = (network, description, t)-->
     { url } = network.api
     dec = get-dec network
+    { FOREIGN_BRIDGE } =  network
     network = \eth
     tx =
         | t.hash? => t.hash
@@ -164,6 +165,7 @@ transform-tx = (network, description, t)-->
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     tx-type =
         | t.from is \0x0000000000000000000000000000000000000000 => "EVM → ETHEREUM Swap"
+        | up(t.to) is up(FOREIGN_BRIDGE ? "") => "ETHEREUM → EVM Swap"   
         | _ => null  
     from = t.from
     { network, tx, status, amount, fee, time, url, from, t.to, recipient-type, description, tx-type }
