@@ -35,7 +35,7 @@
         "networks": {
             "vlx_usdt": {
                 "id":"vlx_usdt",
-                "name": "Tether USD (Velas EVM)",
+                "name": "Velas EVM (USDT VRC-20)",
                 "referTo": "vlx_usdt"
             }
         },
@@ -67,7 +67,7 @@
         "networks": {
             "vlx_usdt": {
                 "id": "vlx_usdt",
-                "name": "Tether USD (Velas EVM)",
+                "name": "Velas EVM (USDT VRC-20)",
                 "referTo": "vlx_usdt"
             }
         }

@@ -24,7 +24,7 @@ mainnet-config =
     networks:
         usdt_erc20:
             id: "usdt_erc20"
-            name: "Tether USD (Ethereum)"
+            name: "Ethereum (Tether USD ERC-20)"
             referTo: "usdt_erc20" 
         
 testnet-config =
@@ -54,7 +54,7 @@ testnet-config =
     networks:
         usdt_erc20:
             id: "usdt_erc20"
-            name: "Tether USD (Ethereum)"
+            name: "Ethereum (Tether USD ERC-20)"
             referTo: "usdt_erc20"   
 
 export mainnet =  mainnet-config
@@ -63,7 +63,7 @@ export color = \#9E4FEB
 export type = \coin
 export enabled = yes
 export wallet-index = 2
-export name = 'Tether USD'
+export name = 'Tether USD VRC20'
 export token = \vlx_usdt   
 export nickname = \usdt 
 export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=825&range=ALL" 
