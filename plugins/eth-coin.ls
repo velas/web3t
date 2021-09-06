@@ -8,7 +8,7 @@ export mainnet =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \eth
-        web3Provider : \https://geth.ethereum.veladev.net
+        web3Provider : \https://geth.ethereum.velas.com
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     nickname: \eth
@@ -47,7 +47,7 @@ export ropsten =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \eth
-        web3Provider : \https://geth.ropsten.veladev.net
+        web3Provider : \https://geth.ropsten.velas.com
         url : \https://ropsten.etherscan.io
         apiUrl : \https://api-ropsten.etherscan.io/api
     nickname: \eth
