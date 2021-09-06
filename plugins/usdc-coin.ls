@@ -22,7 +22,7 @@ export mainnet =
     networks:
         vlx_usdc:
             id: "vlx_usdc"
-            name: "USD Coin (Velas)"
+            name: "Velas EVM (USDC VRC-20)"
             referTo: "vlx_usdc" 
     
 
@@ -50,7 +50,7 @@ export testnet =
     networks:
         vlx_usdc:
             id: "vlx_usdc"
-            name: "USD Coin (Velas)"
+            name: "Velas EVM (USDC VRC-20)"
             referTo: "vlx_usdc" 
 export color = \#9E4FEB
 export type = \coin
