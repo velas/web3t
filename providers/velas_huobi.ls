@@ -141,6 +141,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, description, t)-->
     { url } = network.api
+    { FOREIGN_BRIDGE_TOKEN } = network
     dec = get-dec network
     network = \eth
     tx =
@@ -161,8 +162,9 @@ transform-tx = (network, description, t)-->
     fee = gas-used `times` gas-price `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     tx-type = 
-            | t.from is \0x0000000000000000000000000000000000000000 => "EVM → HECO Swap" 
-            | _ => null 
+        | t.from is \0x0000000000000000000000000000000000000000 => "EVM → HECO Swap"
+        | t.contractAddress? and t.contractAddress isnt "" and up(t.contractAddress) is up(FOREIGN_BRIDGE_TOKEN ? "") => "HECO → EVM Swap" 
+        | _ => null 
     from = t.from 
     { network, tx, status, amount, fee, time, url, from, t.to, recipient-type, description, tx-type }
 get-internal-transactions = ({ network, address }, cb)->
