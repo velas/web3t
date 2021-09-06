@@ -45,7 +45,7 @@ testnet-config =
     
     api:
         provider: \velas_usdt 
-        web3Provider: 'https://rpc-tokenbridge.gw.testnet.veladev.net',
+        web3Provider: 'https://evmexplorer.testnet.velas.com/rpc',
         url: 'https://evmexplorer.testnet.velas.com',
         apiUrl: 'https://evmexplorer.testnet.velas.com/api'
 
