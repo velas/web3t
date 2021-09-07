@@ -9,7 +9,7 @@ export mainnet =
         provider: \bnb
         apiUrl : \https://api.bscscan.com/api
         web3Provider : \https://bsc-dataseed.binance.org
-        url: \https://api.bscscan.com
+        url: \https://bscscan.com
     group: 'BSC'
 
 export testnet =
