@@ -29,6 +29,8 @@
   module.exports = function(config, cb){
     var def;
     def = {
+      sol: sol,
+      vlx_erc20: vlx_erc20, 
       btc: btc,
       eth: eth,
       ltc: ltc,

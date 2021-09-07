@@ -8,7 +8,6 @@
   omni = require('./providers/omni.js');
   velas2 = require('./providers/velas2.js');
   solana = require('./providers/solana.js');
-  velas_evm = require('./providers/velas_evm.js');
   extendProviders = function(providers, config){
     if (toString$.call(config.providers).slice(8, -1) !== 'Object') {
       return;

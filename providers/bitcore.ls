@@ -64,15 +64,15 @@ calc-fee-per-byte = (config, cb)->
     return cb err, o.cheap if err?
     return cb "raw-tx is expected" if typeof! data.raw-tx isnt \String
     #bytes = decode(data.raw-tx).to-string(\hex).length / 2
-    bytes = (new bignumber(data.raw-tx.length)) `div` 1
+    bytes = data.raw-tx.length / 2
     infelicity = 1
     err, data <- get "#{get-api-url network}/fee/6" .timeout { deadline } .end
     vals = if data? and not err? then values data.body else [0.0024295] 
     calced-fee-per-kb = 
         | vals.0 is -1 => network.tx-fee
-        | _ => vals.0 
-    fee-per-byte = calced-fee-per-kb `div` (new bignumber(1000))
-    calc-fee = (bytes `plus` infelicity) `times` fee-per-byte
+        | _ => vals.0       
+    fee-per-byte = calced-fee-per-kb `div` 2000
+    calc-fee = (bytes + infelicity) `times` fee-per-byte
     calc-fee = new bignumber(calc-fee).to-fixed(network.decimals)   
     final-price =
         | calc-fee > +o.cheap => calc-fee
@@ -282,7 +282,6 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
 export get-balance = ({ address, network } , cb)->
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/address/#{address}/balance" .timeout { deadline: 5000 } .end
-    console.log "#{get-api-url network}/address/#{address}/balance"
     return cb err if err? or data.text.length is 0
     #check that data.text has number
     try
@@ -295,28 +294,28 @@ export get-balance = ({ address, network } , cb)->
         return cb e.message 
 transform-in = ({ net, address }, t)->
     #tr = BitcoinLib.Transaction.fromHex(t.script)  
-    tx = t.mintTxid
+    tx = t.hash    
     pending = t.confirmations is 0
     dec = get-dec net
-    amount = t.value `div` dec
+    amount = "#{t.value}" `div` dec
     from = address
     to = t.address
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-in, t)
-    { tx, amount, url, to, from, pending, time: t.time, fee: t.fee, type: t.type  }
+    { tx, amount, url, to, from, pending, time: t.time, fee: t.fee, type: t.type, id: t._id  }
 transform-out = ({ net, address }, t)->
-    tx = t.mintTxid
+    tx = t.hash    
     time = t.time
     pending = t.confirmations is 0
     dec = get-dec net
-    amount = t.value `div` dec
+    amount = "#{t.value}" `div` dec
     to = t.address
     from = address
     url = | net.api.linktx => net.api.linktx.replace \:hash, tx
         | net.api.url => "#{net.api.url}/tx/#{data}"
     #console.log(\insight-out, t)
-    { tx, amount, url, to, pending, from, time: t.time, fee: t.fee, type: t.type }
+    { tx, amount, url, to, pending, from, time: t.time, fee: t.fee, type: t.type, id: t._id }
 transform-tx = (config, t)-->
     self-sender = t.address is config.address
     type = 
@@ -343,8 +342,9 @@ export get-transactions = ({ network, address}, cb)->
     return cb "Unexpected result" if typeof! all-txs isnt \Array
     txs =
         all-txs
-            |> map transform-tx { net: network, address }
-            |> filter (?)                
+            |> filter (?)
+            |> uniqueBy (-> it.hash)
+            |> map transform-tx { net: network, address }  
     cb null, txs
 prepare-raw-txs = ({ txs, network, address }, cb)->
     err, result <- prepare-txs network, txs, address
@@ -360,23 +360,29 @@ get-receiver = (account-address, sender, outputs)->
 get-value = (outputs, receiver)->
     receiver-data = outputs |> find (-> it.address is receiver)
     receiver-data?value ? 0
-prepare-txs = (network, [tx, ...rest], address, cb)->
-    return cb null, [] if not tx?
-    { mintTxid } = tx
+    
+cache = 
+    transactions: {}
+
+get-tx-data = ({network, mintTxid, address}, cb)->
+    return cb null, cache.transactions[mintTxid] if cache.transactions[mintTxid]?
+    
     err, _coins <- get "#{get-api-url network}/tx/#{mintTxid}/coins" .timeout { deadline: 15000 } .end
     console.error "prepare-txs Error: " + err if err?
-    return cb null, [] if err?
+    return cb null if err?
     err, result <- json-parse _coins.text
     return cb err if err?
     {inputs, outputs} = result
     sender = inputs[0].address
     receiver = get-receiver(address, sender, outputs)
     value = get-value(outputs, receiver)
-    err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 15000 } .end
+    
+    err, data <- get "#{get-api-url network}/tx/#{mintTxid}" .timeout { deadline: 5000 } .end
     console.error "prepare-txs Error: " + err if err?
-    return cb null, [] if err?
+    return cb null if err?    
     err, result <- json-parse data.text
-    return cb err if err? 
+    console.error "json-parse  Error: " + err if err?
+    return cb null if err? 
     { blockTime, txid, fee, confirmations, chain,  _id } = result 
     time = moment(blockTime).format("X")
     dec = get-dec network 
@@ -390,11 +396,18 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         confirmations
         _id 
         coinbase: no
-        mintTxid: txid,    
+        hash: txid    
     }
-    t = if _tx? then [_tx] else []
-    err, other <- prepare-txs network, rest, address
-    return cb err if err?
+    
+    cache.transactions[mintTxid] = _tx 
+    cb null, _tx 
+    
+prepare-txs = (network, [tx, ...rest], address, cb)->
+    return cb null, [] if not tx?
+    { mintTxid } = tx
+    err, tx-data <- get-tx-data({network, mintTxid, address})  
+    t = if tx-data? then [tx-data] else []
+    err, other <- prepare-txs network, rest, address    
     all =  t ++ other    
     cb null, all   
 export isValidAddress = ({ address, network }, cb)-> 
@@ -415,4 +428,13 @@ export get-transaction-info = (config, cb)->
         | tx.status is \0x1 => \reverted
         | _ => \pending
     result = { status, info: tx }
+    cb null, result
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
     cb null, result

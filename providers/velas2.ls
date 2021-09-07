@@ -314,7 +314,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         data: data || "0x"
         chainId: chainId     
     }
-    console.log "tx before parse" tx-obj    
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
@@ -357,6 +356,17 @@ export get-balance = ({ network, address} , cb)->
     dec = get-dec network
     balance = number `div` dec
     cb null, balance
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result   
+        
+    
 #console.log \test
 #to-eth-address "VADyNxJR9PjWrQzJVmoaKxqaS8Mk", console.log
 #console.log to-velas-address Buffer.from("0b6a35fafb76e0786db539633652a8553ac28d67", 'hex')

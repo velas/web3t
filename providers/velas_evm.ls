@@ -53,7 +53,7 @@ export isValidAddress =  ({ address }, cb)->
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
-    w = wallet.derive-path("m/44'/5655640'/"+index+"'/0/0").get-wallet!
+    w = wallet.derive-path("m/44'/60'/"+index+"'/0/0").get-wallet!
     address = \0x + w.get-address!.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
@@ -61,7 +61,6 @@ get-ethereum-fullpair-by-index = (mnemonic, index, network)->
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
-    console.log data if typeof! data?text isnt \String
     return cb "expected text" if typeof! data?text isnt \String
     try
         сonsole.log \try-parse, data.text, JSON.parse
@@ -290,7 +289,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         data: data || "0x"
         chainId: chainId     
     }
-    console.log "tx-obj" tx-obj   
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
@@ -336,3 +334,12 @@ export get-peer-count = ({ network }, cb)->
     err, estimate <- make-query network, \net_getPeerCount , [ ]
     return cb err if err?
     return cb null, estimate
+    
+export get-market-history-prices = (config, cb)->
+    { network, coin } = config  
+    {market} = coin    
+    err, resp <- get market .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb err if err?
+    cb null, result
