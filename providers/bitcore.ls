@@ -405,7 +405,6 @@ get-tx-data = ({network, mintTxid, address}, cb)->
 prepare-txs = (network, [tx, ...rest], address, cb)->
     return cb null, [] if not tx?
     { mintTxid } = tx
-    console.log "tx id " mintTxid   
     err, tx-data <- get-tx-data({network, mintTxid, address})  
     t = if tx-data? then [tx-data] else []
     err, other <- prepare-txs network, rest, address    
