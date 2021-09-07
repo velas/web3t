@@ -19,6 +19,7 @@ mainnet-config =
     group: "Ethereum"
     
     FOREIGN_BRIDGE: "0x1E4f16C92026B96D5bb42045993657d8b39253E9"
+    FOREIGN_BRIDGE_TOKEN: "0x8C543AED163909142695f2d2aCd0D55791a9Edb9"
     
     /* Used in getHomeFee wallet method */    
     HOME_BRIDGE: "0x38E20F6224449eCB50A81188147cbf990a00eA44"    
@@ -45,6 +46,7 @@ testnet-config =
     
     ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"    
     FOREIGN_BRIDGE      : "0xBDeDd09D5283fB38EFF898E3859AbAE96B712aF9"
+    FOREIGN_BRIDGE_TOKEN: "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C"
     
     /* Used in getHomeFee wallet method */ 
     HOME_BRIDGE       : "0x57C7f6CD50a432943F40F987a1448181D5B11307"     
