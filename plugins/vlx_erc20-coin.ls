@@ -69,7 +69,7 @@ export color = \#9E4FEB
 export type = \coin
 export enabled = yes
 export wallet-index = 3
-export name = 'Velas'
+export name = 'Velas ERC-20'
 export token = \vlx_erc20
 export nickname = \vlx 
 export market = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=4747&range=ALL" 
