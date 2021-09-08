@@ -296,7 +296,6 @@ get-gas-estimate = ({ network, query, gas }, cb)->
     cb null, estimate-normal
     
 export create-transaction = (config, cb)-->
-    console.log "[erc20 create-transaction]"    
     { network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } = config 
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
@@ -320,7 +319,6 @@ export create-transaction = (config, cb)-->
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?   
     return cb "Not enought balance on #{fee-in} wallet to send tx with fee #{amount-fee}" if +balance < +amount-fee
-    console.log "bsc_vlx recipient" recipient   
     $data =
         | config.data? and config.data isnt "0x" => config.data    
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
