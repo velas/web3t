@@ -151,9 +151,12 @@ transform-tx = (network, description, t)-->
         | t.gas-price? => t.gas-price
         | t.gas-price + "".length is 0 => "0"
         | _ => "0"
+    tx-type = 
+        | t.from is \0x0000000000000000000000000000000000000000 => "ETHEREUM → EVM Swap"
+        | _ => null 
     fee = gas-used `times` (gas-price + "") `div` (10^18)
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description, tx-type }
     res    
 
 up = (s)->
