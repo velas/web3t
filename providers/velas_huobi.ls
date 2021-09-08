@@ -163,7 +163,7 @@ transform-tx = (network, description, t)-->
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     tx-type = 
         | t.from is \0x0000000000000000000000000000000000000000 => "EVM → HECO Swap"
-        | t.contractAddress? and t.contractAddress isnt "" and up(t.contractAddress) is up(FOREIGN_BRIDGE_TOKEN ? "") => "HECO → EVM Swap" 
+        #| t.contractAddress? and t.contractAddress isnt "" and up(t.contractAddress) is up(FOREIGN_BRIDGE_TOKEN ? "") => "HECO → EVM Swap" 
         | _ => null 
     from = t.from 
     { network, tx, status, amount, fee, time, url, from, t.to, recipient-type, description, tx-type }
