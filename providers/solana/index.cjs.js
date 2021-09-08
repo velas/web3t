@@ -11288,9 +11288,7 @@ var solanaWeb3 = (function (exports) {
 
       const seen = new Set();
       this.signatures = signers.filter(publicKey => {
-        console.log("publicKey", publicKey);
         const key = publicKey.toString();
-        console.log("key", key);
 
         if (seen.has(key)) {
           return false;
@@ -18401,7 +18399,6 @@ var solanaWeb3 = (function (exports) {
 
     async getConfirmedBlocks(start_slot, end_slot) {
         const unsafeRes = await this._rpcRequest('getConfirmedBlocks', [start_slot, end_slot]);
-        console.log("unsafeRes", unsafeRes);
         //const res = GetConfirmedBlockRpcResult(unsafeRes);
         const res = unsafeRes;
 
@@ -19276,7 +19273,6 @@ var solanaWeb3 = (function (exports) {
 
     async getConfirmedBlocksWithLimit(slot, limit) {
       const unsafeRes = await this._rpcRequest('getConfirmedBlocksWithLimit', [slot, limit]);
-      console.log("unsafeRes", unsafeRes);
       //const res = GetConfirmedBlockRpcResult(unsafeRes);
       const res = unsafeRes;
 
@@ -19635,7 +19631,6 @@ var solanaWeb3 = (function (exports) {
 
 
     async sendTransaction(transaction, signers, options) {
-      console.log("index.cjs.js [sendTransaction]");
       if (transaction.nonceInfo) {
         transaction.sign(...signers);
       } else {
