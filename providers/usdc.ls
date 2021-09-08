@@ -53,6 +53,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
+    { FOREIGN_BRIDGE } = network
     dec = get-dec network 
     network = \eth
     tx = t.hash
@@ -60,7 +61,10 @@ transform-tx = (network, t)-->
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee = t.cumulative-gas-used `times` t.gas-price `div` (10^18)
-    { network, tx, amount, fee, time, url, t.from, t.to }
+    tx-type = 
+        | up(t.from) is up(FOREIGN_BRIDGE) => "EVM → ETHEREUM Swap"
+        | _ => null 
+    { network, tx, amount, fee, time, url, t.from, t.to, tx-type }
 up = (s)->
     (s ? "").to-upper-case!
 export get-transactions = ({ network, address }, cb)->
