@@ -91,8 +91,12 @@ transform-internal-tx = (network, type, t)-->
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     { network, tx, amount, fee, time, url, t.from, t.to, status, recipient-type, description:type }
 
+up = (s)->
+    (s ? "").to-upper-case!
+
 transform-tx = (network, t)-->
     { url } = network.api
+    { HOME_BRIDGE } = network
     dec = get-dec network
     network = \eth
     tx = t.hash
@@ -102,8 +106,12 @@ transform-tx = (network, t)-->
     fee =
         | t.gasUsed? => t.gasUsed `times` t.gas-price `div` dec    
         | _ => t.cumulative-gas-used `times` t.gas-price `div` dec
+    tx-type =
+        #| up(t.from) is up(FOREIGN_BRIDGE ? "") => "EVM → ETHEREUM Swap"
+        | up(t.to) is up(HOME_BRIDGE ? "") => "ETHEREUM → EVM Swap"   
+        | _ => null 
         
-    { network, tx, amount, fee, time, url, t.from, t.to }
+    { network, tx, amount, fee, time, url, t.from, t.to, tx-type }
 
 get-internal-transactions = (config, cb)->
     { network, address } = config
