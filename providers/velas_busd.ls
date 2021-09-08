@@ -133,6 +133,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, description, t)-->
     { url } = network.api
+    { HOME_BRIDGE_TOKEN } = network
     dec = get-dec network
     network = \eth
     tx =
@@ -151,8 +152,13 @@ transform-tx = (network, description, t)-->
         | t.gas-price + "".length is 0 => "0"
         | _ => "0"
     fee = gas-used `times` (gas-price + "") `div` dec
+    console.log "t" t    
+    tx-type = 
+        | t.from is \0x0000000000000000000000000000000000000000 => "BSC → VELAS EVM Swap"
+        | t.contractAddress? and t.contractAddress isnt "" and up(t.contractAddress) is up(HOME_BRIDGE_TOKEN ? "") => "VELAS EVM → BSC Swap" 
+        | _ => null 
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description, tx-type }
     res    
 
 up = (s)->
