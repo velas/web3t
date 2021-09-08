@@ -152,7 +152,6 @@ transform-tx = (network, description, t)-->
         | t.gas-price + "".length is 0 => "0"
         | _ => "0"
     fee = gas-used `times` (gas-price + "") `div` dec
-    console.log "t" t    
     tx-type = 
         | t.from is \0x0000000000000000000000000000000000000000 => "BSC → VELAS EVM Swap"
         | t.contractAddress? and t.contractAddress isnt "" and up(t.contractAddress) is up(HOME_BRIDGE_TOKEN ? "") => "VELAS EVM → BSC Swap" 
