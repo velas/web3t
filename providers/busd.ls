@@ -133,6 +133,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, description, t)-->
     { url } = network.api
+    { FOREIGN_BRIDGE } = network
     dec = get-dec network
     network = \eth
     tx =
@@ -150,9 +151,12 @@ transform-tx = (network, description, t)-->
         | t.gas-price? => t.gas-price
         | t.gas-price + "".length is 0 => "0"
         | _ => "0"
+    tx-type = 
+        | up(t.from) is up(FOREIGN_BRIDGE) => "BSC → EVM Swap"
+        | _ => null 
     fee = gas-used `times` (gas-price + "") `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description, tx-type }
     res    
 up = (s)->
     (s ? "").to-upper-case!    
