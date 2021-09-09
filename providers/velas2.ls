@@ -144,6 +144,10 @@ round = (num)->
     Math.round +num
 to-hex = ->
     new BN(it)
+    
+up = (str)->
+    (str ? "").to-upper-case! 
+    
 transform-tx = (network, description, t)-->
     { url } = network.api
     dec = get-dec network
@@ -168,6 +172,8 @@ transform-tx = (network, description, t)-->
     tx-type =
         | t.to is "V8sA8Q5jR44E4q6S59eUhhSJQiRBBFdZA8" or t.to is "0x56454c41532d434841494e000000000053574150"
             => "Swap EVM to Native"
+        | up(t.from) is up("V8sA8Q5jR44E4q6S59eUhhSJQiRBBFdZA8") or up(t.from) is up("0x56454c41532d434841494e000000000053574150")
+            => "Native to EVM Swap"     
         | _ => null
     res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description, tx-type }
     res    
