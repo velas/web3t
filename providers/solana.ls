@@ -347,6 +347,7 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
             | type? and type not in <[ transfer assign ]> => type.to-upper-case!
             | type? and type in <[ assign ]> and receiver is "EVM1111111111111111111111111111111111111111" =>
                 "Native → EVM Swap"
+            | instructions[0]?programId is "EVM1111111111111111111111111111111111111111" => "EVM → Native Swap"   
             | _ => null
         _tx = {
             tx: hash
