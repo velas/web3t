@@ -129,8 +129,13 @@ round = (num)->
     Math.round +num
 to-hex = ->
     new BN(it)
+    
+up = (str)->
+    (str ? "").to-upper-case!    
+    
 transform-tx = (network, description, t)-->
     { url } = network.api
+    { HECO_SWAP__HOME_BRIDGE, BSC_SWAP__HOME_BRIDGE } = network 
     dec = get-dec network
     network = \eth
     tx =
@@ -148,9 +153,17 @@ transform-tx = (network, description, t)-->
         | t.gas-price? => t.gas-price
         | t.gas-price + "".length is 0 => "0"
         | _ => "0"
+    
+    tx-type =
+        | up(t.from) is up(\0x56454c41532d434841494e000000000053574150) => "Native → EVM Swap"
+        | up(t.to) is up(\0x56454c41532d434841494e000000000053574150) => "EVM → Native Swap" 
+        | up(t.to) is up(HECO_SWAP__HOME_BRIDGE) => "EVM → HECO Swap" 
+        | up(t.to) is up(BSC_SWAP__HOME_BRIDGE) => "EVM → BSC Swap"   
+        | _ => null      
+    
     fee = gas-used `times` (gas-price + "") `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+    res = { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description, tx-type }
     res    
 get-internal-transactions = (config, cb)->
     { network, address } = config   
