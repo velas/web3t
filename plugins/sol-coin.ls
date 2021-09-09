@@ -15,11 +15,11 @@ mainnet-config =
         
     HomeBridge: "0x56454c41532d434841494e000000000053574150"    
     networks:
-        evm:
-            id: "evm"
+        vlx_evm:
+            id: "vlx_evm"
             name: "Velas EVM"
             referTo: "vlx_evm"
-        legacy:
+        vlx2:
             id: "vlx2"
             name: "Velas Legacy"
             referTo: "vlx2" 
@@ -40,11 +40,11 @@ testnet-config =
         cluster: 'testnet'    
     HomeBridge: "0x56454c41532d434841494e000000000053574150"
     networks:
-        evm:
-            id: "evm"
+        vlx_evm:
+            id: "vlx_evm"
             name: "Velas EVM"
             referTo: "vlx_evm"
-        legacy:
+        vlx2:
             id: "vlx2"
             name: "Velas Legacy"
             referTo: "vlx2"

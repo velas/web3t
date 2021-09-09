@@ -17,8 +17,8 @@ export mainnet =
     BSC_SWAP__HOME_BRIDGE:  "0x24AE61B4a880573fc190a05A407033DA4cd30434"
         
     networks:           
-        native:
-            id: "native"
+        vlx_native:
+            id: "vlx_native"
             name: "Velas Native"
             referTo: "vlx_native"
         vlx_erc20:
@@ -33,7 +33,7 @@ export mainnet =
             id: "vlx_huobi"
             name: "Huobi ECO Chain (VLX HRC20)"
             referTo: "vlx_huobi"
-        legacy:
+        vlx2:
             id: "legacy"
             name: "Velas Legacy"
             referTo: "vlx2"
@@ -62,8 +62,8 @@ export testnet =
     group: "Velas"
 
     networks:
-        native:
-            id: "native"
+        vlx_native:
+            id: "vlx_native"
             name: "Velas Native"
             referTo: "vlx_native"
         vlx_erc20:
@@ -78,7 +78,7 @@ export testnet =
             id: "vlx_huobi"
             name: "Huobi ECO Chain (VLX HRC20)"
             referTo: "vlx_huobi"
-        legacy:
+        vlx2:
             id: "legacy"
             name: "Velas Legacy"
             referTo: "vlx2"       
@@ -101,12 +101,12 @@ export devnet =
     group: "Velas"
 
     networks:
-        native:
-            id: "native"
+        vlx_native:
+            id: "vlx_native"
             name: "Velas Native"
             referTo             : "vlx_native"
-        legacy:
-            id: "legacy"
+        vlx2:
+            id: "vlx2"
             name: "Velas"
             referTo             : "vlx2"
         vlx_erc20:

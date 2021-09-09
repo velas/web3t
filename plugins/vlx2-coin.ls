@@ -17,13 +17,13 @@ mainnet-config =
     ERC20BridgeToken    : "0x8C543AED163909142695f2d2aCd0D55791a9Edb9"
         
     networks:      
-        native:
-            disabled: yes
-            id: "native" 
+        vlx_native:
+            disabled: no 
+            id: "vlx_native" 
             name: "Velas Native" 
             referTo: "vlx_native"
-        evm:
-            id: "evm"    
+        vlx_evm:
+            id: "vlx_evm"    
             name: "Velas EVM"   
             referTo: "vlx_evm"
     "group": "Velas"
@@ -48,13 +48,13 @@ testnet-config =
     ERC20BridgeToken    : "0xfEFF2e74eC612A288Ae55fe9F6e40c52817a1B6C" 
     
     networks:
-        native:
-            disabled: yes
-            id: "native" 
+        vlx_native:
+            disabled: no 
+            id: "vlx_native" 
             name: "Velas Native" 
             referTo: "vlx_native"    
-        evm:
-            id: "evm"
+        vlx_evm:
+            id: "vlx_evm"
             name: "Velas EVM" 
             referTo: "vlx_evm" 
 
