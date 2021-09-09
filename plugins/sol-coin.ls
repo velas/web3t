@@ -19,6 +19,10 @@ mainnet-config =
             id: "evm"
             name: "Velas EVM"
             referTo: "vlx_evm"
+        legacy:
+            id: "vlx2"
+            name: "Velas Legacy"
+            referTo: "vlx2" 
     group: 'Velas'
 testnet-config = 
     decimals: 9
@@ -40,6 +44,10 @@ testnet-config =
             id: "evm"
             name: "Velas EVM"
             referTo: "vlx_evm"
+        legacy:
+            id: "vlx2"
+            name: "Velas Legacy"
+            referTo: "vlx2"
     group: 'Velas'
 devnet-config =
     decimals: 9
