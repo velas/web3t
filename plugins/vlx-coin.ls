@@ -79,7 +79,7 @@ export testnet =
             name: "Huobi ECO Chain (VLX HRC20)"
             referTo: "vlx_huobi"
         vlx2:
-            id: "legacy"
+            id: "vlx2"
             name: "Velas Legacy"
             referTo: "vlx2"       
         
