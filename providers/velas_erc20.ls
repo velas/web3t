@@ -337,7 +337,7 @@ export create-transaction = (config, cb)-->
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
-        gas: to-hex gas-estimate
+        gas: to-hex 300000
         to: $recipient
         from: account.address
         data:  $data
