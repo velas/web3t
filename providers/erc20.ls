@@ -25,21 +25,21 @@ is-address = (address) ->
         false
     else
         true
-export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
-    #console.log "[calc-fee]" { data }    
+export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap }, cb)->
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
-    return cb err if err?
-    from = account.address
-    err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
-    return cb err if err?
-    #console.log "[calc-fee]" { estimate } 
-    #estimate = 100000  
+    #err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    #return cb err if err?
+    #from = account.address
+    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
+    #return cb err if err?   
+    gas-estimate =  
+        | swap? => 250000
+        | _ => estimate 
     dec = get-dec network
-    res = gas-price `times` estimate
+    res = gas-price `times` gas-estimate
     val = res `div` (10^18)
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
@@ -93,10 +93,13 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ web3, fee-type }, cb)->
-    return cb null, \3000000000 if fee-type is \cheap  
-    err, price <- web3.eth.get-gas-price
-    return cb err if err?
+calc-gas-price = ({ network, web3, fee-type }, cb)->
+    #return cb null, \3000000000 if fee-type is \cheap  
+    #err, price <- web3.eth.get-gas-price
+    #return cb err if err?
+    err, price <- make-query network, \eth_gasPrice , []
+    return cb "calc gas price - err: #{err.message ? err}" if err?
+    #price = from-hex(price)
     cb null price    
 round = (num)->
     Math.round +num
@@ -114,9 +117,9 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei-eth = -> it `times` (10^18)
     to-eth = -> it `div` (10^18)
     value = to-wei amount
-    err, gas-price-bn <- calc-gas-price { network, web3, fee-type }
+    err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
-    gas-price = gas-price-bn.to-fixed!
+    #gas-price = gas-price-bn.to-fixed!
     #console.log { gas-price } 
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
     #console.log { gas-minimal }    
@@ -132,7 +135,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
-    gas-estimate = 300000 
+    gas-estimate = 250000 
     #console.log "gas-estimate" gas-estimate    
     $data =
         | data? and data isnt "0x" => data    
