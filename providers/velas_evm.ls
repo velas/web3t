@@ -1,6 +1,6 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each, sort-by, reverse }
+    \prelude-ls : { filter, map, foldl, each, sort-by, reverse, uniqueBy }
     \../math.js : { plus, minus, times, div, from-hex }
     \./superagent.js : { get, post }
     \./deps.js : { Web3, Tx, BN, hdkey, bip39 }
@@ -215,6 +215,7 @@ export get-transactions = ({ network, address }, cb)->
     all = external ++ internal
     ordered =
         all
+            |> uniqueBy (-> it.tx)
             |> sort-by (.time)
             |> reverse
     cb null, ordered

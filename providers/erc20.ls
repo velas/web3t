@@ -30,11 +30,11 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap }, c
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
-    #err, nonce <- web3.eth.get-transaction-count account.address, \pending
-    #return cb err if err?
-    #from = account.address
-    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
-    #return cb err if err?   
+    err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    return cb err if err?
+    from = account.address
+    err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
+    return cb err if err?   
     gas-estimate =  
         | swap? => 250000
         | _ => estimate 
@@ -68,14 +68,23 @@ transform-tx = (network, t)-->
     { network, tx, amount, fee, time, url, from, t.to, tx-type }
 up = (s)->
     (s ? "").to-upper-case!
-export get-transactions = ({ network, address }, cb)->
-    { api-url } = network.api
+export get-transactions = ({ network, address, token }, cb)->
+    if not token? or token.toString!.trim!.length is 0
+        console.error "ERC20 provider, [getTransactions] error: token is not defined"     
+        return cb null, []
+    if not network?api?apikey? or network?api?apikey.toString!.trim!.length is 0
+        console.error "ERC20 provider, [getTransactions] error: apikey is not defined"     
+        return cb null, []
+    search-token = 
+        | up(token) is "USDT_ERC20" => \USDT   
+        | _ => token    
+    { api-url, apikey } = network.api
     module = \account
     action = \tokentx
     startblock = 0
     endblock = 99999999
     sort = \asc
-    apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
+    #apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb err if err?
@@ -84,7 +93,7 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs =
         result.result
-            |> filter -> up(it.tokenSymbol) is \USDT 
+            |> filter -> up(it.tokenSymbol) is search-token
             |> map transform-tx network
     cb null, txs
 get-web3 = (network)->
@@ -103,13 +112,22 @@ calc-gas-price = ({ network, web3, fee-type }, cb)->
     cb null price    
 round = (num)->
     Math.round +num
+    
+get-nonce = ({ network, account }, cb)->
+    address = account.address    
+    err, nonce <- make-query network, \eth_getTransactionCount , [ address, \pending ]
+    return try-get-latest { network, account }, cb if err? and "#{err.message ? err}".index-of('not implemented') > -1
+    return cb "cannot get nonce (pending) - err: #{err.message ? err}" if err?
+    cb null, from-hex(nonce)
+    
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas, gas-price} , cb)-->
+    return cb "txFeeIn is not defined for current network" if not network?txFeeIn? or network?txFeeIn.toString!.trim!.length is 0     
     return cb "address in not correct ethereum address" if not is-address recipient
-    #console.log "[create-tx]" {gas, gas-price, amount-fee}    
+    console.log "ERC20 [create-tx]" { network, account }    
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    err, nonce <- get-nonce { account, network }
     return cb err if err?
     return cb "nonce is required" if not nonce?
     contract = get-contract-instance web3, network.address
@@ -129,7 +147,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, balance <- web3.eth.get-balance account.address
     return cb err if err?
     balance-eth = to-eth balance
-    return cb "ETH balance is not enough to send tx" if +balance-eth < +amount-fee
+    parent-token = up(network?txFeeIn)    
+    return cb "#{parent-token} balance is not enough to send tx" if +balance-eth < +amount-fee
     err, erc-balance <- get-balance { network, account.address }
     return cb err if err?
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
