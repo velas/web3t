@@ -25,19 +25,40 @@ is-address = (address) ->
         false
     else
         true
+        
+get-gas-estimate = (config, cb)->
+    { network, fee-type, account, amount, to, data, swap } = config
+    console.log {account}    
+    return cb null, "0" if +amount is 0
+    return cb null, "0" if (+account?balance ? 0) is 0    
+    err, nonce <- get-nonce { account, network }
+    return cb err if err?
+    from = account.address
+    nonce = "0x" + to-hex nonce
+    web3 = get-web3 network
+    contract = get-contract-instance web3, network.address
+    receiver = 
+        | data? and data isnt "0x" => to    
+        | _ => network.address    
+    $data =
+        | data? and data isnt "0x" => data    
+        | contract.methods? => contract.methods.transfer(network.address, amount).encodeABI!
+        | _ => contract.transfer.get-data network.address, amount   
+    query = { from, nonce, to: receiver, data: $data }  
+    err, estimate <- make-query network, \eth_estimateGas , [ query ]
+    console.error "[getGasEstimate] error:" err if err?   
+    return cb null, "0" if err?    
+    console.log "estimate" estimate  
+    cb null, from-hex(estimate)
+        
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap }, cb)->
+    console.log "calcFee" { to, data}
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
+    return cb err if err?    
+    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data, swap }  
     return cb err if err?
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
-    return cb err if err?
-    from = account.address
-    err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
-    return cb err if err?   
-    gas-estimate =  
-        | swap? => 250000
-        | _ => estimate 
     dec = get-dec network
     res = gas-price `times` gas-estimate
     val = res `div` (10^18)
@@ -102,13 +123,10 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ network, web3, fee-type }, cb)->
-    #return cb null, \3000000000 if fee-type is \cheap  
-    #err, price <- web3.eth.get-gas-price
-    #return cb err if err?
+calc-gas-price = ({ network, web3, fee-type }, cb)->  
     err, price <- make-query network, \eth_gasPrice , []
     return cb "calc gas price - err: #{err.message ? err}" if err?
-    #price = from-hex(price)
+    price = from-hex(price)
     cb null price    
 round = (num)->
     Math.round +num
@@ -116,11 +134,12 @@ round = (num)->
 get-nonce = ({ network, account }, cb)->
     address = account.address    
     err, nonce <- make-query network, \eth_getTransactionCount , [ address, \pending ]
-    return try-get-latest { network, account }, cb if err? and "#{err.message ? err}".index-of('not implemented') > -1
+    #return try-get-latest { network, account }, cb if err? and "#{err.message ? err}".index-of('not implemented') > -1
     return cb "cannot get nonce (pending) - err: #{err.message ? err}" if err?
     cb null, from-hex(nonce)
     
-export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas, gas-price} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas, gas-price, swap} , cb)-->
+    console.log "[create-transaction]"    
     return cb "txFeeIn is not defined for current network" if not network?txFeeIn? or network?txFeeIn.toString!.trim!.length is 0     
     return cb "address in not correct ethereum address" if not is-address recipient
     console.log "ERC20 [create-tx]" { network, account }    
@@ -138,11 +157,12 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?
     #gas-price = gas-price-bn.to-fixed!
-    #console.log { gas-price } 
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
-    #console.log { gas-minimal }    
     gas-estimate = round ( gas-minimal `times` 5 )
-    #console.log { gas-estimate }    
+   
+    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, swap }  
+    return cb err if err?
+      
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance account.address
     return cb err if err?
@@ -154,8 +174,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
-    gas-estimate = 250000 
-    #console.log "gas-estimate" gas-estimate    
     $data =
         | data? and data isnt "0x" => data    
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!

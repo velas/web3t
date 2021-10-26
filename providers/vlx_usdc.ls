@@ -109,8 +109,7 @@ get-gas-estimate = ({ network, query, gas }, cb)->
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
     return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
-    #dec = get-dec network
-    dec = 10^18      
+    dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     data-parsed =
