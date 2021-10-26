@@ -46,12 +46,10 @@ get-gas-estimate = (config, cb)->
         | contract.methods? => contract.methods.transfer(to, value).encodeABI!
         | _ => contract.transfer.get-data to, value   
         
-    console.log "1. get-gas-estimate data " $data    
     query = { from, to: receiver, data: $data, value: "0x0" }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     console.error "[getGasEstimate] error:" err if err?   
     return cb null, "0" if err?    
-    console.log "estimate" estimate  
     cb null, from-hex(estimate)
         
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap }, cb)->

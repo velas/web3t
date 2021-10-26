@@ -101,23 +101,31 @@ export get-transaction-info = (config, cb)->
         | _ => \pending
     result = { tx-data?from, tx-data?to, status, info: tx }
     cb null, result
+    
 get-gas-estimate = (config, cb)->
-    { network, fee-type, account, amount, to, data } = config
+    { network, fee-type, account, amount, to, data, swap } = config
     return cb null, "0" if +amount is 0
-    return cb null, "0" if (+account?balance ? 0) is 0    
+    return cb null, "0" if (+account?balance ? 0) is 0  
+    dec = get-dec network     
     from = account.address
     web3 = get-web3 network
     contract = get-contract-instance web3, network.address
     receiver = 
         | data? and data isnt "0x" => to    
-        | _ => network.address    
+        | _ => network.address 
+        
+    val = +(amount `times` dec)    
+    value = "0x" + val.toString(16)
+        
     $data =
         | data? and data isnt "0x" => data    
-        | contract.methods? => contract.methods.transfer(network.address, amount).encodeABI!
-        | _ => contract.transfer.get-data network.address, amount   
-    query = { from, to: receiver, data: $data }  
+        | contract.methods? => contract.methods.transfer(to, value).encodeABI!
+        | _ => contract.transfer.get-data to, value   
+        
+    query = { from, to: receiver, data: $data, value: "0x0" }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    return cb err if err? 
+    console.error "[getGasEstimate] error:" err if err?   
+    return cb null, "0" if err?    
     cb null, from-hex(estimate)
     
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
