@@ -241,7 +241,7 @@ export get-transactions = ({ network, address, token }, cb)->
     txs =
         result.result
             |> filter -> 
-                up(it.contract-address) is up(network.address) and up(it.tokenSymbol) is $token
+                up(it.contract-address) is up(network.address)
             |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs

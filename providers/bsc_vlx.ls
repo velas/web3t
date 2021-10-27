@@ -237,10 +237,10 @@ export get-transactions = ({ network, address, token }, cb)->
     $token =
         | token is \bsc_vlx => \VLX
         | _ => token 
-    $token = up($token)     
+    $token = up($token) 
     txs =
         result.result
-            |> filter -> up(it.contract-address) is up(network.address) and up(it.tokenSymbol) is $token
+            |> filter -> up(it.contract-address) is up(network.address)
             |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs
