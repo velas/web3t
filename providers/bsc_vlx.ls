@@ -220,7 +220,7 @@ get-external-transactions = ({ network, address }, cb)->
 up = (s)->
     (s ? "").to-upper-case!
     
-export get-transactions = ({ network, address }, cb)->
+export get-transactions = ({ network, address, token }, cb)->
     { api-url } = network.api
     module = \account
     action = \tokentx
@@ -234,10 +234,13 @@ export get-transactions = ({ network, address }, cb)->
     err, result <- json-parse resp.text
     return cb err if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
-        
+    $token =
+        | token is \bsc_vlx => \VLX
+        | _ => token 
+    $token = up($token)     
     txs =
         result.result
-            |> filter -> up(it.contract-address) is up(network.address) and up(it.tokenSymbol) is \VLX
+            |> filter -> up(it.contract-address) is up(network.address) and up(it.tokenSymbol) is $token
             |> uniqueBy (-> it.hash)
             |> map transform-tx network, 'external' 
     cb null, txs
