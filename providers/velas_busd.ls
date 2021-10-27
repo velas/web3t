@@ -129,7 +129,7 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap, gas
     return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
     dec = get-dec network
-    err, gas-price <- calc-gas-price { network, web3, fee-type, gas-price }
+    err, gas-price <- calc-gas-price { network, fee-type, gas-price }
     return cb err if err?  
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data, swap }  
     return cb err if err?
