@@ -26,7 +26,7 @@
     },
     api: {
       provider: 'bnb',
-      web3Provider: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+      web3Provider: 'https://data-seed-prebsc-1-s2.binance.org:8545',
       url: 'https://testnet.bscscan.com',
       apiUrl: 'https://api-testnet.bscscan.com/api'
     }
