@@ -139,7 +139,6 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?   
     err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data }
-    console.log "VLX ERC20 calc-fee" err, estimate   
     res = gas-price `times` estimate
     val = res `div` dec
     cb null, val
@@ -332,12 +331,10 @@ export create-transaction = (config, cb)-->
         | swap? => contract.transferAndCall.get-data(recipient, value, "0x") 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!      
         | _ => contract.transfer.get-data(recipient, value) 
-    console.log "[create-transaction] $data" $data    
     
     $recipient =
         | data? and data isnt "0x" => recipient
         | _ => network.address  
-    console.log "[create-transaction] $recipient" $recipient    
         
     configs = 
         nonce: to-hex nonce

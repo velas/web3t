@@ -278,7 +278,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to = 
         | data? and data isnt "0x" => recipient    
         | _ => network.address
-    console.log "last gas-estimate" gas-estimate    
         
     tx-obj = {
         nonce: to-hex nonce
