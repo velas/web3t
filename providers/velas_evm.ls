@@ -308,6 +308,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     gas-price = buffer.gas-price
     if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
+    gas-price = "3000000000" if 3000000000 < gas-price
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
