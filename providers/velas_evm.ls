@@ -114,7 +114,6 @@ get-gas-estimate = (config, cb)->
         
     query = { from, to, data: $data, value }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    console.log "estimate" estimate    
     console.error "[getGasEstimate] error:" err if err?   
     return cb null, "1000000" if err?    
     cb null, from-hex(estimate)

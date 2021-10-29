@@ -131,9 +131,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
-    console.log "gas-price " gas-price     
     err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data }
-    console.log "gas-estimate " estimate
     estimate = 
         | estimate? => from-hex estimate
         | _ => 60000    

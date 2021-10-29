@@ -53,7 +53,6 @@ get-gas-estimate = (config, cb)->
     cb null, from-hex(estimate)
         
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap }, cb)->
-    console.log "calcFee" { to, data}
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
@@ -140,10 +139,8 @@ get-nonce = ({ network, account }, cb)->
     cb null, from-hex(nonce)
     
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas, gas-price, swap} , cb)-->
-    console.log "[create-transaction]"    
     return cb "txFeeIn is not defined for current network" if not network?txFeeIn? or network?txFeeIn.toString!.trim!.length is 0     
     return cb "address in not correct ethereum address" if not is-address recipient
-    console.log "ERC20 [create-tx]" { network, account }    
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -180,7 +177,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
     #console.log \tx-build, { nonce, gas-price, gas-estimate, to: network.address, account.address, data }
-    console.log "2. create tx data:" $data    
     to = 
         | data? and data isnt "0x" => recipient    
         | _ => network.address    

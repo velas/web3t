@@ -129,7 +129,6 @@ get-gas-estimate = (config, cb)->
     cb null, from-hex(estimate)
     
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
-    console.log "calcFee" { to, data}
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
