@@ -10,6 +10,7 @@ require! {
     \ethereumjs-common : { default: Common }
     \../addresses.js : { vlxToEth, ethToVlx }
     \crypto-js/sha3 : \sha3
+    \bignumber.js     
 }
 isChecksumAddress = (address) ->
     address = address.replace '0x', ''
@@ -306,9 +307,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
     gas-price = buffer.gas-price
-    if fee-type is \custom or !gas-price
+    if fee-type is \custom or !gas-price  
         gas-price = (amount-fee `times` dec) `div` gas-estimate
-    gas-price = "3000000000" if 3000000000 < gas-price
+        gas-price = new bignumber(gas-price).toFixed(0)    
+    #gas-price = "3000000000" if 3000000000 < gas-price
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
