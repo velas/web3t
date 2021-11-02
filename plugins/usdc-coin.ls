@@ -7,7 +7,7 @@ export mainnet =
         cheap: \0.002
     api:
         provider: \usdc
-        web3Provider : \https://mainnet.infura.io/v3/009278d1b77a4af48536f1f772926648
+        web3Provider : \https://mainnet.infura.io/v3/c75baa90ba0d4ee0a037e886a15584f4
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
     group: 'Ethereum'
