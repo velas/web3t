@@ -167,7 +167,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     if fee-type is \custom or !gas-price  
         gas-price = (amount-fee `times` (10^18)) `div` gas-estimate
         gas-price = new bignumber(gas-price).toFixed(0)
-        console.log "custom" {gas-price}  
     
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance from
