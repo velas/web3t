@@ -52,7 +52,9 @@ transform-tx = (network, t)-->
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
+    fee = 
+        | t.gasUsed? => t.gasUsed `times` t.gas-price `div` (10^18)    
+        | _=> t.cumulative-gas-used `times` t.gas-price `div` (10^18) 
     from = 
         | _ => t.from
     { network, tx, amount, fee, time, url, from, t.to }
