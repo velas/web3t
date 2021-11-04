@@ -172,7 +172,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, balance <- web3.eth.get-balance from
     return cb err if err?
     balance-eth = to-eth balance
-    return cb "Balance is not enough to send tx" if +balance-eth < +amount-fee
+    parent-token = 
+        | network?txFeeIn is \vlx2 => "Velas Legacy" 
+        | _ => "Velas EVM"   
+    return cb "#{parent-token} balance is not enough to send tx" if +balance-eth < +amount-fee
     err, erc-balance <- get-balance { network, address: from }
     return cb err if err?
     return cb "Balance is not enough to send this amount" if +erc-balance < +amount
