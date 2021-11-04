@@ -253,6 +253,12 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance-eth = to-eth balance
     to-send = amount
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
+    
+    web3 = get-web3 network
+    err, bnb-balance <- web3.eth.get-balance account.address
+    return cb err if err?
+    bnb-balance-eth = to-eth bnb-balance
+    return cb "BNB balance is not enough to send tx" if +bnb-balance-eth < +amount-fee
 
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, swap }  
     return cb err if err?
