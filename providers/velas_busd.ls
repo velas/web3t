@@ -253,7 +253,14 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     
     balance-eth = to-eth balance
     to-send = amount
-    return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send 
+    return cb "Balance is not enough to send tx #{to-send}" if +balance-eth < +to-send 
+    
+    web3 = get-web3 network
+    err, vlx-evm-balance <- web3.eth.get-balance account.address
+    return cb err if err?
+    vlx-evm-balance-eth = to-eth vlx-evm-balance
+    return cb "Velas EVM balance (#{vlx-evm-balance-eth}) is not enough to send tx" if +vlx-evm-balance-eth < +amount-fee
+    
     data-parsed =
         | data? => data
         | _ => '0x'
