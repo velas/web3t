@@ -259,7 +259,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     bnb-balance-eth = to-eth bnb-balance
     return cb "BNB balance is not enough to send tx" if +bnb-balance-eth < +amount-fee
-    console.log "BUSD" {amount}   
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, swap }  
     return cb err if err?
     
