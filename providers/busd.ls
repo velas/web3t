@@ -259,7 +259,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     bnb-balance-eth = to-eth bnb-balance
     return cb "BNB balance is not enough to send tx" if +bnb-balance-eth < +amount-fee
-
+    console.log "BUSD" {amount}   
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, swap }  
     return cb err if err?
     
@@ -284,12 +284,19 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to = 
         | data? and data isnt "0x" => recipient    
         | _ => network.address
-        
+    
+    one-percent = gas-estimate `times` "0.01"    
+    $gas-estimate = gas-estimate `plus` one-percent
+    res = $gas-estimate.split(".")   
+    $gas-estimate = 
+        | res.length is 2 => res.0
+        | _ => $gas-estimate 
+           
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
-        gas: to-hex gas-estimate
+        gas: to-hex $gas-estimate
         to: to   
         from: address
         data: $data
