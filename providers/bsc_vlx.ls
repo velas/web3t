@@ -335,13 +335,20 @@ export create-transaction = (config, cb)-->
         | _ => network.address
         
     err, estimate <- get-gas-estimate { network, fee-type, account, amount, to: recipient, data, swap }
-    return cb err if err? 
+    return cb err if err?
+    
+    one-percent = estimate `times` "0.01"    
+    $estimate = estimate `plus` one-percent
+    res = $estimate.split(".")   
+    $estimate = 
+        | res.length is 2 => res.0
+        | _ => $estimate  
           
     configs = 
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
-        gas: to-hex estimate
+        gas: to-hex $estimate
         to: to
         from: account.address
         data: $data   
