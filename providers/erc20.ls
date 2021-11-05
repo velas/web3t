@@ -160,6 +160,13 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
    
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, swap }  
     return cb err if err?
+    
+    one-percent = gas-estimate `times` "0.01"    
+    $gas-estimate = gas-estimate `plus` one-percent
+    res = $gas-estimate.split(".")   
+    $gas-estimate = 
+        | res.length is 2 => res.0
+        | _ => $gas-estimate  
       
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance account.address
@@ -184,7 +191,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
-        gas: to-hex gas-estimate
+        gas: to-hex $gas-estimate
         to: to   
         from: account.address
         data: $data || \0x

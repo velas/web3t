@@ -162,6 +162,13 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, gas-estimate <- get-gas-estimate { network, fee-type, account, amount, to: recipient, data }  
     return cb err if err?
     
+    one-percent = gas-estimate `times` "0.01"    
+    $gas-estimate = gas-estimate `plus` one-percent
+    res = $gas-estimate.split(".")   
+    $gas-estimate = 
+        | res.length is 2 => res.0
+        | _ => $gas-estimate 
+    
     gas-price = buffer.gas-price
     
     if fee-type is \custom or !gas-price  
@@ -194,7 +201,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex "0"
-        gas: to-hex gas-estimate
+        gas: to-hex $gas-estimate
         to: $recipient
         from: from
         data: $data || \0x
