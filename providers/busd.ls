@@ -122,7 +122,7 @@ get-gas-estimate = (config, cb)->
     query = { from, to: receiver, data: $data, value: "0x0" }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     console.error "[getGasEstimate] error:" err if err?   
-    return cb null, "0" if err?    
+    return cb err if err?    
     cb null, from-hex(estimate)
     
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas, swap }, cb)->
@@ -132,7 +132,9 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?   
     err, gas-estimate <- get-gas-estimate { network, fee-type, account, amount, to, data, swap } 
-    return cb err if err?
+    gas-estimate = 
+        | err? => network.tx-fee
+        | _ => gas-estimate  
     res = gas-price `times` gas-estimate
     val = res `div` dec
     cb null, val
@@ -281,7 +283,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     
     if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
-        gas-price = $round(gas-price)    
+        gas-price = $round(gas-price) `plus` "1"   
         
         
     $data =
