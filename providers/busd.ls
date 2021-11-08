@@ -100,8 +100,8 @@ export get-transaction-info = (config, cb)->
     cb null, result
     
 get-gas-estimate = (config, cb)->
-    { network, fee-type, account, amount, to, data } = config    
-    #return cb null, "0" if (+account?balance ? 0) is 0 
+    { network, fee-type, account, amount, to, data, gas } = config    
+    return cb null, gas if gas?    
     dec = get-dec network  
     return cb null, "0" if +amount is 0     
     from = account.address
@@ -266,7 +266,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     bnb-balance-eth = to-eth bnb-balance
     return cb "BNB balance is not enough to send tx" if +bnb-balance-eth < +amount-fee
-    err, gas-estimate <- get-gas-estimate { network, fee-type, account, amount, to: recipient, data }  
+    err, gas-estimate <- get-gas-estimate { network, fee-type, account, amount, to: recipient, data, gas }  
     return cb err if err?
     
     err, chainId <- make-query network, \eth_chainId , []

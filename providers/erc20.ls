@@ -27,9 +27,8 @@ is-address = (address) ->
         true
         
 get-gas-estimate = (config, cb)->
-    { network, fee-type, account, amount, to, data, swap } = config
-    return cb null, "0" if +amount is 0
-    #return cb null, "0" if (+account?balance ? 0) is 0  
+    { network, fee-type, account, amount, to, data, gas } = config    
+    return cb null, gas if gas?
     dec = get-dec network     
     from = account.address
     web3 = get-web3 network
