@@ -225,6 +225,13 @@ is-address = (address) ->
         false
     else
         true
+        
+$round = (it)->
+    res = (it ? "").split(".")   
+    result = 
+        | res.length is 2 => res.0
+        | _ => it     
+        
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas, swap } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
@@ -274,6 +281,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     
     if fee-type is \custom or !gas-price
         gas-price = (amount-fee `times` dec) `div` gas-estimate
+        gas-price = $round(gas-price)    
+        
         
     $data =
         | data? and data isnt "0x" => data    
