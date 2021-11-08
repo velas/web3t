@@ -51,9 +51,10 @@ get-gas-estimate = (config, cb)->
         
     query = { from, to: receiver, data: $data, value: "0x0" }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    console.error "[getGasEstimate] error:" err if err?   
-    return cb null, "1000000" if err?    
-    cb null, from-hex(estimate) `div` '2'     
+    console.error "[getGasEstimate] error:" err if err?  
+    return cb null, "1000000" 
+    #return cb null, "1000000" if err?    
+    #cb null, from-hex(estimate) `div` '2'     
     
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
     #return cb null if typeof! to isnt \String or to.length is 0
