@@ -105,7 +105,7 @@ export get-transaction-info = (config, cb)->
 get-gas-estimate = (config, cb)->
     { network, fee-type, account, amount, to, data, swap } = config
     return cb null, "0" if +amount is 0
-    return cb null, "0" if (+account?balance ? 0) is 0  
+    #return cb null, "0" if (+account?balance ? 0) is 0  
     dec = get-dec network     
     from = account.address
     web3 = get-web3 network
@@ -134,7 +134,7 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
     err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?    
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data }  
-    return cb err if err?
+    return cb null, network.tx-fee if err?
     dec = get-dec network
     res = gas-price `times` gas-estimate
     val = res `div` (10^18)
