@@ -45,8 +45,8 @@ get-gas-estimate = (config, cb)->
     value = $toHex(val) 
     query = { from, to, data: $data, value }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    console.error "get-gas-estimate error:" err if err?
-    return cb null, "0" if err?     
+    console.error "[getGasEstimate] error:" err if err?   
+    return cb err if err?    
     cb null, from-hex(estimate)
     
 export calc-fee = ({ network, fee-type, account, amount, to, data, swap }, cb)->
@@ -65,7 +65,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, swap }, cb)->
     from = account.address
     query = { from, to: account.address, data: data-parsed }
     err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data: data-parsed, swap } 
-    #estimate = 24000 
+    return cb null, network.tx-fee if err? 
     res = gas-price `times` estimate
     val = res `div` dec
     fee = new bignumber(val).to-fixed(8)
