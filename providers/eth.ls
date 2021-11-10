@@ -49,7 +49,7 @@ get-gas-estimate = (config, cb)->
     return cb err if err?    
     cb null, from-hex(estimate)
     
-export calc-fee = ({ network, fee-type, account, amount, to, data, swap }, cb)->
+export calc-fee = ({ network, fee-type, account, amount, to, data, gas }, cb)->
     return cb null if fee-type isnt \auto
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network }
@@ -64,11 +64,11 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, swap }, cb)->
         | _ => '0x'
     from = account.address
     query = { from, to: account.address, data: data-parsed }
-    err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data: data-parsed, swap } 
+    err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data: data-parsed, gas } 
     return cb null, network.tx-fee if err? 
     res = gas-price `times` estimate
     val = res `div` dec
-    fee = new bignumber(val).to-fixed(8)
+    fee = new bignumber(val).to-fixed(18)
     cb null, fee
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-ethereum-fullpair-by-index mnemonic, index, network
@@ -238,9 +238,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
  
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data }  
     return cb err if err?
-         
-    #nonce = 0
-    #console.log { nonce, gas-price, value, gas-estimate, recipient, account.address, data }
+
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
     tx = new Tx do
