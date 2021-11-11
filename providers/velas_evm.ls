@@ -101,7 +101,7 @@ export get-transaction-info = (config, cb)->
 get-gas-estimate = (config, cb)->
     { network, fee-type, account, amount, to, data } = config
     return cb null, "0" if +amount is 0
-    return cb null, "0" if (+account?balance ? 0) is 0  
+    #return cb null, "0" if (+account?balance ? 0) is 0  
     dec = get-dec network     
     from = config.account.address
         

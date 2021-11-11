@@ -27,9 +27,8 @@ is-address = (address) ->
         true
         
 get-gas-estimate = (config, cb)->
-    { network, fee-type, account, amount, to, data, swap } = config
-    return cb null, "0" if +amount is 0
-    return cb null, "0" if (+account?balance ? 0) is 0  
+    { network, fee-type, account, amount, to, data, gas } = config    
+    return cb null, gas if gas?
     dec = get-dec network     
     from = account.address
     web3 = get-web3 network
@@ -49,16 +48,16 @@ get-gas-estimate = (config, cb)->
     query = { from, to: receiver, data: $data, value: "0x0" }  
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
     console.error "[getGasEstimate] error:" err if err?   
-    return cb null, "0" if err?    
+    return cb err if err?     
     cb null, from-hex(estimate)
         
-export calc-fee = ({ network, tx, fee-type, account, amount, to, data, swap }, cb)->
+export calc-fee = ({ network, tx, fee-type, account, amount, to, data, gas }, cb)->
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
     err, gas-price <- calc-gas-price { network, web3, fee-type }
     return cb err if err?    
-    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data, swap }  
-    return cb err if err?
+    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data, gas }  
+    return cb null, network.tx-fee if err?
     dec = get-dec network
     res = gas-price `times` gas-estimate
     val = res `div` (10^18)
@@ -156,7 +155,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb err if err?
     #gas-price = gas-price-bn.to-fixed!
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
-    gas-estimate = round ( gas-minimal `times` 5 )
+    #gas-estimate = round ( gas-minimal `times` 5 )
    
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, swap }  
     return cb err if err?
