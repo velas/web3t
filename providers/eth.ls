@@ -93,8 +93,8 @@ transform-internal-tx = (network, type, t)-->
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    { gas-used, cumulativeGasUsed, effectiveGasPrice, status } = t.more-info.info
-    fee = cumulativeGasUsed `times` effectiveGasPrice `div` dec
+    { gas-used, cumulativeGasUsed, effectiveGasPrice, status } = t?more-info?info
+    fee = (cumulativeGasUsed ? t?gas-used) `times` (effectiveGasPrice ? 0) `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
     { network, tx, amount, fee, time, url, t.from, t.to, status, recipient-type, description:type }
 
