@@ -21,7 +21,7 @@ isChecksumAddress = (address) ->
         i++
     true
 isAddress = (address) ->
-    if not //^(0x)?[0-9a-f]{40}$//i.test address
+    if not (//^(0x)?[0-9a-f]{40}$//i.test address)
         false
     else
         if (//^(0x)?[0-9a-f]{40}$//.test address) or //^(0x)?[0-9A-F]{40}$//.test address then true else isChecksumAddress address
@@ -48,8 +48,8 @@ to-eth-address = (velas-address, cb)->
     #     cb err
 window?to-eth-address = vlxToEth if window?
 export isValidAddress =  ({ address }, cb)->
-    err <- to-eth-address address
-    return cb "Given address is not valid Velas address" if err?
+    isValid = is-address address
+    return cb "Given address is not valid Velas EVM address" if not isValid
     cb null, yes
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
@@ -249,16 +249,14 @@ calc-gas-price = ({ fee-type, network, gas-price }, cb)->
     cb null, price
     
 try-get-latest = ({ network, account }, cb)->
-    err, address <- to-eth-address account.address
-    return cb err if err?
+    address = account.address
     err, nonce <- make-query network, \eth_getTransactionCount , [ address, "latest" ]
     return cb "cannot get nonce (latest) - err: #{err.message ? err}" if err?
     next = +from-hex(nonce)
     cb null, next
 get-nonce = ({ network, account }, cb)->
     #err, nonce <- web3.eth.get-transaction-count
-    err, address <- to-eth-address account.address
-    return cb err if err?
+    address = account.address
     err, nonce <- make-query network, \eth_getTransactionCount , [ address, \pending ]
     return try-get-latest { network, account }, cb if err? and "#{err.message ? err}".index-of('not implemented') > -1
     return cb "cannot get nonce (pending) - err: #{err.message ? err}" if err?
@@ -268,12 +266,9 @@ is-address = (address) ->
         false
     else
         true
-export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
-    #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->    
     dec = get-dec network
-    err, $recipient <- to-eth-address recipient
-    return cb err if err?
-    return cb "address is not correct ethereum address" if not is-address $recipient
+    return cb "Address is not correct Velas EVM address" if not is-address recipient
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- get-nonce { account, network }
     return cb err if err?
@@ -284,9 +279,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     buffer.gas-price = gas-price
-    err, address <- to-eth-address account.address
-    return cb err if err?
-    err, balance <- make-query network, \eth_getBalance , [ address, \latest ]
+
+    err, balance <- make-query network, \eth_getBalance , [ account.address, \latest ]
     return cb err if err?
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
@@ -298,8 +292,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     data-parsed =
         | data? => data
         | _ => '0x'
-    query = { from: address, to: $recipient, data: data-parsed }
-    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: $recipient, data } 
+    query = { from: account.address, to: recipient, data: data-parsed }
+    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data } 
     return cb err if err?
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
@@ -316,8 +310,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         gas-price: to-hex gas-price
         value: to-hex value
         gas: to-hex gas-estimate
-        to: $recipient
-        from: address
+        to: recipient
+        from: account.address
         data: data || "0x"
         chainId: chainId     
     }
