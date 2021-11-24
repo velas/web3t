@@ -284,7 +284,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         | data? => data
         | _ => '0x'
     query = { from: address, to: $recipient, data: data-parsed }
-    err, gas-estimate <- get-gas-estimate { network, query, gas }
+    err, gas-estimate <- get-gas-estimate { network, fee-type, account, amount, to: recipient, data }
     return cb err if err?
     err, chainId <- make-query network, \eth_chainId , []
     return cb err if err?
