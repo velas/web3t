@@ -64,7 +64,6 @@ try-parse = (data, cb)->
     return cb null, data if typeof! data.body is \Object
     return cb "expected text" if typeof! data?text isnt \String
     try
-        сonsole.log \try-parse, data.text, JSON.parse
         data.body = JSON.parse data.text
         cb null, data
     catch err
@@ -136,7 +135,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     val = res `div` dec
     #min = 0.002
     #return cb null, min if +val < min
-    cb null, val
+    cb null, { calced-fee: val, gas-price, gas-estimate: estimate }
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-ethereum-fullpair-by-index mnemonic, index, network
     cb null, result
