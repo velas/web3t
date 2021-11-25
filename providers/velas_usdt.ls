@@ -149,7 +149,7 @@ calc-gas-price = ({ network, fee-type, gas-price }, cb)->
     
 round = (num)->
     Math.round +num
-export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas-price} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, data, gas, gas-price} , cb)-->
     return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
     dec = get-dec network
