@@ -123,7 +123,7 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ network, web3, fee-type }, cb)->  
+calc-gas-price = ({ network, fee-type, gas-price }, cb)->  
     return cb null, gas-price if gas-price?    
     err, price <- make-query network, \eth_gasPrice , []
     return cb "calc gas price - err: #{err.message ? err}" if err?
