@@ -57,9 +57,12 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     return cb null if fee-type isnt \auto
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
-    return cb err if err?   
-    err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data, gas }
-    return cb null, network.tx-fee if err?   
+    return cb err if err? 
+    console.log "gas price calc!"  
+    web3 = get-web3 network    
+    #err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data, gas }
+    err, estimate <- web3.eth.estimate-gas { from: account.address, to: null, data: "0x" }
+    return cb null, { calced-fee: network.tx-fee, gas-price } if err?   
     res = gas-price `times` estimate
     val = res `div` (10^18)
     cb null, { calced-fee: val, gas-price, gas-estimate: estimate }
@@ -165,9 +168,9 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     value = to-wei amount
     err, gas-price <- calc-gas-price { network, fee-type, gas-price }
     return cb err if err?
-    err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to: recipient, data, gas }  
-    return cb err if err?
-       
+    gas-minimal = to-wei-eth(amount-fee) `div` gas-price
+    gas-estimate = round ( gas-minimal `times` 5 )
+    gas-estimate = 1000000    
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance from
     return cb err if err?
