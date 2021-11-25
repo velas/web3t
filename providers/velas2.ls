@@ -143,16 +143,14 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
     err, from <- to-eth-address account.address
     console.error "calc-fee from address #{err}" if err?
     return cb "Given address is not valid Velas address" if err?
-    err, to <- to-eth-address to
-    console.error "calc-fee from address #{err}" if err?
-    return cb "Given address is not valid Velas address" if err?
+    #err, to <- to-eth-address to
+    #console.error "calc-fee from address #{err}" if err?
+    #return cb "Given address is not valid Velas address" if err?
     query = { from, to, data: data-parsed }
     err, estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data }
-    return cb err if err?
+    return cb null, { calced-fee: network.tx-fee, gas-price } if err?   
     res = gas-price `times` estimate
     val = res `div` dec
-    #min = 0.002
-    #return cb null, min if +val < min
     cb null, { calced-fee: val, gas-price, gas-estimate: estimate }
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-ethereum-fullpair-by-index mnemonic, index, network
