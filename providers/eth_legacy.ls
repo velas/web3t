@@ -114,7 +114,7 @@ export get-transactions = ({ network, address }, cb)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ fee-type, network }, cb)->
+calc-gas-price = ({ fee-type, network, gas-price }, cb)->
     return cb null, \3000000000 if fee-type is \cheap
     return cb null, gas-price if gas-price?    
     err, price <- make-query network, \eth_gasPrice , []
