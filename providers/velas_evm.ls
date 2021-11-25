@@ -129,8 +129,9 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
         | _ => '0x'
     from = account.address
     query = { from, to, data: data-parsed }
+    console.log "evm" query    
     err, estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data }  
-    return cb err if err?
+    return cb null, { calced-fee: network.tx-fee, gas-price } if err?   
     res = gas-price `times` estimate
     val = res `div` dec
     #min = 0.002
@@ -223,9 +224,10 @@ export get-transactions = ({ network, address }, cb)->
     page = 1
     offset = 20
     err, external <- get-external-transactions { network, address, page, offset }
-    return cb err if err?
+    console.log {err, external}
+    external = [] if err?
     err, internal <- get-internal-transactions { network, address, page, offset }
-    return cb err if err?
+    internal = [] if err?
     all = external ++ internal
     ordered =
         all

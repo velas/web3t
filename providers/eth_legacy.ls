@@ -62,7 +62,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas, gas-pric
     from = account.address
     query = { from, to: account.address, data: data-parsed }
     err, estimate <- get-gas-estimate { network, fee-type, account, amount, to, data: data-parsed, gas } 
-    return cb null, network.tx-fee if err? 
+    return cb null, { calced-fee: network.tx-fee, gas-price } if err?   
     res = gas-price `times` estimate
     val = res `div` dec
     fee = new bignumber(val).to-fixed(18)

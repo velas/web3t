@@ -57,7 +57,7 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data, gas, gas-
     err, gas-price <- calc-gas-price { network, fee-type, gas-price }
     return cb err if err?    
     err, gas-estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data, gas }  
-    return cb null, network.tx-fee if err?
+    return cb null, { calced-fee: network.tx-fee, gas-price } if err?   
     dec = get-dec network
     res = gas-price `times` gas-estimate
     val = res `div` (10^18)
