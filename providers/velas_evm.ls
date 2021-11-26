@@ -64,7 +64,6 @@ try-parse = (data, cb)->
     return cb null, data if typeof! data.body is \Object
     return cb "expected text" if typeof! data?text isnt \String
     try
-        сonsole.log \try-parse, data.text, JSON.parse
         data.body = JSON.parse data.text
         cb null, data
     catch err
@@ -120,7 +119,7 @@ get-gas-estimate = (config, cb)->
     cb null, from-hex(estimate)
     
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
-    return cb null if typeof! to isnt \String or to.length is 0
+    #return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
@@ -130,13 +129,14 @@ export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, ga
         | _ => '0x'
     from = account.address
     query = { from, to, data: data-parsed }
+    console.log "evm" query    
     err, estimate <- get-gas-estimate { network,  fee-type, account, amount, to, data }  
-    return cb err if err?
+    return cb null, { calced-fee: network.tx-fee, gas-price } if err?   
     res = gas-price `times` estimate
     val = res `div` dec
     #min = 0.002
     #return cb null, min if +val < min
-    cb null, val
+    cb null, { calced-fee: val, gas-price, gas-estimate: estimate }
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-ethereum-fullpair-by-index mnemonic, index, network
     cb null, result
@@ -224,9 +224,10 @@ export get-transactions = ({ network, address }, cb)->
     page = 1
     offset = 20
     err, external <- get-external-transactions { network, address, page, offset }
-    return cb err if err?
+    console.log {err, external}
+    external = [] if err?
     err, internal <- get-internal-transactions { network, address, page, offset }
-    return cb err if err?
+    internal = [] if err?
     all = external ++ internal
     ordered =
         all
