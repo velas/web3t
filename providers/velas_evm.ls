@@ -191,7 +191,7 @@ get-internal-transactions = (config, cb)->
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     page = 1
     offset = 20
-    query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
+    query = stringify { module, action, apikey, address, /*sort, startblock, endblock, page, offset*/ }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
@@ -210,7 +210,7 @@ get-external-transactions = ({ network, address }, cb)->
     offset = 20
     sort = \desc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
-    query = stringify { module, action, apikey, address, sort, startblock, endblock, page, offset }
+    query = stringify { module, action, apikey, address, /*sort, startblock, endblock, page, offset*/ }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
