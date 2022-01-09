@@ -8,7 +8,7 @@ export mainnet =
     api:
         provider: \velas_busd
         apiUrl : \https://evmexplorer.velas.com/api
-        web3Provider : "https://explorer.velas.com/rpc"
+        web3Provider : "https://evmexplorer.velas.com/rpc"
         url: \https://evmexplorer.velas.com
 
     group: "Velas"
