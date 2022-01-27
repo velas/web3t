@@ -19868,8 +19868,8 @@ var solanaWeb3 = (function (exports) {
 
       for (let id of accountKeys) {
         const sub = this._accountChangeSubscriptions[id];
-
-        this._subscribe(sub, 'accountSubscribe', this._buildArgs([sub.publicKey], sub.commitment, 'base64'));
+        // We re expecting jsonParsed type
+        this._subscribe(sub, 'accountSubscribe', this._buildArgs([sub.publicKey], sub.commitment, 'jsonParsed'));
       }
 
       for (let id of programKeys) {
@@ -19922,12 +19922,15 @@ var solanaWeb3 = (function (exports) {
             value,
             context
           } = result;
-          assert(value.data[1] === 'base64');
+          // We re expecting jsonParsed type
+          //assert(value.data[1] === 'base64');
+          const data = value.data[0] ? value.data[0] : value.data
           sub.callback({
             executable: value.executable,
             owner: new PublicKey(value.owner),
             lamports: value.lamports,
-            data: buffer.Buffer.from(value.data[0], 'base64')
+            //data: buffer.Buffer.from(value.data[0], 'base64')
+            data: data,
           }, context);
           return true;
         }
@@ -20000,14 +20003,16 @@ var solanaWeb3 = (function (exports) {
             value,
             context
           } = result;
-          assert(value.account.data[1] === 'base64');
+          //assert(value.account.data[1] === 'base64');
           sub.callback({
             accountId: value.pubkey,
             accountInfo: {
               executable: value.account.executable,
               owner: new PublicKey(value.account.owner),
               lamports: value.account.lamports,
-              data: buffer.Buffer.from(value.account.data[0], 'base64')
+              //data: buffer.Buffer.from(value.account.data[0], 'base64'),
+              data: value.account.data[0],
+              dataParsed: value.account.data[0]
             }
           }, context);
           return true;
