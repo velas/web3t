@@ -19750,9 +19750,10 @@ var solanaWeb3 = (function (exports) {
      * @private
      */
 
-
+    /*TODO: handle error in cb */
     _wsOnError(err) {
       console.error('ws error:', err.message);
+      this._updateSubscriptions();
     }
     /**
      * @private
