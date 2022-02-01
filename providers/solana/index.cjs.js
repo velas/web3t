@@ -15477,7 +15477,10 @@ var solanaWeb3 = (function (exports) {
       }, {
         key: "addEventListener",
         value: function addEventListener(type, listener, options) {
-          this.socket.addEventListener(type, listener, options);
+          if (this.socket && typeof this.socket.addEventListener === 'function')
+            this.socket.addEventListener(type, listener, options);
+          else
+            throw new Error('socket is blocked')
         }
       }]);
       return WebSocketBrowserImpl;
