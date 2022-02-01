@@ -253,7 +253,14 @@
       return calcFeeInstantx(config, cb);
     }
     calcFee = getCalcFeeFunc(network);
-    return calcFee(config, cb);
+    return calcFee(config, function(err, calcedFee){
+      if (err != null) {
+        return cb(err);
+      }
+      return cb(null, {
+        calcedFee: calcedFee
+      });
+    });
   };
   out$.getKeys = getKeys = function(arg$, cb){
     var network, mnemonic, index, result;

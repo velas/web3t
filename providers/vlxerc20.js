@@ -258,7 +258,10 @@
         }, function(err, estimate){
           var dec, res, val;
           if (err != null) {
-            return cb(err);
+            return cb(null, {
+              calcedFee: network.txFee,
+              gasPrice: gasPrice
+            });
           }
           dec = getDec(network);
           res = times(gasPrice, estimate);
