@@ -1,7 +1,7 @@
-import { post } from "../../superagent";
-import ERC20BridgeToken from "../../../contracts/ERC20BridgeToken.json";
-import { div } from "../../../math";
-import { vlxToEth } from "../../../addresses";
+const { post } = require("../../superagent");
+const ERC20BridgeToken = require("../../../contracts/ERC20BridgeToken.json");
+const { div } = require("../../../math");
+const { vlxToEth } = require("../../../addresses");
 const ABI = [
   {
     constant: true,
@@ -518,7 +518,7 @@ const web3EthGetBalance = (address, network, cb) => {
   return web3EthGetBalanceWithAvailableWeb3Provider(address, web3Providers, cb);
 };
 
-export default {
+module.exports = {
   getWeb3Providers,
   makeQuery,
   getBalance,

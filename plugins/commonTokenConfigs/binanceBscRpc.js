@@ -35,4 +35,4 @@ const binanceBscRpc = Object.freeze({
     },
   });
   
-  export default binanceBscRpc;
+ module.exports = binanceBscRpc;
