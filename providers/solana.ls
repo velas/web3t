@@ -413,7 +413,7 @@ export get-transaction-info = (config, cb)->
         | (tx-data.meta.status.Ok isnt undefined) => \confirmed
         #| tx.status is \0x1 => \reverted
         | _ => \pending
-    result = { from: sender, to: receiver, status, info: tx }
+    result = { from: sender, to: receiver, status, info: tx, data }
     cb null, result
     
 export get-market-history-prices = (config, cb)->
