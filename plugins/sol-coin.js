@@ -15,7 +15,8 @@
       provider: 'solana',
       web3Provider: 'https://api.velas.com',
       url: 'https://native.velas.com',
-      apiUrl: 'https://api.velas.com'
+      apiUrl: 'https://api.velas.com',
+      validatorsBackend: 'https://validators.devnet.velas.com'
     },
     HomeBridge: "0x56454c41532d434841494e000000000053574150",
     networks: {
@@ -46,6 +47,7 @@
       web3Provider: 'https://api.testnet.velas.com/rpc',
       url: 'https://native.velas.com',
       apiUrl: 'https://explorer.testnet.velas.com/api',
+      validatorsBackend: 'https://validators.testnet.velas.com',
       cluster: 'testnet'
     },
     HomeBridge: "0x56454c41532d434841494e000000000053574150",

@@ -709,7 +709,8 @@
         from: sender,
         to: receiver,
         status: status,
-        info: tx
+        info: tx,
+        data: data
       };
       return cb(null, result);
     });
