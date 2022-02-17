@@ -268,9 +268,17 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
         {fee, err, status} = tx-data.meta
         transaction = tx-data.transaction
         {accountKeys,instructions} = transaction.message
-        type = instructions[0]?parsed?type
+        type =
+          | instructions[1]?parsed?type is "swapNativeToEvm" => 'swapNativeToEvm'
+          | instructions[0].programId is "11111111111111111111111111111111" => 'buy'
+          | _ => instructions[0]?parsed?type
         dec = get-dec network
         try
+            if type is "swapNativeToEvm" then
+                sender      = instructions[1].parsed.info.fromNativeAccount
+                receiver    = instructions[1].parsed.info.toEvmAccount
+                amount      = instructions[1].parsed.info.lamports
+                hash        = transaction.signatures[0]
             if type is "evmTransaction" then
                 { from, to, value, hash } = instructions[0].parsed.info.transaction   
                 sender      = instructions[0].parsed.info.bridgeAccount   
@@ -312,6 +320,14 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
                 receiver    = instructions[0].parsed.info.destination
                 amount      = instructions[0].parsed.info.lamports
                 hash        = transaction.signatures[0]
+            if type is "buy" then
+                index =
+                    | instructions.length > 1 => 1
+                    | _ => 0
+                sender      = instructions[index].parsed.info.source
+                receiver    = instructions[index].parsed.info.destination
+                amount      = instructions[index].parsed.info.lamports
+                hash        = transaction.signatures[0]
             if not type?
                 senders =
                     accountKeys
@@ -339,30 +355,34 @@ prepare-txs = (network, [tx, ...rest], address, cb)->
             |  _ => "IN"
         recipient-type = \regular
         is-stake = instructions[0]?parsed?type in <[ stake createAccountWithSeed delegate deactivate ]>
-        tx-type =
-            | type? and type in <[ stake  delegate deactivate withdraw]> =>
-                (type + " Stake").to-upper-case!
-            | type? and type in <[ createAccount createAccountWithSeed ]> =>
-                "create stake account".to-upper-case!
-            | type? and type not in <[ transfer assign ]> => type.to-upper-case!
-            | type? and type in <[ assign ]> and receiver is "EVM1111111111111111111111111111111111111111" =>
-                "Native → EVM Swap"
-            | instructions[0]?programId is "EVM1111111111111111111111111111111111111111" => "EVM → Native Swap"   
-            | _ => null
-        _tx = {
-            tx: hash
-            amount: amount `div` dec
-            url: uri
-            to: receiver
-            pending: not (!tx-data.meta.status.Ok?)
-            from: (sender ? "unknown")
-            time
-            fee: tx-data.meta.fee `div` dec
-            type: _type
-            recipient-type
-            tx-type: tx-type
-        }
-        t = [_tx]
+        try
+            tx-type =
+                | type? and type is "swapNativeToEvm" => "Native → EVM Swap"
+                | type? and type in <[ stake  delegate deactivate withdraw]> =>
+                    (type + " Stake").to-upper-case!
+                | type? and type in <[ createAccount createAccountWithSeed ]> =>
+                    "create stake account".to-upper-case!
+                | type? and type not in <[ transfer assign buy ]> => type.to-upper-case!
+                | type? and type in <[ assign ]> and receiver is "EVM1111111111111111111111111111111111111111" =>
+                    "Native → EVM Swap"
+                | instructions[0]?programId is "EVM1111111111111111111111111111111111111111" => "EVM → Native Swap"
+                | _ => null
+            _tx = {
+                tx: hash
+                amount: amount `div` dec
+                url: uri
+                to: receiver
+                pending: not (!tx-data.meta.status.Ok?)
+                from: (sender ? "unknown")
+                time
+                fee: tx-data.meta.fee `div` dec
+                type: _type
+                recipient-type
+                tx-type: tx-type
+            }
+            t = [_tx]
+        catch err
+            console.error err
     err, other <- prepare-txs network, rest, address 
     all =  t ++ other
     cb null, all 
