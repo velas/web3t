@@ -480,7 +480,7 @@
     }
     blockTime = tx.blockTime, signature = tx.signature, slot = tx.slot;
     return getTxData(network, signature, function(err, data){
-      var t, txData, sender, receiver, hash, amount, ref$, fee, status, transaction, accountKeys, instructions, type, ref1$, dec, ref2$, from, to, value, ref3$, ref4$, senders, receiverIndex, receivers, e, time, url, cluster, customUrl, $cluster, uri, _type, recipientType, isStake, ref5$, ref6$, txType, _tx;
+      var t, txData, sender, receiver, hash, amount, ref$, fee, status, transaction, accountKeys, instructions, type, dec, from, to, value, ref1$, ref2$, index, senders, receiverIndex, receivers, e, time, url, cluster, customUrl, $cluster, uri, _type, recipientType, isStake, ref3$, ref4$, txType, _tx;
       if (err != null) {
         console.error("Error occured while fetching tx details for signature:", signature);
       }
@@ -494,27 +494,43 @@
         ref$ = txData.meta, fee = ref$.fee, err = ref$.err, status = ref$.status;
         transaction = txData.transaction;
         ref$ = transaction.message, accountKeys = ref$.accountKeys, instructions = ref$.instructions;
-        type = (ref$ = instructions[0]) != null ? (ref1$ = ref$.parsed) != null ? ref1$.type : void 8 : void 8;
+        type = (function(){
+          var ref$, ref1$, ref2$, ref3$;
+          switch (false) {
+          case ((ref$ = instructions[1]) != null ? (ref1$ = ref$.parsed) != null ? ref1$.type : void 8 : void 8) !== "swapNativeToEvm":
+            return 'swapNativeToEvm';
+          case instructions[0].programId !== "11111111111111111111111111111111":
+            return 'buy';
+          default:
+            return (ref2$ = instructions[0]) != null ? (ref3$ = ref2$.parsed) != null ? ref3$.type : void 8 : void 8;
+          }
+        }());
         dec = getDec(network);
         try {
+          if (type === "swapNativeToEvm") {
+            sender = instructions[1].parsed.info.fromNativeAccount;
+            receiver = instructions[1].parsed.info.toEvmAccount;
+            amount = instructions[1].parsed.info.lamports;
+            hash = transaction.signatures[0];
+          }
           if (type === "evmTransaction") {
-            ref2$ = instructions[0].parsed.info.transaction, from = ref2$.from, to = ref2$.to, value = ref2$.value, hash = ref2$.hash;
+            ref$ = instructions[0].parsed.info.transaction, from = ref$.from, to = ref$.to, value = ref$.value, hash = ref$.hash;
             sender = instructions[0].parsed.info.bridgeAccount;
-            receiver = (ref2$ = accountKeys != null ? (ref3$ = accountKeys[2]) != null ? ref3$.pubkey : void 8 : void 8) != null ? ref2$ : to;
+            receiver = (ref$ = accountKeys != null ? (ref1$ = accountKeys[2]) != null ? ref1$.pubkey : void 8 : void 8) != null ? ref$ : to;
             amount = div(value, dec);
-            hash = (ref2$ = transaction != null ? (ref4$ = transaction.signatures) != null ? ref4$[0] : void 8 : void 8) != null ? ref2$ : hash;
+            hash = (ref$ = transaction != null ? (ref2$ = transaction.signatures) != null ? ref2$[0] : void 8 : void 8) != null ? ref$ : hash;
           }
           if (type === "assign") {
             sender = instructions[0].parsed.info.account;
             receiver = instructions[0].parsed.info.owner;
             hash = transaction.signatures[0];
-            amount = (ref2$ = getSentAmount(txData)[sender]) != null ? ref2$ : 0;
+            amount = (ref$ = getSentAmount(txData)[sender]) != null ? ref$ : 0;
           }
           if (type === "delegate") {
             sender = instructions[0].parsed.info.stakeAccount;
             receiver = instructions[0].parsed.info.voteAccount;
             hash = transaction.signatures[0];
-            amount = (ref2$ = getSentAmount(txData)[sender]) != null ? ref2$ : 0;
+            amount = (ref$ = getSentAmount(txData)[sender]) != null ? ref$ : 0;
           }
           if (type === "createAccountWithSeed") {
             sender = instructions[0].parsed.info.base;
@@ -526,11 +542,11 @@
             sender = instructions[0].parsed.info.stakeAuthority;
             receiver = instructions[0].programId;
             hash = transaction.signatures[0];
-            amount = (ref2$ = getSentAmount(txData)[sender]) != null ? ref2$ : 0;
+            amount = (ref$ = getSentAmount(txData)[sender]) != null ? ref$ : 0;
           }
           if (type === "withdraw") {
-            sender = (ref2$ = instructions[0].parsed.info.stakeAccount) != null
-              ? ref2$
+            sender = (ref$ = instructions[0].parsed.info.stakeAccount) != null
+              ? ref$
               : instructions[0].parsed.info.stakeAccount;
             receiver = instructions[0].parsed.info.withdrawAuthority;
             amount = instructions[0].parsed.info.lamports;
@@ -545,6 +561,20 @@
             sender = instructions[0].parsed.info.source;
             receiver = instructions[0].parsed.info.destination;
             amount = instructions[0].parsed.info.lamports;
+            hash = transaction.signatures[0];
+          }
+          if (type === "buy") {
+            index = (function(){
+              switch (false) {
+              case !(instructions.length > 1):
+                return 1;
+              default:
+                return 0;
+              }
+            }());
+            sender = instructions[index].parsed.info.source;
+            receiver = instructions[index].parsed.info.destination;
+            amount = instructions[index].parsed.info.lamports;
             hash = transaction.signatures[0];
           }
           if (type == null) {
@@ -565,7 +595,7 @@
             sender = accountKeys[0].pubkey;
             receiver = accountKeys[2].pubkey;
             hash = transaction.signatures[0];
-            amount = (ref2$ = getSentAmount(txData)[receiver]) != null ? ref2$ : 0;
+            amount = (ref$ = getSentAmount(txData)[receiver]) != null ? ref$ : 0;
           }
         } catch (e$) {
           e = e$;
@@ -573,7 +603,7 @@
         }
         time = moment(+blockTime * 1000).format("X");
         dec = getDec(network);
-        ref2$ = network.api, url = ref2$.url, cluster = ref2$.cluster, customUrl = ref2$.customUrl;
+        ref$ = network.api, url = ref$.url, cluster = ref$.cluster, customUrl = ref$.customUrl;
         $cluster = cluster != null ? "?cluster=" + cluster : "";
         uri = (url + "/tx/" + hash) + $cluster;
         _type = (function(){
@@ -585,38 +615,45 @@
           }
         }());
         recipientType = 'regular';
-        isStake = (ref2$ = (ref5$ = instructions[0]) != null ? (ref6$ = ref5$.parsed) != null ? ref6$.type : void 8 : void 8) === 'stake' || ref2$ === 'createAccountWithSeed' || ref2$ === 'delegate' || ref2$ === 'deactivate';
-        txType = (function(){
-          var ref$;
-          switch (false) {
-          case !(type != null && (type === 'stake' || type === 'delegate' || type === 'deactivate' || type === 'withdraw')):
-            return (type + " Stake").toUpperCase();
-          case !(type != null && (type === 'createAccount' || type === 'createAccountWithSeed')):
-            return "create stake account".toUpperCase();
-          case !(type != null && (type !== 'transfer' && type !== 'assign')):
-            return type.toUpperCase();
-          case !(type != null && type === 'assign' && receiver === "EVM1111111111111111111111111111111111111111"):
-            return "Native → EVM Swap";
-          case ((ref$ = instructions[0]) != null ? ref$.programId : void 8) !== "EVM1111111111111111111111111111111111111111":
-            return "EVM → Native Swap";
-          default:
-            return null;
-          }
-        }());
-        _tx = {
-          tx: hash,
-          amount: div(amount, dec),
-          url: uri,
-          to: receiver,
-          pending: !(txData.meta.status.Ok == null),
-          from: sender != null ? sender : "unknown",
-          time: time,
-          fee: div(txData.meta.fee, dec),
-          type: _type,
-          recipientType: recipientType,
-          txType: txType
-        };
-        t = [_tx];
+        isStake = (ref$ = (ref3$ = instructions[0]) != null ? (ref4$ = ref3$.parsed) != null ? ref4$.type : void 8 : void 8) === 'stake' || ref$ === 'createAccountWithSeed' || ref$ === 'delegate' || ref$ === 'deactivate';
+        try {
+          txType = (function(){
+            var ref$;
+            switch (false) {
+            case !(type != null && type === "swapNativeToEvm"):
+              return "Native → EVM Swap";
+            case !(type != null && (type === 'stake' || type === 'delegate' || type === 'deactivate' || type === 'withdraw')):
+              return (type + " Stake").toUpperCase();
+            case !(type != null && (type === 'createAccount' || type === 'createAccountWithSeed')):
+              return "create stake account".toUpperCase();
+            case !(type != null && (type !== 'transfer' && type !== 'assign' && type !== 'buy')):
+              return type.toUpperCase();
+            case !(type != null && type === 'assign' && receiver === "EVM1111111111111111111111111111111111111111"):
+              return "Native → EVM Swap";
+            case ((ref$ = instructions[0]) != null ? ref$.programId : void 8) !== "EVM1111111111111111111111111111111111111111":
+              return "EVM → Native Swap";
+            default:
+              return null;
+            }
+          }());
+          _tx = {
+            tx: hash,
+            amount: div(amount, dec),
+            url: uri,
+            to: receiver,
+            pending: !(txData.meta.status.Ok == null),
+            from: sender != null ? sender : "unknown",
+            time: time,
+            fee: div(txData.meta.fee, dec),
+            type: _type,
+            recipientType: recipientType,
+            txType: txType
+          };
+          t = [_tx];
+        } catch (e$) {
+          err = e$;
+          console.error(err);
+        }
       }
       return prepareTxs(network, rest, address, function(err, other){
         var all;
