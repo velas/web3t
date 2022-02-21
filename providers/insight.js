@@ -221,7 +221,9 @@
           return cb("private-per-input is missing");
         }
         fee = plus(times(txFee, 2), times(numberOfInputs, o.privatePerInput));
-        return cb(null, fee);
+        return cb(null, {
+          calcedFee: fee
+        });
       });
     });
   };
