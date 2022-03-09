@@ -31,7 +31,7 @@ const binanceBscRpc = require("./commonTokenConfigs/binanceBscRpc");
       provider: 'bnb',
       url: 'https://testnet.bscscan.com',
       apiUrl: 'https://api-testnet.bscscan.com/api',
-      ...binanceBscRpc.mainnet.api,
+      ...binanceBscRpc.testnet.api,
     },
     group: 'BSC'
   };
