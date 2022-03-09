@@ -36,7 +36,6 @@ const commonProvider = require("./common/provider");
     toEthAddress,
     isValidAddress,
     getEthereumFullpairByIndex,
-    tryParse,
     makeQuery,
     getTransactionInfo,
     getGasEstimate,
