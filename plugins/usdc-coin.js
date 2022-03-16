@@ -11,7 +11,7 @@
     },
     api: {
       provider: 'usdc',
-      web3Provider: 'https://mainnet.infura.io/v3/c75baa90ba0d4ee0a037e886a15584f4',
+      web3Provider: 'https://mainnet.infura.io/v3/843d2e25655c47c7851744f65ce95837',
       url: 'https://etherscan.io',
       apiUrl: 'https://api.etherscan.io/api'
     },
@@ -39,7 +39,7 @@
     },
     api: {
       provider: 'usdc',
-      web3Provider: 'https://ropsten.infura.io/v3/009278d1b77a4af48536f1f772926648',
+      web3Provider: 'https://ropsten.infura.io/v3/843d2e25655c47c7851744f65ce95837',
       url: 'https://ropsten.etherscan.io',
       apiUrl: 'https://api-ropsten.etherscan.io/api'
     },
