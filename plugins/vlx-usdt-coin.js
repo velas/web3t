@@ -46,6 +46,7 @@
     address: "0x6ef054b3e3c3c83e14527e8fa593c2c4435a6ea4",
     HOME_BRIDGE: "0xb6A42fc8BcB09cf3Ad44A63495f6f562028c99b8",
     HOME_BRIDGE_TOKEN: "0x90f69A6134fD1cf45170AC55a895138da69B40aD",
+    FEE_MANAGER_ADDRESS: "0x9Dd87a1BFbC3775023D72B89c45d3f491aBd4156",
     api: {
       provider: 'velas_usdt',
       web3Provider: 'https://evmexplorer.testnet.velas.com/rpc',
