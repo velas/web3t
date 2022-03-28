@@ -37,6 +37,7 @@ const commonProvider = require("./common/provider");
     toEthAddress,
     isValidAddress,
     getEthereumFullpairByIndex,
+    tryParse,
     makeQuery,
     getTransactionInfo,
     getGasEstimate,
@@ -931,7 +932,6 @@ const commonProvider = require("./common/provider");
       }
     );
   };
-  getWeb3 = commonProvider.getWeb3;
   out$.getBalance = getBalance = function (arg$, cb) {
     var network, address;
     (network = arg$.network), (address = arg$.address);

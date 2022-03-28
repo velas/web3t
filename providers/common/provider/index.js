@@ -230,14 +230,11 @@ const ERC20_ABI = ERC20BridgeToken.abi;
 const isErrorCausedByUnavailableWeb3Provider = (error) => {
   const { message } = error;
   return (
-    // Mobile errors IOS and Android
     message ===
       'Invalid JSON RPC response: "A server with the specified hostname could not be found."' ||
     message === "Network request failed" ||
     message === 'Invalid JSON RPC response: ""' ||
-    message.includes("Unable to resolve host") ||
-    // Web errors
-    message.includes('CONNECTION ERROR')
+    message.includes("Unable to resolve host")
   );
 };
 
