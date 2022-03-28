@@ -48,6 +48,7 @@ const commonProvider = require("./common/provider");
     getUnconfirmedBalance,
     getBalance,
     isValidAddress,
+    tryParse,
     makeQuery,
     getTransactionInfo,
     isChecksumAddress,
