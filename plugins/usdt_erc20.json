@@ -56,7 +56,7 @@
         "mask": "0x0000000000000000000000000000000000000000",
         "api": {
             "provider": "erc20",
-            "web3Provider": "https://mainnet.infura.io/v3/843d2e25655c47c7851744f65ce95837",
+            "web3Provider": "https://mainnet.infura.io/v3/c75baa90ba0d4ee0a037e886a15584f4",
             "url": "https://etherscan.io",
             "apiUrl": "https://api.etherscan.io/api",
             "apikey": "4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG" 
