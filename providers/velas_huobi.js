@@ -179,7 +179,7 @@
     });
   };
   getGasEstimate = function(config, cb){
-    var network, feeType, account, amount, to, data, gas, dec, from, web3, contract, receiver, val, value, $data, query;
+    var network, feeType, account, amount, to, data, gas, from, web3, contract, receiver, val, value, $data, query;
     network = config.network, feeType = config.feeType, account = config.account, amount = config.amount, to = config.to, data = config.data, gas = config.gas;
     if (gas != null) {
       return cb(null, gas);
@@ -187,7 +187,6 @@
     if (+amount === 0) {
       return cb(null, "0");
     }
-    dec = getDec(network);
     from = account.address;
     web3 = getWeb3(network);
     contract = getContractInstance(web3, network.address);
@@ -199,7 +198,7 @@
         return network.address;
       }
     }());
-    val = times(amount, dec);
+    val = times(amount, Math.pow(10, network.decimals));
     value = $toHex(val);
     $data = (function(){
       switch (false) {
@@ -222,18 +221,17 @@
         console.error("[getGasEstimate] error:", err);
       }
       if (err != null) {
-        return cb(err);
+        return cb(null, "0");
       }
       return cb(null, fromHex(estimate));
     });
   };
   out$.calcFee = calcFee = function(arg$, cb){
-    var network, feeType, account, amount, to, data, gasPrice, gas, dec;
+    var network, feeType, account, amount, to, data, gasPrice, gas;
     network = arg$.network, feeType = arg$.feeType, account = arg$.account, amount = arg$.amount, to = arg$.to, data = arg$.data, gasPrice = arg$.gasPrice, gas = arg$.gas;
     if (feeType !== 'auto') {
       return cb(null);
     }
-    dec = getDec(network);
     return calcGasPrice({
       feeType: feeType,
       network: network,
@@ -259,7 +257,7 @@
           });
         }
         res = times(gasPrice, estimate);
-        val = div(res, dec);
+        val = div(res, Math.pow(10, 18));
         return cb(null, {
           calcedFee: val,
           gasPrice: gasPrice,
@@ -311,7 +309,7 @@
     url = url + "/tx/" + tx;
     gasUsed = (ref$ = t.gasUsed) != null ? ref$ : 0;
     gasPrice = (ref$ = t.gasPrice) != null ? ref$ : 0;
-    fee = div(times(gasUsed, gasPrice), dec);
+    fee = div(times(gasUsed, gasPrice), Math.pow(10, 18));
     recipientType = ((ref$ = t.input) != null ? ref$ : "").length > 3 ? 'contract' : 'regular';
     txType = (function(){
       switch (false) {
@@ -601,13 +599,12 @@
     return web3.eth.contract(abi).at(network.address);
   };
   out$.createTransaction = createTransaction = curry$(function(config, cb){
-    var network, account, recipient, amount, amountFee, data, feeType, txType, gasPrice, gas, web3, dec, privateKey;
+    var network, account, recipient, amount, amountFee, data, feeType, txType, gasPrice, gas, web3, privateKey;
     network = config.network, account = config.account, recipient = config.recipient, amount = config.amount, amountFee = config.amountFee, data = config.data, feeType = config.feeType, txType = config.txType, gasPrice = config.gasPrice, gas = config.gas;
     if (!isAddress(recipient)) {
       return cb("address in not correct ethereum address");
     }
     web3 = getWeb3(network);
-    dec = getDec(network);
     privateKey = new Buffer(account.privateKey.replace(/^0x/, ''), 'hex');
     return web3.eth.getTransactionCount(account.address, 'pending', function(err, nonce){
       var contract, toWei, toWeiEth, toEth, value;
@@ -619,7 +616,7 @@
       }
       contract = getContractInstance(web3, network);
       toWei = function(it){
-        return times(it, dec);
+        return times(it, Math.pow(10, network.decimals));
       };
       toWeiEth = function(it){
         return times(it, Math.pow(10, 18));
@@ -792,25 +789,23 @@
     return new Web3(new Web3.providers.HttpProvider(web3Provider));
   };
   out$.getBalance = getBalance = function(arg$, cb){
-    var network, address, swap, web3, contract, number, dec, balance;
-    network = arg$.network, address = arg$.address, swap = arg$.swap;
+    var network, address, web3, contract, number, dec, balance;
+    network = arg$.network, address = arg$.address;
     web3 = getWeb3(network);
     contract = getContractInstance(web3, network);
     number = contract.balanceOf(address);
-    dec = getDec(network);
-    balance = div(number, dec);
+    balance = div(number, Math.pow(10, network.decimals));
     return cb(null, balance);
   };
   out$.getEthBalance = getEthBalance = function(arg$, cb){
     var network, address;
     network = arg$.network, address = arg$.address;
     return makeQuery(network, 'eth_getBalance', [address, 'latest'], function(err, number){
-      var dec, balance;
+      var balance;
       if (err != null) {
         return cb(err);
       }
-      dec = getDec(network);
-      balance = div(number, dec);
+      balance = div(number, Math.pow(10, 18));
       return cb(null, balance);
     });
   };
@@ -832,6 +827,25 @@
         return cb(err);
       }
       return cb(null, estimate);
+    });
+  };
+  out$.getMarketHistoryPrices = getMarketHistoryPrices = function(config, cb){
+    var network, coin, market;
+    network = config.network, coin = config.coin;
+    market = coin.market;
+    return get(market).timeout({
+      deadline: deadline
+    }).end(function(err, resp){
+      var ref$;
+      if (err != null) {
+        return cb("cannot execute query - err " + ((ref$ = err.message) != null ? ref$ : err));
+      }
+      return jsonParse(resp.text, function(err, result){
+        if (err != null) {
+          return cb(err);
+        }
+        return cb(null, result);
+      });
     });
   };
   function curry$(f, bound){
