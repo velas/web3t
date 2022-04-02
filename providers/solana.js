@@ -494,17 +494,9 @@
         ref$ = txData.meta, fee = ref$.fee, err = ref$.err, status = ref$.status;
         transaction = txData.transaction;
         ref$ = transaction.message, accountKeys = ref$.accountKeys, instructions = ref$.instructions;
-        type = (function(){
-          var ref$, ref1$, ref2$, ref3$;
-          switch (false) {
-          case ((ref$ = instructions[1]) != null ? (ref1$ = ref$.parsed) != null ? ref1$.type : void 8 : void 8) !== "swapNativeToEvm":
-            return 'swapNativeToEvm';
-          case instructions[0].programId !== "11111111111111111111111111111111":
-            return 'buy';
-          default:
-            return (ref2$ = instructions[0]) != null ? (ref3$ = ref2$.parsed) != null ? ref3$.type : void 8 : void 8;
-          }
-        }());
+        type = instructions[1] && instructions[1].parsed && instructions[1].parsed.type === "swapNativeToEvm"
+          ? "swapNativeToEvm"
+          : instructions[instructions.length - 1].parsed.type;
         dec = getDec(network);
         try {
           if (type === "swapNativeToEvm") {
@@ -530,7 +522,7 @@
             sender = instructions[0].parsed.info.stakeAccount;
             receiver = instructions[0].parsed.info.voteAccount;
             hash = transaction.signatures[0];
-            amount = (ref$ = getSentAmount(txData)[sender]) != null ? ref$ : 0;
+            amount = instructions[0].parsed.info.lamports;
           }
           if (type === "createAccountWithSeed") {
             sender = instructions[0].parsed.info.base;
@@ -542,7 +534,7 @@
             sender = instructions[0].parsed.info.stakeAuthority;
             receiver = instructions[0].programId;
             hash = transaction.signatures[0];
-            amount = (ref$ = getSentAmount(txData)[sender]) != null ? ref$ : 0;
+            amount = 0;
           }
           if (type === "withdraw") {
             sender = (ref$ = instructions[0].parsed.info.stakeAccount) != null
