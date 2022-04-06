@@ -494,9 +494,19 @@
         ref$ = txData.meta, fee = ref$.fee, err = ref$.err, status = ref$.status;
         transaction = txData.transaction;
         ref$ = transaction.message, accountKeys = ref$.accountKeys, instructions = ref$.instructions;
-        type = instructions[1] && instructions[1].parsed && instructions[1].parsed.type === "swapNativeToEvm"
-          ? "swapNativeToEvm"
-          : instructions[instructions.length - 1].parsed.type;
+        type =
+          (function(){
+            switch (true) {
+              case instructions[1] && instructions[1].parsed && instructions[1].parsed.type === "swapNativeToEvm":
+                return "swapNativeToEvm";
+              case instructions[0] && instructions[0].parsed && instructions[0].parsed.type === "createAccountWithSeed" &&
+                instructions[1] && instructions[1].parsed && instructions[1].parsed.type === "initialize" &&
+                instructions.length === 2:
+                return "createAccountWithSeed";
+              default:
+                return instructions[instructions.length - 1].parsed.type;
+            }
+          }());
         dec = getDec(network);
         try {
           if (type === "swapNativeToEvm") {
