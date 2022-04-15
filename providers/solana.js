@@ -560,9 +560,10 @@
             hash = transaction.signatures[0];
           }
           if (type === "transfer") {
-            sender = instructions[0].parsed.info.source;
-            receiver = instructions[0].parsed.info.destination;
-            amount = instructions[0].parsed.info.lamports;
+            const Idata = instructions[instructions.length - 1];
+            sender = Idata.parsed.info.source;
+            receiver = Idata.parsed.info.destination;
+            amount = Idata.parsed.info.lamports;
             hash = transaction.signatures[0];
           }
           if (type === "buy") {

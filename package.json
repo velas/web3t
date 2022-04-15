@@ -25,6 +25,7 @@
     "hdkey": "^1.1.0",
     "jayson": "3.4.4",
     "js-sha3": "0.8.0",
+    "lodash": "^4.17.12",
     "moment": "2.22.2",
     "multicoin-address-validator": "0.4.16",
     "prelude-ls": "1.1.2",
