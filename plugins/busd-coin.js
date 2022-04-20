@@ -55,9 +55,9 @@ const binanceBscRpc = require("./commonTokenConfigs/binanceBscRpc");
     txBridgeFeeIn: "bnb",
     api: {
       provider: "busd",
-      web3Provider: "https://data-seed-prebsc-1-s2.binance.org:8545",
       url: "https://testnet.bscscan.com",
       apiUrl: "https://api-testnet.bscscan.com/api",
+      ...binanceBscRpc.testnet.api,
     },
     address: "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee",
     FOREIGN_BRIDGE: "0xF9a7046E40E7e1992B877E7C20C0715F10560AB5",
