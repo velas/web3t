@@ -497,6 +497,8 @@
         type =
           (function(){
             switch (true) {
+              case !instructions[instructions.length - 1].parsed || !instructions[instructions.length - 1].parsed.type:
+                return "unknown";
               case instructions[1] && instructions[1].parsed && instructions[1].parsed.type === "swapNativeToEvm":
                 return "swapNativeToEvm";
               case instructions[0] && instructions[0].parsed && instructions[0].parsed.type === "createAccountWithSeed" &&
@@ -509,6 +511,40 @@
           }());
         dec = getDec(network);
         try {
+          if (type === "unknown") {
+            var findIndex = (arr, func) => {
+              var result = -1;
+              for(var i = 0; i < arr.length; i++){
+                if(func(arr[i])) {
+                  return i;
+                }
+              }
+              return result;
+            }
+            var foundParticipantIndex = (func) => {
+              const preBalances  = txData.meta.preBalances;
+              const postBalances = txData.meta.postBalances;
+              for (var i = 0; i < preBalances.length; i++) {
+                var preBalance  = preBalances[i];
+                var postBalance = postBalances[i];
+                var diff = preBalance - postBalance;
+                if (func(diff)) {
+                  return i;
+                }
+              }
+              return -1;
+            }
+            const foundIndex  = findIndex(accountKeys, (it) => {return it.pubkey === address});
+            const preBalance  = txData.meta.preBalances[foundIndex];
+            const postBalance = txData.meta.postBalances[foundIndex];
+            const _amount     = foundIndex > -1 ? postBalance - preBalance : 0;
+            amount = Math.abs(_amount);
+
+            const participantIndex = foundParticipantIndex((it) => {return Math.abs(it) === amount});
+            sender   = _amount < 0 ? address : (participantIndex > -1 ? accountKeys[participantIndex].pubkey : 'unknown');
+            receiver = _amount < 0 ? (participantIndex > -1 ? accountKeys[participantIndex].pubkey : 'unknown') : address;
+            hash = transaction.signatures[0];
+          }
           if (type === "swapNativeToEvm") {
             sender = instructions[1].parsed.info.fromNativeAccount;
             receiver = instructions[1].parsed.info.toEvmAccount;
@@ -629,7 +665,7 @@
               return (type + " Stake").toUpperCase();
             case !(type != null && (type === 'createAccount' || type === 'createAccountWithSeed')):
               return "create stake account".toUpperCase();
-            case !(type != null && (type !== 'transfer' && type !== 'assign' && type !== 'buy')):
+            case !(type != null && (type !== 'transfer' && type !== 'assign' && type !== 'buy' && type !== 'unknown')):
               return type.toUpperCase();
             case !(type != null && type === 'assign' && receiver === "EVM1111111111111111111111111111111111111111"):
               return "Native → EVM Swap";
