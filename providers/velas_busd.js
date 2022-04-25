@@ -268,6 +268,7 @@
     var url, HOME_BRIDGE_TOKEN, dec, tx, amount, time, gasUsed, gasPrice, fee, txType, recipientType, ref$, res;
     url = network.api.url;
     HOME_BRIDGE_TOKEN = network.HOME_BRIDGE_TOKEN;
+    var HOME_BRIDGE = network.HOME_BRIDGE;
     dec = getDec(network);
     network = 'eth';
     tx = (function(){
@@ -305,9 +306,11 @@
     }());
     fee = div(times(gasUsed, gasPrice + ""), dec);
     txType = (function(){
-      switch (false) {
-      case t.from !== '0x0000000000000000000000000000000000000000':
+      switch (true) {
+      case t.from === '0x0000000000000000000000000000000000000000':
         return "BSC → VELAS EVM Swap";
+      case up(t.to) === up(HOME_BRIDGE):
+        return "VELAS EVM → BSC Swap";
       default:
         return null;
       }
