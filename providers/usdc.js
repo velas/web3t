@@ -258,9 +258,11 @@ const commonProvider = require("./common/provider");
     url = url + "/tx/" + tx;
     fee = div(times(t.cumulativeGasUsed, t.gasPrice), Math.pow(10, 18));
     txType = (function () {
-      switch (false) {
-        case up(t.from) !== up(FOREIGN_BRIDGE):
+      switch (true) {
+        case up(t.from) === up(FOREIGN_BRIDGE):
           return "EVM → ETHEREUM Swap";
+        case up(t.to) === up(FOREIGN_BRIDGE):
+          return "ETHEREUM → EVM Swap";
         default:
           return null;
       }

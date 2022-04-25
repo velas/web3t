@@ -406,9 +406,11 @@ const commonProvider = require("./common/provider");
       }
     })();
     txType = (function () {
-      switch (false) {
-        case up(t.from) !== up(FOREIGN_BRIDGE):
+      switch (true) {
+        case up(t.from) === up(FOREIGN_BRIDGE):
           return "BSC → EVM Swap";
+        case up(t.to) === up(FOREIGN_BRIDGE):
+          return "EVM → BSC Swap";
         default:
           return null;
       }

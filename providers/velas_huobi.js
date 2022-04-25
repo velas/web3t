@@ -282,6 +282,7 @@
     var url, FOREIGN_BRIDGE_TOKEN, dec, tx, status, amount, time, gasUsed, ref$, gasPrice, fee, recipientType, txType, from;
     url = network.api.url;
     FOREIGN_BRIDGE_TOKEN = network.FOREIGN_BRIDGE_TOKEN;
+    const FOREIGN_BRIDGE = network.FOREIGN_BRIDGE;
     dec = getDec(network);
     network = 'eth';
     tx = (function(){
@@ -312,9 +313,11 @@
     fee = div(times(gasUsed, gasPrice), Math.pow(10, 18));
     recipientType = ((ref$ = t.input) != null ? ref$ : "").length > 3 ? 'contract' : 'regular';
     txType = (function(){
-      switch (false) {
-      case t.from !== '0x0000000000000000000000000000000000000000':
+      switch (true) {
+      case t.from === '0x0000000000000000000000000000000000000000':
         return "EVM → HECO Swap";
+      case up(t.to) === up(FOREIGN_BRIDGE):
+        return "HECO → EVM Swap";
       default:
         return null;
       }

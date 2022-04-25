@@ -321,6 +321,7 @@
   };
   transformTx = curry$(function(network, t){
     var url, dec, tx, amount, time, fee, txType, from;
+    var HOME_BRIDGE = network.HOME_BRIDGE;
     url = network.api.url;
     dec = getDec(network);
     network = 'eth';
@@ -337,9 +338,11 @@
       }
     }());
     txType = (function(){
-      switch (false) {
-      case t.from !== '0x0000000000000000000000000000000000000000':
+      switch (true) {
+      case t.from === '0x0000000000000000000000000000000000000000':
         return "ETHEREUM → EVM Swap";
+      case up(t.to) === up(HOME_BRIDGE):
+        return "EVM → ETHEREUM Swap";
       default:
         return null;
       }
