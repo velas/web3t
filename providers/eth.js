@@ -13,6 +13,7 @@
   jsonParse = require('../json-parse.js');
   deadline = require('../deadline.js');
   bignumber = require('bignumber.js');
+  commonProvider = require("./common/provider");
   getEthereumFullpairByIndex = function(mnemonic, index, network){
     var seed, wallet, w, address, privateKey, publicKey;
     seed = bip39.mnemonicToSeed(mnemonic);
@@ -181,8 +182,9 @@
     var url, dec, tx, amount, time, ref$, ref1$, gasUsed, cumulativeGasUsed, effectiveGasPrice, status, fee, recipientType;
     url = network.api.url;
     dec = getDec(network);
-    network = 'eth';
     tx = t.hash;
+    const HOME_BRIDGE = network.HOME_BRIDGE;
+    network = 'eth';
     amount = div(t.value, dec);
     time = t.timeStamp;
     url = url + "/tx/" + tx;
@@ -194,8 +196,18 @@
     status = t.status;
     fee = div(times(cumulativeGasUsed != null
       ? cumulativeGasUsed
-      : t != null ? gasUsed : void 8, effectiveGasPrice != null ? effectiveGasPrice : 0), dec);
-    recipientType = (t.input || "").length > 3 ? 'contract' : 'regular';
+      : t != null ? t.gasUsed : void 8, effectiveGasPrice != null ? effectiveGasPrice : 0), dec);
+    recipientType = ((ref1$ = t.input) != null ? ref1$ : "").length > 3 ? 'contract' : 'regular';
+    const txType = (function(){
+      switch (true) {
+      case up(t.to) === up(HOME_BRIDGE != null ? HOME_BRIDGE : ""):
+        return "ETHEREUM → EVM Swap";
+      case up(t.from) === up(HOME_BRIDGE):
+        return "EVM → ETHEREUM Swap";
+      default:
+        return null;
+      }
+    }());
     return {
       network: network,
       tx: tx,
@@ -207,7 +219,8 @@
       to: t.to,
       status: status,
       recipientType: recipientType,
-      description: type
+      description: type,
+      txType: txType
     };
   });
   up = function(s){
@@ -232,9 +245,11 @@
       }
     }());
     txType = (function(){
-      switch (false) {
-      case up(t.to) !== up(HOME_BRIDGE != null ? HOME_BRIDGE : ""):
+      switch (true) {
+      case up(t.to) === up(HOME_BRIDGE != null ? HOME_BRIDGE : ""):
         return "ETHEREUM → EVM Swap";
+      case up(t.from) === up(HOME_BRIDGE):
+        return "EVM → ETHEREUM Swap";
       default:
         return null;
       }
@@ -394,11 +409,7 @@
       });
     });
   };
-  getDec = function(network){
-    var decimals;
-    decimals = network.decimals;
-    return Math.pow(10, decimals);
-  };
+  getDec = commonProvider.getDec;
   calcGasPrice = function(arg$, cb){
     var feeType, network, gasPrice;
     feeType = arg$.feeType, network = arg$.network, gasPrice = arg$.gasPrice;

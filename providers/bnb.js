@@ -13,6 +13,7 @@
   ref$ = require('../addresses.js'), vlxToEth = ref$.vlxToEth, ethToVlx = ref$.ethToVlx;
   sha3 = require('crypto-js/sha3');
   ERC20BridgeToken = require('../contracts/ERC20BridgeToken.json');
+  commonProvider = require("./common/provider");
   isChecksumAddress = function(address){
     var addressHash, i;
     address = address.replace('0x', '');
@@ -86,56 +87,8 @@
       publicKey: publicKey
     };
   };
-  tryParse = function(data, cb){
-    return setImmediate(function(){
-      var err;
-      if (toString$.call(data.body).slice(8, -1) === 'Object') {
-        return cb(null, data);
-      }
-      if (toString$.call(data != null ? data.text : void 8).slice(8, -1) !== 'String') {
-        console.log(data);
-      }
-      if (toString$.call(data != null ? data.text : void 8).slice(8, -1) !== 'String') {
-        return cb("expected text");
-      }
-      try {
-        data.body = JSON.parse(data.text);
-        return cb(null, data);
-      } catch (e$) {
-        err = e$;
-        return cb(err);
-      }
-    });
-  };
-  makeQuery = function(network, method, params, cb){
-    var web3Provider, query;
-    web3Provider = network.api.web3Provider;
-    query = {
-      jsonrpc: '2.0',
-      id: 1,
-      method: method,
-      params: params
-    };
-    return post(web3Provider, query).end(function(err, data){
-      var ref$;
-      if (err != null) {
-        return cb("query err: " + ((ref$ = err.message) != null ? ref$ : err));
-      }
-      return tryParse(data, function(err, data){
-        var ref$;
-        if (err != null) {
-          return cb(err);
-        }
-        if (toString$.call(data.body).slice(8, -1) !== 'Object') {
-          return cb("expected object");
-        }
-        if (((ref$ = data.body) != null ? ref$.error : void 8) != null) {
-          return cb(data.body.error);
-        }
-        return cb(null, data.body.result);
-      });
-    });
-  };
+  
+  makeQuery = commonProvider.makeQuery;
   out$.getTransactionInfo = getTransactionInfo = function(config, cb){
     var network, tx, query;
     network = config.network, tx = config.tx;
@@ -437,11 +390,7 @@
       });
     });
   };
-  getDec = function(network){
-    var decimals;
-    decimals = network.decimals;
-    return Math.pow(10, decimals);
-  };
+  getDec = commonProvider.getDec;
   calcGasPrice = function(arg$, cb){
     var feeType, network, gasPrice;
     feeType = arg$.feeType, network = arg$.network, gasPrice = arg$.gasPrice;
@@ -696,11 +645,7 @@
       return cb(null, balance);
     });
   };
-  getWeb3 = function(network){
-    var web3Provider;
-    web3Provider = network.api.web3Provider;
-    return new Web3(new Web3.providers.HttpProvider(web3Provider));
-  };
+  getWeb3 = commonProvider.getWeb3;
   getContractInstance = function(web3, network, swap){
     var abi;
     abi = ERC20BridgeToken.abi;
