@@ -237,11 +237,17 @@ const isErrorCausedByUnavailableWeb3Provider = (error) => {
     message === 'Invalid JSON RPC response: ""' ||
     message.includes("Unable to resolve host") ||
     // Web errors
-    message.includes('CONNECTION ERROR')
+    message.includes("CONNECTION ERROR")
   );
 };
 
 const getWeb3Providers = (web3Provider, extraWeb3Providers) => {
+  if (extraWeb3Providers?.$mobx) {
+    // Convert from mobx ObservableArray to Array
+    if (extraWeb3Providers.length !== 0) {
+      extraWeb3Providers = [...extraWeb3Providers];
+    }
+  }
   if (
     !!extraWeb3Providers &&
     Array.isArray(extraWeb3Providers) &&
