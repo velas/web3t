@@ -425,10 +425,7 @@
       offset: offset
     }, function(err, external){
       if (err != null) {
-        console.log(err);
-      }
-      if (err != null) {
-        external = [];
+        return cb(err);
       }
       return getInternalTransactions({
         network: network,
@@ -438,10 +435,7 @@
       }, function(err, internal){
         var all, ordered;
         if (err != null) {
-          console.log(err);
-        }
-        if (err != null) {
-          internal = [];
+          return cb(err);
         }
         all = external.concat(internal);
         ordered = reverse(
