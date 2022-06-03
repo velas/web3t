@@ -276,13 +276,15 @@
     endblock = 99999999;
     sort = 'desc';
     apikey = '4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG';
-    page = 1;
-    offset = 20;
+    page = config.page;
+    offset = config.offset;
     query = stringify({
       module: module,
       action: action,
       apikey: apikey,
-      address: address
+      address: address,
+      page,
+      offset,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
@@ -371,7 +373,9 @@
       address: address,
       sort: sort,
       startblock: startblock,
-      endblock: endblock
+      endblock: endblock,
+      page,
+      offset,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
