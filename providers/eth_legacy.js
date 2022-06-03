@@ -308,6 +308,8 @@
     endblock = 99999999;
     sort = "asc";
     apikey = "4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG";
+    const page = 1;
+    const offset = 30;
     query = stringify({
       module: module,
       action: action,
@@ -316,6 +318,8 @@
       sort: sort,
       startblock: startblock,
       endblock: endblock,
+      page,
+      offset,
     });
     return get(apiUrl + "?" + query)
       .timeout({
