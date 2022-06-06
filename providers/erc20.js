@@ -207,8 +207,6 @@
     startblock = 0;
     endblock = 99999999;
     sort = 'asc';
-    const page = 1;
-    const offset = 30;
     query = stringify({
       module: module,
       action: action,
@@ -217,8 +215,6 @@
       sort: sort,
       startblock: startblock,
       endblock: endblock,
-      page,
-      offset,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
