@@ -176,7 +176,6 @@
     startblock = 0;
     endblock = 99999999;
     sort = 'asc';
-
     query = stringify({
       module: module,
       action: action,

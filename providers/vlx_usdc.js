@@ -212,7 +212,6 @@
     endblock = 99999999;
     sort = 'asc';
     ref2$ = network.api, apiUrl = ref2$.apiUrl, apikey = ref2$.apikey;
-
     query = stringify({
       module: module,
       action: action,
