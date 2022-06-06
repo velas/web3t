@@ -366,7 +366,7 @@
     var network, address, page, offset;
     network = arg$.network, address = arg$.address;
     page = 1;
-    offset = 20;
+    offset = 30;
     return getExternalTransactions({
       network: network,
       address: address,
