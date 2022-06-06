@@ -212,8 +212,6 @@
     endblock = 99999999;
     sort = 'asc';
     ref2$ = network.api, apiUrl = ref2$.apiUrl, apikey = ref2$.apikey;
-    const page = 1;
-    const offset = 30;
 
     query = stringify({
       module: module,
@@ -223,8 +221,6 @@
       sort: sort,
       startblock: startblock,
       endblock: endblock,
-      page,
-      offset,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
