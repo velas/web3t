@@ -276,15 +276,13 @@
     endblock = 99999999;
     sort = 'desc';
     apikey = '4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG';
-    page = config.page;
-    offset = config.offset;
+    page = 1;
+    offset = 20;
     query = stringify({
       module: module,
       action: action,
       apikey: apikey,
       address: address,
-      page,
-      offset,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
@@ -374,8 +372,6 @@
       sort: sort,
       startblock: startblock,
       endblock: endblock,
-      page,
-      offset,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
@@ -400,8 +396,6 @@
         return getInternalTransactions({
           network: network,
           address: address,
-          page: page,
-          offset: offset
         }, function(err, internal){
           var all;
           if (err != null) {
