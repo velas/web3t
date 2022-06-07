@@ -214,7 +214,7 @@
       address: address,
       sort: sort,
       startblock: startblock,
-      endblock: endblock
+      endblock: endblock,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline

@@ -282,7 +282,7 @@
       module: module,
       action: action,
       apikey: apikey,
-      address: address
+      address: address,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
@@ -371,7 +371,7 @@
       address: address,
       sort: sort,
       startblock: startblock,
-      endblock: endblock
+      endblock: endblock,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
@@ -396,8 +396,6 @@
         return getInternalTransactions({
           network: network,
           address: address,
-          page: page,
-          offset: offset
         }, function(err, internal){
           var all;
           if (err != null) {
