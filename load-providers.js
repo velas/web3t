@@ -22,7 +22,7 @@
   usdc = require('./providers/usdc');
   vlx_usdc = require('./providers/vlx_usdc');
   bsc_vlx = require('./providers/bsc_vlx');
-  vlx_usdv = require('./providers/vlx_usdv');
+  vlx_usdv = require('./providers/velas_usdv');
   extendProviders = function(providers, config){
     if (toString$.call(config.providers).slice(8, -1) !== 'Object') {
       return;
