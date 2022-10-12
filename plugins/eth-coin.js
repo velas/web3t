@@ -12,7 +12,7 @@
     mask: '0x0000000000000000000000000000000000000000',
     api: {
       provider: 'eth',
-      web3Provider: 'https://mainnet.infura.io/v3/c75baa90ba0d4ee0a037e886a15584f4',
+      web3Provider: 'https://mainnet.infura.io/v3/622100399ace495d92c1339f6be12b2b',
       url: 'https://etherscan.io',
       apiUrl: 'https://api.etherscan.io/api'
     },
