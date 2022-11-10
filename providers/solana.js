@@ -543,6 +543,9 @@ const commonProvider = require('./common/provider');
             receiver = _amount < 0 ? (participantIndex > -1 ? accountKeys[participantIndex].pubkey : 'unknown') : address;
             hash = transaction.signatures[0];
           }
+          if (type === "authorize") {
+            hash = transaction.signatures[0];
+          }
           if (type === "swapNativeToEvm") {
             sender = instructions[1].parsed.info.fromNativeAccount;
             receiver = instructions[1].parsed.info.toEvmAccount;
