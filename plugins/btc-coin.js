@@ -13,7 +13,7 @@
     mask: '1000000000000000000000000000000000',
     api: {
       provider: 'bitcore',
-      url: 'https://bitcore.velas.com',
+      url: 'https://api.bitcore.io',
       networkName: 'mainnet',
       linktx: 'https://bitcore.velas.com/#/BTC/mainnet/tx/:hash',
       decimal: 8,
