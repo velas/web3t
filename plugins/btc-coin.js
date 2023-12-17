@@ -15,7 +15,7 @@
       provider: 'bitcore',
       url: 'https://api.bitcore.io',
       networkName: 'mainnet',
-      linktx: 'https://bitcore.velas.com/#/BTC/mainnet/tx/:hash',
+      linktx: 'https://bitpay.com/insight/BTC/mainnet/tx/:hash',
       decimal: 8,
       alternative: {
         balance: 'https://blockchain.info/q/addressbalance/:address'
