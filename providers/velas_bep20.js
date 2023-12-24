@@ -566,7 +566,6 @@
                       data: data || "0x",
                       chainId: chainId
                     };
-                    console.log("tx-obj", txObj);
                     tx = new Tx(txObj, {
                       common: common
                     });

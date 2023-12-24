@@ -311,8 +311,6 @@ const postWithAvailableWeb3provider = function (web3Providers, query, cb) {
 };
 
 const makeQuery = function (network, method, params, cb) {
-  console.log('try to makeQuery...', network.api)
-  // console.log('common makeQuery', network.api.toJS())
 
   const {
     web3Provider,
