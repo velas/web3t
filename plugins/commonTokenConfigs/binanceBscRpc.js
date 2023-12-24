@@ -1,12 +1,17 @@
 const binanceBscRpc = Object.freeze({
     mainnet: {
       api: {
-        web3Provider: 'https://bsc-dataseed.binance.org',
+        web3Provider: 'https://binance.llamarpc.com',
         // From https://docs.binance.org/smart-chain/developer/rpc.html
         extraWeb3Providers: [
           // Recommend
-          'https://bsc-dataseed1.defibit.io',
+          'https://bsc-pokt.nodies.app',
+          'https://bsc.publicnode.com',
+          'https://1rpc.io/bnb',
+          'https://bsc.drpc.org',
           'https://bsc-dataseed1.ninicoin.io',
+          'https://bsc-dataseed.binance.org',
+          'https://bsc-dataseed1.defibit.io',
           // Backups
           'https://bsc-dataseed2.defibit.io',
           'https://bsc-dataseed3.defibit.io',
