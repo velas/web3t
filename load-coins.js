@@ -19,8 +19,8 @@
   vlx_huobi = require('./plugins/vlx-huobi-coin');
   vlx_usdt = require('./plugins/vlx-usdt-coin');
   vlx_eth = require('./plugins/vlx-eth-coin');
-  usdt_erc20 = require('./plugins/usdt_erc20.json');
-  usdt_erc20_legacy = require('./plugins/usdt_erc20_legacy-coin.json');
+  usdt_erc20 = require('./plugins/usdt_erc20.js');
+  usdt_erc20_legacy = require('./plugins/usdt_erc20_legacy-coin.js');
   usdc = require('./plugins/usdc-coin');
   vlx_usdc = require('./plugins/vlx_usdc-coin');
   bsc_vlx = require('./plugins/bsc-vlx-coin');

@@ -16370,7 +16370,6 @@ var solanaWeb3 = (function (exports) {
           path.splice(lvl - 1, path.length);
           last = this;
         }
-        // console.log(lvl, key, path);
         if (typeof value === 'object' && value) {
           // if object isn't referring to parent object, add to the
           // object path stack. Otherwise it is already there.

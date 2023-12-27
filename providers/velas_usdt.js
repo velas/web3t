@@ -101,7 +101,6 @@
       if (err != null) {
         return cb(err);
       }
-      console.log("gas price calc!");
       web3 = getWeb3(network);
       return web3.eth.estimateGas({
         from: account.address,
