@@ -243,7 +243,7 @@ const isErrorCausedByUnavailableWeb3Provider = (error) => {
 
 const getWeb3Providers = (web3Provider, extraWeb3Providers) => {
   const extraProviders = !!extraWeb3Providers 
-    ? !!extraWeb3Providers?.toJS 
+    ? !!extraWeb3Providers && !!extraWeb3Providers.toJS 
       ? extraWeb3Providers.toJS()
       : extraWeb3Providers
     : [];
