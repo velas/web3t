@@ -49,7 +49,6 @@
     getBalance,
     isValidAddress,
     tryParse,
-    makeQuery,
     getTransactionInfo,
     isChecksumAddress,
     getMarketHistoryPrices,
@@ -82,6 +81,9 @@
   deadline = require("../deadline.js");
   sha3 = require("crypto-js/sha3");
   commonProvider = require("./common/provider");
+
+  const makeQuery = commonProvider.makeQuery;
+
   getEthereumFullpairByIndex = function (mnemonic, index, network) {
     var seed, wallet, w, address, privateKey, publicKey;
     seed = bip39.mnemonicToSeed(mnemonic);
@@ -585,33 +587,8 @@
     (network = arg$.network), (address = arg$.address);
     return cb("Not Implemented");
   };
-  out$.getBalance = getBalance = function (arg$, cb) {
-    var network, address, web3, contract, balanceOf;
-    (network = arg$.network), (address = arg$.address);
-    web3 = getWeb3(network);
-    contract = getContractInstance(web3, network.address);
-    balanceOf = (function () {
-      switch (false) {
-        case contract.methods == null:
-          return function (address, cb) {
-            return contract.methods.balanceOf(address).call(cb);
-          };
-        default:
-          return function (address, cb) {
-            return contract.balanceOf(address, cb);
-          };
-      }
-    })();
-    return balanceOf(address, function (err, number) {
-      var dec, balance;
-      if (err != null) {
-        return cb(err);
-      }
-      dec = getDec(network);
-      balance = div(number, dec);
-      return cb(null, balance);
-    });
-  };
+  out$.getBalance = getBalance = commonProvider.getBalance;
+  
   out$.isValidAddress = isValidAddress = function (arg$, cb) {
     var address, network, e, valid;
     (address = arg$.address), (network = arg$.network);
@@ -654,35 +631,7 @@
       }
     });
   };
-  makeQuery = function (network, method, params, cb) {
-    var web3Provider, query;
-    web3Provider = network.api.web3Provider;
-    query = {
-      jsonrpc: "2.0",
-      id: 1,
-      method: method,
-      params: params,
-    };
-    return post(web3Provider, query).end(function (err, data) {
-      var ref$;
-      if (err != null) {
-        return cb("query err: " + ((ref$ = err.message) != null ? ref$ : err));
-      }
-      return tryParse(data, function (err, data) {
-        var ref$;
-        if (err != null) {
-          return cb(err);
-        }
-        if (toString$.call(data.body).slice(8, -1) !== "Object") {
-          return cb("expected object");
-        }
-        if (((ref$ = data.body) != null ? ref$.error : void 8) != null) {
-          return cb(data.body.error);
-        }
-        return cb(null, data.body.result);
-      });
-    });
-  };
+
   out$.getTransactionInfo = getTransactionInfo = function (config, cb) {
     var network, tx, query;
     (network = config.network), (tx = config.tx);

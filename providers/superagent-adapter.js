@@ -194,7 +194,6 @@
                   text: text
                 });
               }
-              console.log('make-tor-request', method, url, err, body);
               cb(null, {
                 body: body,
                 text: text

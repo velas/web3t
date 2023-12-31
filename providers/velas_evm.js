@@ -184,7 +184,6 @@
         to: to,
         data: dataParsed
       };
-      console.log("evm", query);
       return getGasEstimate({
         network: network,
         feeType: feeType,
@@ -389,10 +388,6 @@
       page: page,
       offset: offset
     }, function(err, external){
-      console.log({
-        err: err,
-        external: external
-      });
       if (err != null) {
         return cb(err);
       }

@@ -242,12 +242,18 @@ const isErrorCausedByUnavailableWeb3Provider = (error) => {
 };
 
 const getWeb3Providers = (web3Provider, extraWeb3Providers) => {
+  const extraProviders = !!extraWeb3Providers 
+    ? !!extraWeb3Providers && !!extraWeb3Providers.toJS 
+      ? extraWeb3Providers.toJS()
+      : extraWeb3Providers
+    : [];
+
   if (
-    !!extraWeb3Providers &&
-    Array.isArray(extraWeb3Providers) &&
-    extraWeb3Providers.length !== 0
+    !!extraProviders &&
+    Array.isArray(extraProviders) &&
+    extraProviders.length !== 0
   ) {
-    return [web3Provider, ...extraWeb3Providers];
+    return [web3Provider, ...extraProviders];
   }
   return [web3Provider];
 };
@@ -305,6 +311,7 @@ const postWithAvailableWeb3provider = function (web3Providers, query, cb) {
 };
 
 const makeQuery = function (network, method, params, cb) {
+
   const {
     web3Provider,
     extraWeb3Providers,
@@ -406,10 +413,8 @@ const balanceOfWithAvailableWeb3Provider = function (
           };
       }
     })();
-
-    return balanceOf(address, function (err, number) {
+    balanceOf(address, function (err, number) {
       if (err != null) {
-        console.error("[balanceOfWithAvailableWeb3Provider] err", err);
         if (extraWeb3Providers.length === 0) {
           return cb(err);
         }
