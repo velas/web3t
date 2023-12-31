@@ -302,6 +302,10 @@ const postWithAvailableWeb3provider = function (web3Providers, query, cb) {
       }
     }
 
+    if (data && !!data.body && !!data.body.error) {
+      return postWithAvailableWeb3provider(extraWeb3Providers, query, cb);
+    }
+
     if (err == null && data != null) {
       return cb(null, data);
     }
