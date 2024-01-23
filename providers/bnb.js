@@ -363,10 +363,8 @@
     });
   };
   out$.getTransactions = getTransactions = function(arg$, cb){
-    var network, address, page, offset;
-    network = arg$.network, address = arg$.address;
-    page = 1;
-    offset = 30;
+    const { network, address, offset, lastLoadedTx, page } = arg$;
+   
     return getExternalTransactions({
       network: network,
       address: address,

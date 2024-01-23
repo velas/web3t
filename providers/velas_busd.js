@@ -297,6 +297,8 @@
     endblock = 99999999;
     sort = 'asc';
     apikey = 'KXYT4M24AWGIV585T7T38GUNMB4IRSY7H9';
+    const offset = arg$.offset;
+    const page = arg$.page;
 
     // We need all transaction without page, offset for correct display transaction history
     query = stringify({
@@ -305,8 +307,10 @@
       apikey: apikey,
       address: address,
       sort: sort,
-      startblock: startblock,
-      endblock: endblock,
+      offset, 
+      page,
+      // startblock: startblock,
+      // endblock: endblock,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline

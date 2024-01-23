@@ -186,13 +186,17 @@
     startblock = 0;
     endblock = 99999999;
     sort = 'asc';
+    const offset = arg$.offset;
+    const page = arg$.page;
     query = stringify({
       module: module,
       action: action,
       address: address,
       sort: sort,
-      startblock: startblock,
-      endblock: endblock,
+      offset, 
+      page,
+      // startblock: startblock,
+      // endblock: endblock,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
