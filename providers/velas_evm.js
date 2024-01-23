@@ -376,26 +376,27 @@
       });
     });
   };
-  out$.getTransactions = getTransactions = function(arg$, cb){
-    var network, address, page, offset;
-    network = arg$.network, address = arg$.address;
-    page = 1;
+  
+  out$.getTransactions = function(arg$, cb){
+    const { network, address, page, offset } = arg$;
+    console.log('getTransactions',  {page, offset});
+    const $page = isNaN(page) ? 1 : page;
     // with offset 10 will be 20 txs
-    offset = 10;
-    return getExternalTransactions({
+    const $offset = isNaN(offset) ? 20 : offset;
+    getExternalTransactions({
       network: network,
       address: address,
-      page: page,
-      offset: offset
+      page: $page,
+      offset: $offset
     }, function(err, external){
       if (err != null) {
         return cb(err);
       }
-      return getInternalTransactions({
+      getInternalTransactions({
         network: network,
         address: address,
-        page: page,
-        offset: offset
+        page: $page,
+        offset: $offset
       }, function(err, internal){
         var all, ordered;
         if (err != null) {
@@ -414,6 +415,7 @@
       });
     });
   };
+
   getDec = commonProvider.getDec;
   calcGasPrice = function(arg$, cb){
     var feeType, network, gasPrice;

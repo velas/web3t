@@ -547,10 +547,7 @@ const commonProvider = require("./common/provider");
       });
   };
   out$.getTransactions = getTransactions = function (arg$, cb) {
-    var network, address, page, offset;
-    (network = arg$.network), (address = arg$.address);
-    page = 1;
-    offset = 30;
+    const { network, address, offset, page } = arg$;
     return getExternalTransactions(
       {
         network: network,

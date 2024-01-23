@@ -395,15 +395,20 @@ const commonProvider = require('./common/provider');
     network = arg$.network, tx = arg$.tx;
     return cb("Not Implemented");
   };
+
+  /**
+   * @param {before} - A base58-encoded transaction signature. If provided, the method will only return signatures that occurred before the specified transaction
+   */
   out$.getTransactions = getTransactions = function(arg$, cb){
-    var network, address, ref$;
-    network = arg$.network, address = arg$.address;
+    const { network, address, offset, lastLoadedTx } = arg$;
+    var ref$;
     if ((network != null ? (ref$ = network.api) != null ? ref$.url : void 8 : void 8) == null) {
       return cb("Url is not defined");
     }
     return makeQuery(network, 'getConfirmedSignaturesForAddress2', [
       address, {
-        limit: 20
+        limit: offset,
+        before: lastLoadedTx,
       }
     ], function(err, result){
       var txs;

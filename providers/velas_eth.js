@@ -168,8 +168,8 @@
     return (s != null ? s : "").toUpperCase();
   };
   out$.getTransactions = getTransactions = function(arg$, cb){
-    var network, address, apiUrl, module, action, startblock, endblock, sort, query;
-    network = arg$.network, address = arg$.address;
+    var apiUrl, module, action, startblock, endblock, sort, query;
+    const { network, address, offset, page } = arg$;
     apiUrl = network.api.apiUrl;
     module = 'account';
     action = 'tokentx';
@@ -181,8 +181,10 @@
       action: action,
       address: address,
       sort: sort,
-      startblock: startblock,
-      endblock: endblock,
+      offset, 
+      page,
+      // startblock: startblock,
+      // endblock: endblock,
     });
     return get(apiUrl + "?" + query).timeout({
       deadline: deadline
@@ -203,6 +205,7 @@
           return up(it.contractAddress) === up(network.address);
         })(
         result.result));
+        console.log('rebuild-history return txs', txs)
         return cb(null, txs);
       });
     });
