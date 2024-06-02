@@ -44,7 +44,7 @@
       apiUrl: 'https://evmexplorer.testnet.velas.com/api'
     },
     address: "0xe2172a8E1762ae9962A59EE88a731522A61a4cc9",
-    HOME_BRIDGE: "0x729900a7db6bC1dAb1C2c953791C232Fb2A996Cb",
+    HOME_BRIDGE: "0x194dc601EcA2948F8F09eCcDaA7D20C3B40572CF",
     HOME_BRIDGE_TOKEN: "0xe2172a8E1762ae9962A59EE88a731522A61a4cc9",
     txFeeIn: "vlx_evm",
     txBridgeFeeIn: "vlx_evm",

@@ -60,7 +60,7 @@ const binanceBscRpc = require("./commonTokenConfigs/binanceBscRpc");
       ...binanceBscRpc.testnet.api,
     },
     address: "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee",
-    FOREIGN_BRIDGE: "0xF9a7046E40E7e1992B877E7C20C0715F10560AB5",
+    FOREIGN_BRIDGE: "0x308B1C70E1FF1F0De5149ed36F298eaf25e6E914",
     FOREIGN_BRIDGE_TOKEN: "0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee",
     group: "BSC",
     networks: {
